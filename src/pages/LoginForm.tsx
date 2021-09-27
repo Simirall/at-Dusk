@@ -13,6 +13,7 @@ import {
   Radio,
   RadioGroup,
   Stack,
+  Heading,
 } from "@chakra-ui/react";
 
 export const LoginForm: React.VFC = () => {
@@ -90,14 +91,24 @@ export const LoginForm: React.VFC = () => {
       />
       <Box minW="full">
         <Container boxShadow="base" p={4}>
+          <Heading
+            as="h3"
+            size="2xl"
+            marginBottom={6}
+            fontWeight="normal"
+            bgGradient="linear(to top, #ffa17f, #00223e)"
+            bgClip="text"
+          >
+            at Dusk.
+          </Heading>
           <form onSubmit={handleSubmit(onSubmit)}>
             <Stack spacing={2}>
               <FormControl isInvalid={errors.appname}>
                 <FormLabel htmlFor="appname">アプリ名</FormLabel>
                 <Input
                   id="appname"
-                  placeholder="mysskey"
-                  defaultValue="mysskey"
+                  placeholder="@dusk"
+                  defaultValue="@dusk"
                   {...register("appname", { required: "アプリ名は必須です" })}
                 />
                 <FormErrorMessage>
