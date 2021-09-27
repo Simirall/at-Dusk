@@ -1,6 +1,7 @@
 import { ColorModeScript } from "@chakra-ui/react";
 import * as React from "react";
 import ReactDOM from "react-dom";
+import { ChakraProvider, CSSReset, theme } from "@chakra-ui/react";
 
 import { App } from "./pages/App";
 import * as serviceWorker from "./utils/serviceWorker";
@@ -8,7 +9,10 @@ import * as serviceWorker from "./utils/serviceWorker";
 ReactDOM.render(
   <React.StrictMode>
     <ColorModeScript />
-    <App />
+    <CSSReset />
+    <ChakraProvider theme={theme}>
+      <App />
+    </ChakraProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );
