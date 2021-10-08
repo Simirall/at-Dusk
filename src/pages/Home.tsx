@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 import { Box, Link } from "@chakra-ui/react";
 import { useLoginContext } from "../utils/LoginContext";
 
-export const Home: React.FC = () => {
+export const Home: React.VFC = () => {
   const history = useHistory();
   const { updateLogin } = useLoginContext();
   return (

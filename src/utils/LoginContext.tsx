@@ -5,9 +5,13 @@ interface LoginType {
   updateLogin: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+interface Props {
+  children: React.ReactChild;
+}
+
 const LoginContext = createContext({} as LoginType);
 
-const LoginProvider: React.FC = ({ children }) => {
+const LoginProvider: React.VFC<Props> = ({ children }) => {
   const [login, updateLogin] = useState<boolean>(false);
   return (
     <>
