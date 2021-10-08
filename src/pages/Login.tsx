@@ -3,7 +3,7 @@ import { Redirect } from "react-router-dom";
 import { LoginForm } from "./LoginForm";
 import { GetToken } from "./GetToken";
 
-export const Login: React.FC = () => {
+export const Login: React.VFC = () => {
   const session = getUuid();
   return localStorage.getItem("login") ? (
     <Redirect to={"/"} />

@@ -9,12 +9,12 @@ type Props = {
   uuid: string;
 };
 
-export const GetToken: React.VFC<Props> = (props) => {
+export const GetToken: React.VFC<Props> = ({ uuid }) => {
   const history = useHistory();
   const { updateLogin } = useLoginContext();
-  const tokenUrl = `https://${localStorage.getItem("instanceURL")}/api/miauth/${
-    props.uuid
-  }/check`;
+  const tokenUrl = `https://${localStorage.getItem(
+    "instanceURL"
+  )}/api/miauth/${uuid}/check`;
   fetchData(tokenUrl, history, updateLogin);
   return (
     <Box w="full">
