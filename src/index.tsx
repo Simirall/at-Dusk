@@ -13,8 +13,6 @@ import "focus-visible";
 import { App } from "./pages/App";
 import { FocusVisible } from "./utils/FocusVisible";
 import { LoginProvider } from "./utils/LoginContext";
-import { SocketProvider } from "./utils/SocketContext";
-import { SocketManager } from "./utils/SocketManager";
 import * as serviceWorker from "./utils/serviceWorker";
 
 ReactDOM.render(
@@ -24,13 +22,9 @@ ReactDOM.render(
     <FocusVisible />
     <Provider store={store}>
       <LoginProvider>
-        <SocketProvider>
-          <SocketManager>
-            <ChakraProvider theme={theme}>
-              <App />
-            </ChakraProvider>
-          </SocketManager>
-        </SocketProvider>
+        <ChakraProvider theme={theme}>
+          <App />
+        </ChakraProvider>
       </LoginProvider>
     </Provider>
   </React.StrictMode>,
