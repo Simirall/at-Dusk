@@ -1,7 +1,3 @@
-import React, { useState, useEffect } from "react";
-import { ColorModeSwitcher } from "../components/ColorModeSwitcher";
-import { useForm, SubmitHandler, Controller } from "react-hook-form";
-import { v4 as uuid } from "uuid";
 import {
   Box,
   Container,
@@ -15,6 +11,11 @@ import {
   Stack,
   Heading,
 } from "@chakra-ui/react";
+import React, { useState, useEffect } from "react";
+import { useForm, SubmitHandler, Controller } from "react-hook-form";
+import { v4 as uuid } from "uuid";
+
+import { ColorModeSwitcher } from "../components/ColorModeSwitcher";
 
 export const LoginForm: React.VFC = () => {
   const {
@@ -45,7 +46,6 @@ export const LoginForm: React.VFC = () => {
   }>({ ok: true, message: "" });
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    // console.log(data);
     localStorage.setItem("mode", data.mode);
     const id = uuid();
     const appURL = document.location.href;

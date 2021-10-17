@@ -1,6 +1,12 @@
-import React from "react";
 import { Box } from "@chakra-ui/react";
+import React from "react";
+
+import { TimeLine } from "../components/TimeLine";
 
 export const Home: React.VFC = () => {
-  return <Box></Box>;
+  return (
+    <Box>
+      <TimeLine />
+    </Box>
+  );
 };

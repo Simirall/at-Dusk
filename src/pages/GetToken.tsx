@@ -1,15 +1,14 @@
-import React from "react";
-import { History } from "history";
-import { useHistory } from "react-router-dom";
-import { useLoginContext } from "../utils/LoginContext";
-import { Progress } from "@chakra-ui/progress";
 import { Box, Container, Heading, Stack } from "@chakra-ui/layout";
+import { Progress } from "@chakra-ui/progress";
+import { History } from "history";
+import React from "react";
+import { useHistory } from "react-router-dom";
 
-type Props = {
+import { useLoginContext } from "../utils/LoginContext";
+
+export const GetToken: React.VFC<{
   uuid: string;
-};
-
-export const GetToken: React.VFC<Props> = ({ uuid }) => {
+}> = ({ uuid }) => {
   const history = useHistory();
   const { updateLogin } = useLoginContext();
   const tokenUrl = `https://${localStorage.getItem(

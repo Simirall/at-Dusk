@@ -1,10 +1,12 @@
+import { Flex } from "@chakra-ui/react";
 import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { Flex } from "@chakra-ui/react";
-import { Home } from "./Home";
+
 import { Auth } from "../components/Auth";
-import { Login } from "./Login";
 import { Header } from "../components/Header";
+
+import { Home } from "./Home";
+import { Login } from "./Login";
 import { User } from "./User";
 
 export const App: React.VFC = () => (
