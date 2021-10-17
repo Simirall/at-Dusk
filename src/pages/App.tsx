@@ -4,6 +4,8 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import { Auth } from "../components/Auth";
 import { Header } from "../components/Header";
+import { SocketProvider } from "../utils/SocketContext";
+import { SocketManager } from "../utils/SocketManager";
 
 import { Home } from "./Home";
 import { Login } from "./Login";
@@ -17,15 +19,19 @@ export const App: React.VFC = () => (
           <Login />
         </Route>
         <Auth>
-          <Header />
-          <Switch>
-            <Route exact path="/user/:id">
-              <User />
-            </Route>
-            <Route exact path="/">
-              <Home />
-            </Route>
-          </Switch>
+          <SocketProvider>
+            <SocketManager>
+              <Header />
+              <Switch>
+                <Route exact path="/user/:id">
+                  <User />
+                </Route>
+                <Route exact path="/">
+                  <Home />
+                </Route>
+              </Switch>
+            </SocketManager>
+          </SocketProvider>
         </Auth>
       </Switch>
     </Flex>
