@@ -1,14 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Redirect } from "react-router-dom";
+
 import { useLoginContext } from "../utils/LoginContext";
 
-type Props = {
+export const Auth: React.VFC<{
   children: React.ReactNode;
-};
-
-export const Auth: React.VFC<Props> = ({ children }) => {
-  const { updateToken } = useLoginContext();
+}> = ({ children }) => {
   const isLogin = localStorage.getItem("login");
-  if (isLogin) updateToken(localStorage.getItem("UserToken") as string);
+  const { updateToken } = useLoginContext();
+  useEffect(() => {
+    if (isLogin) updateToken(localStorage.getItem("UserToken") as string);
+  });
   return isLogin ? <>{children}</> : <Redirect to={"/login"} />;
 };

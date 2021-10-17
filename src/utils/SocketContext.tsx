@@ -4,11 +4,9 @@ const SocketContext = createContext<React.MutableRefObject<WebSocket>>(
   {} as React.MutableRefObject<WebSocket>
 );
 
-interface Props {
+const SocketProvider: React.VFC<{
   children: React.ReactChild;
-}
-
-const SocketProvider: React.VFC<Props> = ({ children }) => {
+}> = ({ children }) => {
   const socketRef = useRef<WebSocket>(
     new WebSocket(
       "wss://" +
@@ -17,7 +15,6 @@ const SocketProvider: React.VFC<Props> = ({ children }) => {
         localStorage.getItem("UserToken")
     )
   );
-  console.log("SOCKET OPEND");
 
   socketRef.current.onerror = (e) => {
     console.error(e);

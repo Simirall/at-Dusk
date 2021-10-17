@@ -1,7 +1,8 @@
 import React from "react";
 import { Redirect } from "react-router-dom";
-import { LoginForm } from "./LoginForm";
+
 import { GetToken } from "./GetToken";
+import { LoginForm } from "./LoginForm";
 
 export const Login: React.VFC = () => {
   const session = getUuid();

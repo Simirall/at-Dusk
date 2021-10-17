@@ -1,8 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ID, Note } from "misskey-js/built/entities";
+
 import { RootState } from "../app/store";
 
-interface ReactionDetails {
+export interface ReactionDetails {
   id: ID;
   myReaction?: string;
   reactions: Record<string, number>;
@@ -12,20 +13,20 @@ interface ReactionDetails {
   }>;
 }
 
-interface NoteType {
+export interface NoteType {
   id: ID;
-  type: "note" | "renote" | "quote";
+  type: "note" | "reply" | "renote" | "quote";
 }
 
 export interface NotesState {
   notes: Array<Note>;
-  noteType: Array<NoteType>;
+  noteTypes: Array<NoteType>;
   reactions: Array<ReactionDetails>;
 }
 
 const initialState: NotesState = {
   notes: [],
-  noteType: [],
+  noteTypes: [],
   reactions: [],
 };
 
@@ -34,17 +35,20 @@ export const notesSlice = createSlice({
   initialState,
   reducers: {
     addUpper: (state, action: PayloadAction<Note>) => {
-      state.noteType.unshift({
+      state.noteTypes.unshift({
         id: action.payload.id,
-        type: action.payload.renoteId
-          ? !action.payload.text
+        type:
+          action.payload.renoteId && !action.payload.text
             ? "renote"
-            : "quote"
-          : "note",
+            : action.payload.replyId
+            ? "reply"
+            : action.payload.renoteId
+            ? "quote"
+            : "note",
       });
       state.notes.unshift(action.payload);
       let n: Note;
-      if (state.noteType[0].type === "renote") {
+      if (state.noteTypes[0].type === "renote") {
         n = action.payload;
         while (n.renoteId && n.renote) {
           n = n.renote;
@@ -63,25 +67,20 @@ export const notesSlice = createSlice({
       }
     },
     addLower: (state, action: PayloadAction<Note>) => {
-      state.noteType.push({
+      state.noteTypes.push({
         id: action.payload.id,
-        type: action.payload.renoteId
-          ? !action.payload.text
+        type:
+          action.payload.renoteId && !action.payload.text
             ? "renote"
-            : "quote"
-          : "note",
+            : action.payload.replyId
+            ? "reply"
+            : action.payload.renoteId
+            ? "quote"
+            : "note",
       });
-      console.log(
-        action.payload,
-        action.payload.renoteId
-          ? !action.payload.text
-            ? "renote"
-            : "quote"
-          : "note"
-      );
       state.notes.push(action.payload);
       let n: Note;
-      if (state.noteType[state.noteType.length - 1].type === "renote") {
+      if (state.noteTypes[state.noteTypes.length - 1].type === "renote") {
         n = action.payload;
         while (n.renoteId && n.renote) {
           n = n.renote;
@@ -107,6 +106,8 @@ export const notesSlice = createSlice({
 
 export const { addUpper, addLower, clear } = notesSlice.actions;
 
+export const allNoteTypes = (state: RootState): Array<NoteType> =>
+  state.notes.noteTypes;
 export const allNotes = (state: RootState): Array<Note> => state.notes.notes;
 export const allReactions = (state: RootState): Array<ReactionDetails> =>
   state.notes.reactions;

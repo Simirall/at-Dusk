@@ -18,11 +18,7 @@
       "version": "detect"
     }
   },
-  "plugins": [
-    "react-hooks",
-    "react",
-    "@typescript-eslint"
-  ],
+  "plugins": ["react-hooks", "react", "@typescript-eslint", "import"],
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
@@ -32,6 +28,31 @@
     "prettier"
   ],
   "rules": {
-    "react/prop-types": "off"
+    "react/prop-types": "off",
+    "import/order": [
+      "error",
+      {
+        "groups": [
+          "builtin",
+          "external",
+          "parent",
+          "sibling",
+          "index",
+          "object",
+          "type"
+        ],
+        "pathGroups": [
+          {
+            "pattern": "@alias/**",
+            "group": "parent",
+            "position": "before"
+          }
+        ],
+        "alphabetize": {
+          "order": "asc"
+        },
+        "newlines-between": "always"
+      }
+    ]
   }
 }

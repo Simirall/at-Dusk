@@ -1,9 +1,10 @@
-import React from "react";
 import { Flex, Text } from "@chakra-ui/react";
-import { Link as RouterLink } from "react-router-dom";
 import { User } from "misskey-js/built/entities";
-import { ColorModeSwitcher } from "../components/ColorModeSwitcher";
+import React from "react";
+import { Link as RouterLink } from "react-router-dom";
 import { useHistory } from "react-router-dom";
+
+import { ColorModeSwitcher } from "../components/ColorModeSwitcher";
 import { useLoginContext } from "../utils/LoginContext";
 
 export const Header: React.VFC = () => {
@@ -18,12 +19,16 @@ export const Header: React.VFC = () => {
       p="2"
       alignItems="center"
       justifyContent="space-between"
+      pos="sticky"
+      top="0"
+      zIndex="1"
+      maxW="6xl"
     >
       <Text as={RouterLink} to="/" fontSize="xl" color="white">
         AT DUSK
       </Text>
       <Flex alignItems="center">
-        <Text as={RouterLink} to={`/user/${user.username}`} color="blue.200">
+        <Text as={RouterLink} to={`/user/@${user.username}`} color="blue.200">
           {user.username}
         </Text>
         <Text

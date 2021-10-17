@@ -1,18 +1,20 @@
-import * as React from "react";
-import ReactDOM from "react-dom";
-import { Provider } from "react-redux";
-import { store } from "./app/store";
 import {
   ChakraProvider,
   CSSReset,
   theme,
   ColorModeScript,
 } from "@chakra-ui/react";
+import * as React from "react";
+import ReactDOM from "react-dom";
+import { Provider } from "react-redux";
+
+import { store } from "./app/store";
 import "focus-visible";
+import { App } from "./pages/App";
 import { FocusVisible } from "./utils/FocusVisible";
 import { LoginProvider } from "./utils/LoginContext";
 import { SocketProvider } from "./utils/SocketContext";
-import { App } from "./pages/App";
+import { SocketManager } from "./utils/SocketManager";
 import * as serviceWorker from "./utils/serviceWorker";
 
 ReactDOM.render(
@@ -23,9 +25,11 @@ ReactDOM.render(
     <Provider store={store}>
       <LoginProvider>
         <SocketProvider>
-          <ChakraProvider theme={theme}>
-            <App />
-          </ChakraProvider>
+          <SocketManager>
+            <ChakraProvider theme={theme}>
+              <App />
+            </ChakraProvider>
+          </SocketManager>
         </SocketProvider>
       </LoginProvider>
     </Provider>
