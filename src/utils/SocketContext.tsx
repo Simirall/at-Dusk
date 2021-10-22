@@ -1,12 +1,21 @@
-import React, { useRef, createContext, useContext } from "react";
+import React, { useRef, createContext, useContext, useState } from "react";
 
-const SocketContext = createContext<React.MutableRefObject<WebSocket>>(
-  {} as React.MutableRefObject<WebSocket>
+const SocketContext = createContext<{
+  socket: React.MutableRefObject<WebSocket>;
+  isSocketOpen: boolean;
+  updateSocketOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}>(
+  {} as {
+    socket: React.MutableRefObject<WebSocket>;
+    isSocketOpen: boolean;
+    updateSocketOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  }
 );
 
 const SocketProvider: React.VFC<{
   children: React.ReactChild;
 }> = ({ children }) => {
+  const [isSocketOpen, updateSocketOpen] = useState<boolean>(false);
   const socketRef = useRef<WebSocket>(
     new WebSocket(
       "wss://" +
@@ -25,7 +34,9 @@ const SocketProvider: React.VFC<{
   };
 
   return (
-    <SocketContext.Provider value={socketRef}>
+    <SocketContext.Provider
+      value={{ socket: socketRef, isSocketOpen, updateSocketOpen }}
+    >
       {children}
     </SocketContext.Provider>
   );
@@ -33,7 +44,18 @@ const SocketProvider: React.VFC<{
 
 const useSocket = (): WebSocket => {
   const socket = useContext(SocketContext);
-  return socket.current;
+  return socket.socket.current;
 };
 
-export { SocketProvider, useSocket };
+const useSocketOpen = (): {
+  isSocketOpen: boolean;
+  updateSocketOpen: React.Dispatch<React.SetStateAction<boolean>>;
+} => {
+  const socket = useContext(SocketContext);
+  return {
+    isSocketOpen: socket.isSocketOpen,
+    updateSocketOpen: socket.updateSocketOpen,
+  };
+};
+
+export { SocketProvider, useSocket, useSocketOpen };

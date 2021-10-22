@@ -1,9 +1,9 @@
-import { Box, Container, Heading, Stack } from "@chakra-ui/layout";
-import { Progress } from "@chakra-ui/progress";
+import { Box, Center } from "@chakra-ui/layout";
 import { History } from "history";
 import React from "react";
 import { useHistory } from "react-router-dom";
 
+import { Loading } from "../components/Loading";
 import { useLoginContext } from "../utils/LoginContext";
 
 export const GetToken: React.VFC<{
@@ -17,14 +17,9 @@ export const GetToken: React.VFC<{
   fetchData(tokenUrl, history, updateLogin);
   return (
     <Box w="full">
-      <Container>
-        <Stack marginTop={4}>
-          <Heading size="md" textAlign="center">
-            Logining...
-          </Heading>
-          <Progress size="xs" isIndeterminate w="full" />
-        </Stack>
-      </Container>
+      <Center>
+        <Loading />
+      </Center>
     </Box>
   );
 };

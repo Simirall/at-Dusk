@@ -1,10 +1,11 @@
-import { Box, Text } from "@chakra-ui/react";
+import { Box, Text, Center } from "@chakra-ui/react";
 import { Note as NoteType } from "misskey-js/built/entities";
 import React from "react";
 
 import { useAppSelector } from "../app/hooks";
 import { allNotes, allNoteTypes } from "../features/notesSlice";
 
+import { Loading } from "./Loading";
 import { Note } from "./Note";
 
 export const TimeLine: React.VFC = () => {
@@ -17,12 +18,17 @@ export const TimeLine: React.VFC = () => {
           Home
         </Text>
       </Box>
-      {notes &&
+      {notes.length ? (
         notes.map((note: NoteType, i) => (
           <Box paddingBlock="1" key={note.id}>
             <Note note={note} type={noteTypes[i]} depth={0} />
           </Box>
-        ))}
+        ))
+      ) : (
+        <Center>
+          <Loading />
+        </Center>
+      )}
     </Box>
   );
 };
