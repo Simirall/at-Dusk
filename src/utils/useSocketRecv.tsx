@@ -2,6 +2,7 @@ import { Note } from "misskey-js/built/entities";
 import { useEffect } from "react";
 
 import { useAppDispatch } from "../app/hooks";
+import { set } from "../features/noteDetailsSlice";
 import { addUpper, addLower } from "../features/notesSlice";
 
 import { useSocket } from "./SocketContext";
@@ -25,6 +26,9 @@ export const useSocketRecv = (): void => {
           data.res.forEach((note: Note) => {
             dispatch(addLower(note));
           });
+          break;
+        case "api:noteDetails":
+          dispatch(set(data.res));
           break;
       }
     };
