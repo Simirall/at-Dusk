@@ -28,7 +28,7 @@
     "build": "react-scripts build",
     "eject": "react-scripts eject",
     "format": "prettier --write src/**/*.{js,jsx,ts,tsx,css,scss}",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "lint": "eslint ./src/** --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "yarn lint --fix"
   },
   "eslintConfig": {
