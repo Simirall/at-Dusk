@@ -1,3 +1,10 @@
+import {
+  Accordion,
+  AccordionButton,
+  AccordionIcon,
+  AccordionItem,
+  AccordionPanel,
+} from "@chakra-ui/accordion";
 import { Avatar } from "@chakra-ui/avatar";
 import { Button } from "@chakra-ui/button";
 import { useColorModeValue } from "@chakra-ui/color-mode";
@@ -18,13 +25,15 @@ import { Link as RouterLink } from "react-router-dom";
 import { NoteType } from "../features/notesSlice";
 import { getRelativeTime } from "../utils/getRelativeTime";
 
+import { Files } from "./Files";
+
 export const Note: React.VFC<{
   note: mkNote;
   type: NoteType;
   depth: number;
 }> = ({ note, type, depth }) => {
   const name = note.user.name ? note.user.name : note.user.username;
-  const [cw, updateCw] = React.useState(false);
+  const [cw, updateCw] = React.useState(note.cw ? true : false);
   return (
     <>
       <Box
@@ -70,83 +79,107 @@ const GeneralNote: React.VFC<{
   updateCw: React.Dispatch<React.SetStateAction<boolean>>;
 }> = ({ note, name, depth, cw, updateCw }) => {
   return (
-    <Flex>
-      <Link
-        as={RouterLink}
-        to={`/user/@${note.user.username}${
-          note.user.host ? `@${note.user.host}` : ""
-        }`}
-      >
-        <Avatar
-          name={note.user.username}
-          src={note.user.avatarUrl}
-          marginRight="2"
-          bg="none"
-        />
-      </Link>
-      <Box overflow="hidden" flex="1">
-        <Flex alignItems="center" justifyContent="space-between">
-          <Flex alignItems="center" overflow="hidden">
-            <Link
-              as={RouterLink}
-              to={`/user/@${note.user.username}${
+    <>
+      <Flex>
+        <Link
+          as={RouterLink}
+          to={`/user/@${note.user.username}${
+            note.user.host ? `@${note.user.host}` : ""
+          }`}
+        >
+          <Avatar
+            name={note.user.username}
+            src={note.user.avatarUrl}
+            marginRight="2"
+            bg="none"
+          />
+        </Link>
+        <Box overflow="hidden" flex="1">
+          <Flex alignItems="center" justifyContent="space-between">
+            <Flex alignItems="center" overflow="hidden">
+              <Link
+                as={RouterLink}
+                to={`/user/@${note.user.username}${
+                  note.user.host ? `@${note.user.host}` : ""
+                }`}
+                isTruncated
+              >
+                {name}
+              </Link>
+              <Text color="gray.400" isTruncated>{`@${note.user.username}${
                 note.user.host ? `@${note.user.host}` : ""
-              }`}
-              isTruncated
+              }`}</Text>
+            </Flex>
+            <HStack flexShrink={0} spacing="1">
+              <Link as={RouterLink} to={`/notes/${note.id}`} color="gray.400">
+                {getRelativeTime(note.createdAt)}
+              </Link>
+              <Visibility
+                visibility={note.visibility}
+                local={note.localOnly}
+                renote={false}
+              />
+            </HStack>
+          </Flex>
+          {note.user.host && depth === 0 && (
+            <Flex
+              bgGradient={`linear(to-r, ${note.user.instance?.themeColor}, #00000000)`}
+              paddingLeft="1"
+              borderRadius="md"
+              alignItems="center"
             >
-              {name}
-            </Link>
-            <Text color="gray.400" isTruncated>{`@${note.user.username}${
-              note.user.host ? `@${note.user.host}` : ""
-            }`}</Text>
-          </Flex>
-          <HStack flexShrink={0} spacing="1">
-            <Link as={RouterLink} to={`/notes/${note.id}`} color="gray.400">
-              {getRelativeTime(note.createdAt)}
-            </Link>
-            <Visibility visibility={note.visibility} local={note.localOnly} />
-          </HStack>
-        </Flex>
-        {note.user.host && depth === 0 && (
-          <Flex
-            bgGradient={`linear(to-r, ${note.user.instance?.themeColor}, #00000000)`}
-            paddingLeft="1"
-            borderRadius="md"
-            alignItems="center"
-          >
-            <Image
-              src={note.user.instance?.faviconUrl as string}
-              h="5"
-              marginRight="1"
-            />
-            <Text color="white">{note.user.instance?.name}</Text>
-          </Flex>
-        )}
-        <Box>
-          {note.cw || note.cw === "" ? (
-            <>
+              <Image
+                src={note.user.instance?.faviconUrl as string}
+                h="5"
+                marginRight="1"
+              />
+              <Text color="white">{note.user.instance?.name}</Text>
+            </Flex>
+          )}
+          <Box>
+            {note.cw || note.cw === "" ? (
+              <>
+                <HStack>
+                  {note.replyId && <Icon as={IoArrowUndo} />}
+                  <Box>
+                    <Text
+                      whiteSpace="pre-wrap"
+                      wordBreak="break-word"
+                      display="inline"
+                    >
+                      {note.cw}
+                    </Text>
+                    <Button
+                      marginLeft="1"
+                      size="xs"
+                      onClick={() => {
+                        updateCw(!cw);
+                      }}
+                    >
+                      {!cw ? "隠す" : `もっと見る (${note.text?.length}文字)`}
+                    </Button>
+                  </Box>
+                </HStack>
+                {!cw && (
+                  <Box>
+                    <Text
+                      whiteSpace="pre-wrap"
+                      wordBreak="break-word"
+                      display="inline"
+                    >
+                      {note.text}
+                    </Text>
+                    {note.renoteId && note.renote?.text && (
+                      <Text marginLeft="1" color="green.400" display="inline">
+                        <i>RN:</i>
+                      </Text>
+                    )}
+                  </Box>
+                )}
+              </>
+            ) : (
               <HStack>
                 {note.replyId && <Icon as={IoArrowUndo} />}
-                <Box>
-                  <Text
-                    whiteSpace="pre-wrap"
-                    wordBreak="break-word"
-                    display="inline"
-                  >
-                    {note.cw}
-                  </Text>
-                  <Button
-                    marginLeft="1"
-                    size="xs"
-                    onClick={() => {
-                      updateCw(!cw);
-                    }}
-                  >
-                    {cw ? "隠す" : `もっと見る (${note.text?.length}文字)`}
-                  </Button>
-                </Box>
-              </HStack>
-              {cw && (
                 <Box>
                   <Text
                     whiteSpace="pre-wrap"
@@ -161,30 +194,31 @@ const GeneralNote: React.VFC<{
                     </Text>
                   )}
                 </Box>
-              )}
-            </>
-          ) : (
-            <HStack>
-              {note.replyId && <Icon as={IoArrowUndo} />}
-              <Box>
-                <Text
-                  whiteSpace="pre-wrap"
-                  wordBreak="break-word"
-                  display="inline"
-                >
-                  {note.text}
-                </Text>
-                {note.renoteId && note.renote?.text && (
-                  <Text marginLeft="1" color="green.400" display="inline">
-                    <i>RN:</i>
-                  </Text>
-                )}
-              </Box>
-            </HStack>
-          )}
+              </HStack>
+            )}
+          </Box>
         </Box>
-      </Box>
-    </Flex>
+      </Flex>
+      {!cw && note.files.length > 0 && (
+        <>
+          {depth === 0 ? (
+            <Files files={note.files} />
+          ) : (
+            <Accordion allowToggle m="1">
+              <AccordionItem border="none">
+                <AccordionButton w="fit-content">
+                  <AccordionIcon />
+                  {`${note.files.length}個のファイル`}
+                </AccordionButton>
+                <AccordionPanel>
+                  <Files files={note.files} />
+                </AccordionPanel>
+              </AccordionItem>
+            </Accordion>
+          )}
+        </>
+      )}
+    </>
   );
 };
 
@@ -298,7 +332,11 @@ const Renote: React.VFC<{
             {getRelativeTime(note.createdAt)}
           </Link>
           <Box color="green.400">
-            <Visibility visibility={note.visibility} local={note.localOnly} />
+            <Visibility
+              visibility={note.visibility}
+              local={note.localOnly}
+              renote={true}
+            />
           </Box>
         </HStack>
       </Flex>
@@ -351,7 +389,7 @@ const Quote: React.VFC<{
         cw={cw}
         updateCw={updateCw}
       />
-      {!((note.cw || note.cw === "") && !cw) && depth === 0 && (
+      {!((note.cw || note.cw === "") && cw) && depth === 0 && (
         <Box marginTop="1">
           <Note
             note={note.renote as mkNote}
@@ -370,24 +408,27 @@ const Quote: React.VFC<{
 const Visibility: React.VFC<{
   visibility: "public" | "home" | "followers" | "specified";
   local: boolean | undefined;
-}> = ({ visibility, local }) => {
+  renote: boolean;
+}> = ({ visibility, local, renote }) => {
   let v = null;
   switch (visibility) {
     case "home":
-      v = <Icon as={IoHome} />;
+      v = <Icon as={IoHome} color={renote ? "green.400" : "gray.400"} />;
       break;
     case "followers":
-      v = <Icon as={IoLockClosed} />;
+      v = <Icon as={IoLockClosed} color={renote ? "green.400" : "gray.400"} />;
       break;
     case "specified":
-      v = <Icon as={IoMail} />;
+      v = <Icon as={IoMail} color={renote ? "green.400" : "gray.400"} />;
       break;
     default:
       break;
   }
   return (
     <HStack spacing="1">
-      {local && <Icon as={IoFastFood} />}
+      {local && (
+        <Icon as={IoFastFood} color={renote ? "green.400" : "gray.400"} />
+      )}
       {v}
     </HStack>
   );
