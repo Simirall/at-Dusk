@@ -27,7 +27,6 @@
     "plugin:react-hooks/recommended",
     "prettier"
   ],
-  "ignorePatterns": ["src/style/"],
   "rules": {
     "react/prop-types": "off",
     "import/order": [
