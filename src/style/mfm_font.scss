@@ -1,0 +1,22 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Serif+JP&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Hachi+Maru+Pop&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Stick&display=swap");
+
+.font {
+  &.serif {
+    font-family: "Noto Serif JP", serif;
+  }
+  &.monospace {
+    font-family: "Roboto Mono", "Noto Sans JP", monospace;
+  }
+  &.cursive {
+    font-family: "Hachi Maru Pop", cursive;
+  }
+  &.fantasy {
+    font-family: "Stick", fantasy;
+  }
+}
+
+/*! https://fonts.google.com */

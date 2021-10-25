@@ -14,6 +14,8 @@ import { PrismLight as SyntaxHighlighter } from "react-syntax-highlighter";
 import nord from "react-syntax-highlighter/dist/esm/styles/prism/nord";
 import solarizedLight from "react-syntax-highlighter/dist/esm/styles/prism/solarizedlight";
 import { parse } from "twemoji-parser";
+import "../style/mfm.scss";
+import "../style/mfm_font.scss"; //will be able to opt-out
 
 export const ParseMFM: React.VFC<{
   text: string | null;
