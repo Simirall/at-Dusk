@@ -26,6 +26,7 @@ import { NoteType } from "../features/notesSlice";
 import { getRelativeTime } from "../utils/getRelativeTime";
 
 import { Files } from "./Files";
+import { ParseMFM } from "./ParseMFM";
 
 export const Note: React.VFC<{
   note: mkNote;
@@ -78,6 +79,7 @@ const GeneralNote: React.VFC<{
   cw: boolean;
   updateCw: React.Dispatch<React.SetStateAction<boolean>>;
 }> = ({ note, name, depth, cw, updateCw }) => {
+  const AccordionButtonColor = useColorModeValue("gray.300", "gray.700");
   return (
     <>
       <Flex>
@@ -104,7 +106,7 @@ const GeneralNote: React.VFC<{
                 }`}
                 isTruncated
               >
-                {name}
+                <ParseMFM text={name} emojis={note.user.emojis} type="plain" />
               </Link>
               <Text color="gray.400" isTruncated>{`@${note.user.username}${
                 note.user.host ? `@${note.user.host}` : ""
@@ -147,7 +149,11 @@ const GeneralNote: React.VFC<{
                       wordBreak="break-word"
                       display="inline"
                     >
-                      {note.cw}
+                      <ParseMFM
+                        text={note.cw}
+                        emojis={note.emojis}
+                        type="full"
+                      />
                     </Text>
                     <Button
                       marginLeft="1"
@@ -161,14 +167,14 @@ const GeneralNote: React.VFC<{
                   </Box>
                 </HStack>
                 {!cw && (
-                  <Box>
-                    <Text
-                      whiteSpace="pre-wrap"
-                      wordBreak="break-word"
-                      display="inline"
-                    >
-                      {note.text}
-                    </Text>
+                  <Box paddingInline="1" w="full">
+                    <Box whiteSpace="pre-wrap" wordBreak="break-word" w="full">
+                      <ParseMFM
+                        text={note.text}
+                        emojis={note.emojis}
+                        type="full"
+                      />
+                    </Box>
                     {note.renoteId && note.renote?.text && (
                       <Text marginLeft="1" color="green.400" display="inline">
                         <i>RN:</i>
@@ -180,14 +186,14 @@ const GeneralNote: React.VFC<{
             ) : (
               <HStack>
                 {note.replyId && <Icon as={IoArrowUndo} />}
-                <Box>
-                  <Text
-                    whiteSpace="pre-wrap"
-                    wordBreak="break-word"
-                    display="inline"
-                  >
-                    {note.text}
-                  </Text>
+                <Box paddingInline="1" w="full">
+                  <Box whiteSpace="pre-wrap" wordBreak="break-word" w="full">
+                    <ParseMFM
+                      text={note.text}
+                      emojis={note.emojis}
+                      type="full"
+                    />
+                  </Box>
                   {note.renoteId && note.renote?.text && (
                     <Text marginLeft="1" color="green.400" display="inline">
                       <i>RN:</i>
@@ -206,7 +212,7 @@ const GeneralNote: React.VFC<{
           ) : (
             <Accordion allowToggle m="1">
               <AccordionItem border="none">
-                <AccordionButton w="fit-content">
+                <AccordionButton w="fit-content" bgColor={AccordionButtonColor}>
                   <AccordionIcon />
                   {`${note.files.length}個のファイル`}
                 </AccordionButton>
@@ -228,9 +234,15 @@ const Reply: React.VFC<{
   cw: boolean;
   updateCw: React.Dispatch<React.SetStateAction<boolean>>;
 }> = ({ note, name, cw, updateCw }) => {
+  const col = useColorModeValue("whiteAlpha.600", "blackAlpha.300");
   return (
     <Box>
-      <Box paddingBottom="2">
+      <Box
+        backgroundColor={col}
+        borderRadius="lg"
+        marginBottom="2"
+        opacity="0.6"
+      >
         <Note
           note={note.reply as mkNote}
           type={{
@@ -315,17 +327,17 @@ const Renote: React.VFC<{
             marginRight="1"
             bg="none"
           />
-          <Text color="green.400" isTruncated>
+          <Box color="green.400" isTruncated>
             <Link
               as={RouterLink}
               to={`/user/@${note.user.username}${
                 note.user.host ? `@${note.user.host}` : ""
               }`}
             >
-              {name}
+              <ParseMFM text={name} emojis={note.user.emojis} type="plain" />
             </Link>
             がRenote
-          </Text>
+          </Box>
         </Flex>
         <HStack spacing="1" flexShrink={0}>
           <Link as={RouterLink} to={`/notes/${note.id}`} color="green.400">
@@ -380,6 +392,7 @@ const Quote: React.VFC<{
   cw: boolean;
   updateCw: React.Dispatch<React.SetStateAction<boolean>>;
 }> = ({ note, name, depth, cw, updateCw }) => {
+  const col = useColorModeValue("whiteAlpha.600", "blackAlpha.300");
   return (
     <Box>
       <GeneralNote
@@ -390,7 +403,13 @@ const Quote: React.VFC<{
         updateCw={updateCw}
       />
       {!((note.cw || note.cw === "") && cw) && depth === 0 && (
-        <Box marginTop="1">
+        <Box
+          marginTop="1"
+          backgroundColor={col}
+          borderRadius="lg"
+          border="1.5px dashed"
+          borderColor="teal.600"
+        >
           <Note
             note={note.renote as mkNote}
             type={{
