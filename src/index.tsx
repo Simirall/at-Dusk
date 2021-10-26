@@ -1,15 +1,11 @@
-import {
-  ChakraProvider,
-  CSSReset,
-  theme,
-  ColorModeScript,
-} from "@chakra-ui/react";
+import { CSSReset, ColorModeScript } from "@chakra-ui/react";
 import * as React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 
 import { store } from "./app/store";
 import "focus-visible";
+import { ThemeSelector } from "./components/ThemeSelector";
 import { App } from "./pages/App";
 import { FocusVisible } from "./utils/FocusVisible";
 import { LoginProvider } from "./utils/LoginContext";
@@ -22,9 +18,9 @@ ReactDOM.render(
     <FocusVisible />
     <Provider store={store}>
       <LoginProvider>
-        <ChakraProvider theme={theme}>
+        <ThemeSelector>
           <App />
-        </ChakraProvider>
+        </ThemeSelector>
       </LoginProvider>
     </Provider>
   </React.StrictMode>,

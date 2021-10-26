@@ -5,6 +5,7 @@ import { useAppSelector } from "../app/hooks";
 import { Loading } from "../components/Loading";
 import { Note } from "../components/Note";
 import { noteDetails, noteDetailsType } from "../features/noteDetailsSlice";
+import { useColors } from "../utils/Colors";
 import { useSocket } from "../utils/SocketContext";
 import { useAPIObject } from "../utils/useAPIObject";
 
@@ -13,6 +14,7 @@ export const Notes: React.VFC = () => {
   const socket = useSocket();
   const details = useAppSelector(noteDetails);
   const detailsType = useAppSelector(noteDetailsType);
+  const colors = useColors();
   const noteDetailsObject = JSON.stringify(
     useAPIObject({
       id: "noteDetails",
@@ -30,7 +32,7 @@ export const Notes: React.VFC = () => {
     <Box maxW="95vw" w="6xl">
       {details.id ? (
         <Box marginBlock="2">
-          <Note note={details} depth={0} type={detailsType} />
+          <Note note={details} depth={0} type={detailsType} colors={colors} />
         </Box>
       ) : (
         <Center>
