@@ -7,7 +7,6 @@ import {
 } from "@chakra-ui/accordion";
 import { Avatar } from "@chakra-ui/avatar";
 import { Button } from "@chakra-ui/button";
-import { useColorModeValue } from "@chakra-ui/color-mode";
 import { Icon } from "@chakra-ui/icon";
 import { Image } from "@chakra-ui/image";
 import { Box, Flex, HStack, Link, Text } from "@chakra-ui/layout";
@@ -26,22 +25,31 @@ import { NoteType } from "../features/notesSlice";
 import { getRelativeTime } from "../utils/getRelativeTime";
 
 import { Files } from "./Files";
-import { ParseMFM } from "./ParseMFM";
+import { ParseMFMMemo } from "./ParseMFM";
 
 export const Note: React.VFC<{
   note: mkNote;
   type: NoteType;
   depth: number;
-}> = ({ note, type, depth }) => {
+  colors: Record<string, string>;
+}> = ({ note, type, depth, colors }) => {
   const name = note.user.name ? note.user.name : note.user.username;
-  const [cw, updateCw] = React.useState(note.cw ? true : false);
+  const [cw, updateCw] = React.useState(
+    type.type === "renote"
+      ? note.renote?.cw || note.renote?.cw === ""
+        ? true
+        : false
+      : note.cw || note.cw === ""
+      ? true
+      : false
+  );
   return (
     <>
       <Box
         p="2"
         borderRadius="lg"
         overflow="hidden"
-        bgColor={useColorModeValue("blackAlpha.50", "whiteAlpha.50")}
+        bgColor={colors.panelColor}
       >
         {type.type === "note" && (
           <GeneralNote
@@ -50,13 +58,26 @@ export const Note: React.VFC<{
             depth={depth}
             cw={cw}
             updateCw={updateCw}
+            colors={colors}
           />
         )}
         {type.type === "reply" && (
-          <Reply note={note} name={name} cw={cw} updateCw={updateCw} />
+          <Reply
+            note={note}
+            name={name}
+            cw={cw}
+            updateCw={updateCw}
+            colors={colors}
+          />
         )}
         {type.type === "renote" && (
-          <Renote note={note} name={name} cw={cw} updateCw={updateCw} />
+          <Renote
+            note={note}
+            name={name}
+            cw={cw}
+            updateCw={updateCw}
+            colors={colors}
+          />
         )}
         {type.type === "quote" && (
           <Quote
@@ -65,6 +86,7 @@ export const Note: React.VFC<{
             depth={depth}
             cw={cw}
             updateCw={updateCw}
+            colors={colors}
           />
         )}
       </Box>
@@ -78,8 +100,8 @@ const GeneralNote: React.VFC<{
   depth: number;
   cw: boolean;
   updateCw: React.Dispatch<React.SetStateAction<boolean>>;
-}> = ({ note, name, depth, cw, updateCw }) => {
-  const AccordionButtonColor = useColorModeValue("gray.300", "gray.700");
+  colors: Record<string, string>;
+}> = ({ note, name, depth, cw, updateCw, colors }) => {
   return (
     <>
       <Flex>
@@ -105,8 +127,13 @@ const GeneralNote: React.VFC<{
                   note.user.host ? `@${note.user.host}` : ""
                 }`}
                 isTruncated
+                color={colors.textColor}
               >
-                <ParseMFM text={name} emojis={note.user.emojis} type="plain" />
+                <ParseMFMMemo
+                  text={name}
+                  emojis={note.user.emojis}
+                  type="plain"
+                />
               </Link>
               <Text color="gray.400" isTruncated>{`@${note.user.username}${
                 note.user.host ? `@${note.user.host}` : ""
@@ -142,19 +169,22 @@ const GeneralNote: React.VFC<{
             {note.cw || note.cw === "" ? (
               <>
                 <HStack>
-                  {note.replyId && <Icon as={IoArrowUndo} />}
+                  {note.replyId && (
+                    <Icon as={IoArrowUndo} color={colors.textColor} />
+                  )}
                   <Box>
-                    <Text
+                    <Box
                       whiteSpace="pre-wrap"
                       wordBreak="break-word"
                       display="inline"
+                      color={colors.textColor}
                     >
-                      <ParseMFM
+                      <ParseMFMMemo
                         text={note.cw}
                         emojis={note.emojis}
                         type="full"
                       />
-                    </Text>
+                    </Box>
                     <Button
                       marginLeft="1"
                       size="xs"
@@ -168,8 +198,13 @@ const GeneralNote: React.VFC<{
                 </HStack>
                 {!cw && (
                   <Box paddingInline="1" w="full">
-                    <Box whiteSpace="pre-wrap" wordBreak="break-word" w="full">
-                      <ParseMFM
+                    <Box
+                      whiteSpace="pre-wrap"
+                      wordBreak="break-word"
+                      w="full"
+                      color={colors.textColor}
+                    >
+                      <ParseMFMMemo
                         text={note.text}
                         emojis={note.emojis}
                         type="full"
@@ -185,10 +220,17 @@ const GeneralNote: React.VFC<{
               </>
             ) : (
               <HStack>
-                {note.replyId && <Icon as={IoArrowUndo} />}
+                {note.replyId && (
+                  <Icon as={IoArrowUndo} color={colors.textColor} />
+                )}
                 <Box paddingInline="1" w="full">
-                  <Box whiteSpace="pre-wrap" wordBreak="break-word" w="full">
-                    <ParseMFM
+                  <Box
+                    whiteSpace="pre-wrap"
+                    wordBreak="break-word"
+                    w="full"
+                    color={colors.textColor}
+                  >
+                    <ParseMFMMemo
                       text={note.text}
                       emojis={note.emojis}
                       type="full"
@@ -212,7 +254,11 @@ const GeneralNote: React.VFC<{
           ) : (
             <Accordion allowToggle m="1">
               <AccordionItem border="none">
-                <AccordionButton w="fit-content" bgColor={AccordionButtonColor}>
+                <AccordionButton
+                  w="fit-content"
+                  bgColor={colors.AccordionButtonColor}
+                  color={colors.textColor}
+                >
                   <AccordionIcon />
                   {`${note.files.length}個のファイル`}
                 </AccordionButton>
@@ -233,12 +279,13 @@ const Reply: React.VFC<{
   name: string;
   cw: boolean;
   updateCw: React.Dispatch<React.SetStateAction<boolean>>;
-}> = ({ note, name, cw, updateCw }) => {
-  const col = useColorModeValue("whiteAlpha.600", "blackAlpha.300");
+  colors: Record<string, string>;
+}> = ({ note, name, cw, updateCw, colors }) => {
   return (
     <Box>
       <Box
-        backgroundColor={col}
+        border="1.5px dashed"
+        borderColor={colors.secondaryColor}
         borderRadius="lg"
         marginBottom="2"
         opacity="0.6"
@@ -250,6 +297,7 @@ const Reply: React.VFC<{
             type: note.renoteId ? "quote" : "note",
           }}
           depth={1}
+          colors={colors}
         />
       </Box>
       {note.renoteId ? (
@@ -260,6 +308,7 @@ const Reply: React.VFC<{
             depth={0}
             cw={cw}
             updateCw={updateCw}
+            colors={colors}
           />
         </Box>
       ) : (
@@ -270,6 +319,7 @@ const Reply: React.VFC<{
             depth={0}
             cw={cw}
             updateCw={updateCw}
+            colors={colors}
           />
         </Box>
       )}
@@ -282,7 +332,8 @@ const Renote: React.VFC<{
   name: string;
   cw: boolean;
   updateCw: React.Dispatch<React.SetStateAction<boolean>>;
-}> = ({ note, name, cw, updateCw }) => {
+  colors: Record<string, string>;
+}> = ({ note, name, cw, updateCw, colors }) => {
   return (
     <Box>
       {note.renote?.replyId && (
@@ -299,6 +350,7 @@ const Renote: React.VFC<{
                 depth={1}
                 cw={cw}
                 updateCw={updateCw}
+                colors={colors}
               />
             </Box>
           ) : (
@@ -313,6 +365,7 @@ const Renote: React.VFC<{
                 depth={1}
                 cw={cw}
                 updateCw={updateCw}
+                colors={colors}
               />
             </Box>
           )}
@@ -334,7 +387,11 @@ const Renote: React.VFC<{
                 note.user.host ? `@${note.user.host}` : ""
               }`}
             >
-              <ParseMFM text={name} emojis={note.user.emojis} type="plain" />
+              <ParseMFMMemo
+                text={name}
+                emojis={note.user.emojis}
+                type="plain"
+              />
             </Link>
             がRenote
           </Box>
@@ -364,6 +421,7 @@ const Renote: React.VFC<{
             depth={0}
             cw={cw}
             updateCw={updateCw}
+            colors={colors}
           />
         </Box>
       ) : (
@@ -378,6 +436,7 @@ const Renote: React.VFC<{
             depth={0}
             cw={cw}
             updateCw={updateCw}
+            colors={colors}
           />
         </Box>
       )}
@@ -391,8 +450,8 @@ const Quote: React.VFC<{
   depth: number;
   cw: boolean;
   updateCw: React.Dispatch<React.SetStateAction<boolean>>;
-}> = ({ note, name, depth, cw, updateCw }) => {
-  const col = useColorModeValue("whiteAlpha.600", "blackAlpha.300");
+  colors: Record<string, string>;
+}> = ({ note, name, depth, cw, updateCw, colors }) => {
   return (
     <Box>
       <GeneralNote
@@ -401,14 +460,14 @@ const Quote: React.VFC<{
         depth={0}
         cw={cw}
         updateCw={updateCw}
+        colors={colors}
       />
       {!((note.cw || note.cw === "") && cw) && depth === 0 && (
         <Box
           marginTop="1"
-          backgroundColor={col}
           borderRadius="lg"
           border="1.5px dashed"
-          borderColor="teal.600"
+          borderColor={colors.borderColor}
         >
           <Note
             note={note.renote as mkNote}
@@ -417,6 +476,7 @@ const Quote: React.VFC<{
               type: !note.renote?.renoteId ? "note" : "quote",
             }}
             depth={1}
+            colors={colors}
           />
         </Box>
       )}
