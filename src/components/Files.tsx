@@ -81,6 +81,7 @@ const ImageFile: React.VFC<{ image: DriveFile; size: string }> = ({
           position="absolute"
           zIndex="3"
           m="1.5"
+          size="xs"
           aria-label="toggle NSFW"
           icon={<IoEyeOff color="white" />}
           onClick={() => {

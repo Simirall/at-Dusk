@@ -7,7 +7,7 @@ import { Box, Center, Code, Flex, Link } from "@chakra-ui/layout";
 import * as mfm from "mfm-js";
 import { MfmNode } from "mfm-js";
 import { MfmPlainNode } from "mfm-js/built/node";
-import React from "react";
+import React, { memo } from "react";
 import { IoSearch } from "react-icons/io5";
 import { Link as routerLink } from "react-router-dom";
 import { PrismLight as SyntaxHighlighter } from "react-syntax-highlighter";
@@ -58,8 +58,9 @@ const Judge: React.VFC<{
     url: string;
   }[];
 }> = ({ element, emojis }) => {
-  const codeColor = useColorModeValue(solarizedLight, nord);
   const c: Array<React.ReactNode> = [];
+  const codeColor = useColorModeValue(solarizedLight, nord);
+  const secondaryColor = useColorModeValue("light.secondary", "dark.secondary");
   switch (element.type) {
     case "text":
       return <Box display="inline">{element.props.text}</Box>;
@@ -112,14 +113,14 @@ const Judge: React.VFC<{
         );
       });
       return (
-        <Link href={element.props.url} color="skyblue" isExternal>
+        <Link href={element.props.url} color={secondaryColor} isExternal>
           {c}
           <ExternalLinkIcon marginLeft="0.5" />
         </Link>
       );
     case "url":
       return (
-        <Link href={element.props.url} color="skyblue" isExternal>
+        <Link href={element.props.url} color={secondaryColor} isExternal>
           {decodeURI(element.props.url)}
           <ExternalLinkIcon marginLeft="0.5" />
         </Link>
@@ -129,22 +130,36 @@ const Judge: React.VFC<{
         <Link
           as={routerLink}
           to={`/tags/${element.props.hashtag}`}
-          color="skyblue"
+          color={secondaryColor}
         >
           {`#${element.props.hashtag}`}
         </Link>
       );
     case "mention":
-      return (
-        <Link
-          as={routerLink}
-          to={`/user/${element.props.acct}`}
-          color="skyblue"
-        >
-          {`@${element.props.username}`}
-          {element.props.host && <>{`@${element.props.host}`}</>}
-        </Link>
-      );
+      if (element.props.host === "twitter.com") {
+        return (
+          <Link
+            href={`https://twitter.com/${element.props.username}`}
+            color={secondaryColor}
+            isExternal
+          >
+            {`@${element.props.username}`}
+            {element.props.host && <>{`@${element.props.host}`}</>}
+            <ExternalLinkIcon marginLeft="0.5" />
+          </Link>
+        );
+      } else {
+        return (
+          <Link
+            as={routerLink}
+            to={`/user/${element.props.acct}`}
+            color={secondaryColor}
+          >
+            {`@${element.props.username}`}
+            {element.props.host && <>{`@${element.props.host}`}</>}
+          </Link>
+        );
+      }
     case "mathInline":
       return <span>{element.props.formula}</span>;
     case "inlineCode":
@@ -249,7 +264,7 @@ const Judge: React.VFC<{
     case "search":
       return (
         <Flex marginBlock="1">
-          <Input value={element.props.query} readOnly />
+          <Input value={element.props.query} readOnly variant="flushed" />
           <IconButton
             aria-label="search"
             icon={<IoSearch />}
@@ -330,3 +345,14 @@ const JudgePlain: React.VFC<{
       );
   }
 };
+
+export const ParseMFMMemo: React.VFC<{
+  text: string | null;
+  emojis: {
+    name: string;
+    url: string;
+  }[];
+  type: "full" | "plain";
+}> = memo(function parseMFMMemo({ text, emojis, type }) {
+  return <ParseMFM text={text} emojis={emojis} type={type} />;
+});
