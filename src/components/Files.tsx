@@ -168,6 +168,7 @@ const ImageFile: React.VFC<{
         cursor="pointer"
         onClick={() => {
           if (nsfw) toggleNSFW(!nsfw);
+          else if (image.type.startsWith("image")) onOpen();
         }}
       >
         {image.type.startsWith("image") && (
@@ -184,9 +185,6 @@ const ImageFile: React.VFC<{
               filter: nsfw
                 ? "blur(30px) saturate(150%) brightness(60%)"
                 : "none",
-            }}
-            onClick={() => {
-              onOpen();
             }}
           />
         )}
