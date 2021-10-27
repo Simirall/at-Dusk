@@ -1,10 +1,8 @@
 import { useColorModeValue } from "@chakra-ui/color-mode";
 
 export const useColors = (): Record<string, string> => {
-  const AccordionButtonColor = useColorModeValue(
-    "blackAlpha.200",
-    "whiteAlpha.200"
-  );
+  const alpha50 = useColorModeValue("blackAlpha.50", "whiteAlpha.50");
+  const alpha200 = useColorModeValue("blackAlpha.200", "whiteAlpha.200");
   const baseColor = useColorModeValue("light.base", "dark.base");
   const panelColor = useColorModeValue("light.panel", "dark.panel");
   const primaryColor = useColorModeValue("light.primary", "dark.primary");
@@ -16,7 +14,8 @@ export const useColors = (): Record<string, string> => {
   );
   const borderColor = useColorModeValue("light.secondary", "dark.secondary");
   return {
-    AccordionButtonColor: AccordionButtonColor,
+    alpha50: alpha50,
+    alpha200: alpha200,
     baseColor: baseColor,
     panelColor: panelColor,
     primaryColor: primaryColor,

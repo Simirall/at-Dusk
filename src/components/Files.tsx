@@ -1,18 +1,31 @@
-import { IconButton } from "@chakra-ui/button";
-import { useColorModeValue } from "@chakra-ui/color-mode";
+import { Button, IconButton } from "@chakra-ui/button";
+import { useDisclosure } from "@chakra-ui/hooks";
 import { Image } from "@chakra-ui/image";
-import { Box, Flex, Link, Text } from "@chakra-ui/layout";
+import { Box, Center, Flex, Link, Text } from "@chakra-ui/layout";
+import {
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalOverlay,
+} from "@chakra-ui/react";
 import { DriveFile } from "misskey-js/built/entities";
 import React, { useState } from "react";
 import { IoDownload, IoEyeOff, IoMusicalNote } from "react-icons/io5";
+import { Carousel } from "react-responsive-carousel";
 
-export const Files: React.VFC<{ files: Array<DriveFile> }> = ({ files }) => {
+import "react-responsive-carousel/lib/styles/carousel.min.css";
+import { useColors } from "../utils/Colors";
+
+export const Files: React.VFC<{
+  files: Array<DriveFile>;
+  colors: Record<string, string>;
+}> = ({ files, colors }) => {
   const images = files.filter((file) => file.type.match(/image.*|video.*/));
   const audios = files.filter((file) => file.type.startsWith("audio"));
   const others = files.filter((file) =>
     file.type.match(/^(?!image)(?!video)(?!audio).*/)
   );
-  const c = useColorModeValue("blackAlpha.50", "whiteAlpha.50");
   return (
     <Box>
       {images.length > 0 && images.length <= 2 && (
@@ -24,10 +37,16 @@ export const Files: React.VFC<{ files: Array<DriveFile> }> = ({ files }) => {
           justifyContent="center"
           alignItems="center"
           borderRadius="md"
-          backgroundColor={c}
+          backgroundColor={colors.alpha50}
         >
-          {images.map((image) => (
-            <ImageFile image={image} key={image.id} size="24rem" />
+          {images.map((image, i) => (
+            <ImageFile
+              key={image.id}
+              image={image}
+              images={images}
+              index={i}
+              size="24rem"
+            />
           ))}
         </Flex>
       )}
@@ -40,11 +59,18 @@ export const Files: React.VFC<{ files: Array<DriveFile> }> = ({ files }) => {
           borderRadius="md"
           flexWrap="wrap"
           justifyContent="center"
-          backgroundColor={c}
+          alignItems="center"
+          backgroundColor={colors.alpha50}
           overflow="hidden"
         >
-          {images.map((image) => (
-            <ImageFile image={image} key={image.id} size="12rem" />
+          {images.map((image, i) => (
+            <ImageFile
+              key={image.id}
+              image={image}
+              images={images}
+              index={i}
+              size="12rem"
+            />
           ))}
         </Flex>
       )}
@@ -58,7 +84,7 @@ export const Files: React.VFC<{ files: Array<DriveFile> }> = ({ files }) => {
       {others.length > 0 && (
         <Flex m="1" flexWrap="wrap">
           {others.map((file) => (
-            <OtherFile file={file} key={file.id} />
+            <OtherFile file={file} key={file.id} colors={colors} />
           ))}
         </Flex>
       )}
@@ -66,13 +92,60 @@ export const Files: React.VFC<{ files: Array<DriveFile> }> = ({ files }) => {
   );
 };
 
-const ImageFile: React.VFC<{ image: DriveFile; size: string }> = ({
-  image,
-  size,
-}) => {
+const ImageFile: React.VFC<{
+  image: DriveFile;
+  images: Array<DriveFile>;
+  index: number;
+  size: string;
+}> = ({ image, images, index, size }) => {
   const [nsfw, toggleNSFW] = useState(image.isSensitive);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { panelColor } = useColors();
   return (
     <Box position="relative">
+      <Modal isOpen={isOpen} onClose={onClose} isCentered size="4xl">
+        <ModalOverlay />
+        <ModalContent bgColor={panelColor}>
+          <ModalBody userSelect="none">
+            <Carousel
+              emulateTouch={true}
+              selectedItem={index}
+              showStatus={false}
+              showIndicators={false}
+              showThumbs={false}
+              useKeyboardArrows={true}
+            >
+              {images.map((image) => (
+                <Center h="full" key={image.id}>
+                  {image.type.startsWith("image") ? (
+                    <Image
+                      src={image.url}
+                      alt={image.name}
+                      maxH="xl"
+                      minW="10rem"
+                      p="0.5"
+                      objectFit="contain"
+                    />
+                  ) : (
+                    <video
+                      controls
+                      preload="metadata"
+                      poster={image.thumbnailUrl}
+                    >
+                      <source src={image.url} type={image.type} />
+                    </video>
+                  )}
+                </Center>
+              ))}
+            </Carousel>
+          </ModalBody>
+          <ModalFooter>
+            <Button colorScheme="blue" onClick={onClose}>
+              Close
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
       {!nsfw && (
         <IconButton
           bgColor="whiteAlpha.400"
@@ -99,7 +172,7 @@ const ImageFile: React.VFC<{ image: DriveFile; size: string }> = ({
       >
         {image.type.startsWith("image") && (
           <Image
-            src={image.url}
+            src={image.thumbnailUrl}
             alt={image.name}
             maxH={size}
             minH="5rem"
@@ -111,6 +184,9 @@ const ImageFile: React.VFC<{ image: DriveFile; size: string }> = ({
               filter: nsfw
                 ? "blur(30px) saturate(150%) brightness(60%)"
                 : "none",
+            }}
+            onClick={() => {
+              onOpen();
             }}
           />
         )}
@@ -188,17 +264,20 @@ const AudioFile: React.VFC<{ audio: DriveFile }> = ({ audio }) => {
   );
 };
 
-const OtherFile: React.VFC<{ file: DriveFile }> = ({ file }) => {
+const OtherFile: React.VFC<{
+  file: DriveFile;
+  colors: Record<string, string>;
+}> = ({ file, colors }) => {
   return (
     <Flex
       as={Link}
       m="1"
       p="3"
       borderRadius="md"
-      bgColor={useColorModeValue("blackAlpha.200", "whiteAlpha.200")}
+      bgColor={colors.alhpa200}
       _hover={{
         textDecor: "none",
-        bgColor: useColorModeValue("blackAlpha.50", "whiteAlpha.50"),
+        bgColor: colors.alpha50,
       }}
       href={file.url}
       download

@@ -250,20 +250,20 @@ const GeneralNote: React.VFC<{
       {!cw && note.files.length > 0 && (
         <>
           {depth === 0 ? (
-            <Files files={note.files} />
+            <Files files={note.files} colors={colors} />
           ) : (
             <Accordion allowToggle m="1">
               <AccordionItem border="none">
                 <AccordionButton
                   w="fit-content"
-                  bgColor={colors.AccordionButtonColor}
+                  bgColor={colors.alpha200}
                   color={colors.textColor}
                 >
                   <AccordionIcon />
                   {`${note.files.length}個のファイル`}
                 </AccordionButton>
                 <AccordionPanel>
-                  <Files files={note.files} />
+                  <Files files={note.files} colors={colors} />
                 </AccordionPanel>
               </AccordionItem>
             </Accordion>
