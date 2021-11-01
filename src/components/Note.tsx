@@ -152,7 +152,11 @@ const GeneralNote: React.VFC<{
           </Flex>
           {note.user.host && depth === 0 && (
             <Flex
-              bgGradient={`linear(to-r, ${note.user.instance?.themeColor}, #00000000)`}
+              bgGradient={`linear(to-r, ${
+                note.user.instance?.themeColor
+                  ? note.user.instance.themeColor
+                  : colors.alpha600
+              }, #00000000)`}
               paddingLeft="1"
               borderRadius="md"
               alignItems="center"
