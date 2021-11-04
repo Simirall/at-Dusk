@@ -30,6 +30,9 @@ export const settingsSlice = createSlice({
     ) => {
       state.theme = action.payload.theme;
     },
+    setMotto: (state, action: PayloadAction<boolean>) => {
+      state.autoMotto = action.payload;
+    },
     setDefault: (state) => {
       state.theme = initialState.theme;
       state = initialState;
@@ -37,7 +40,7 @@ export const settingsSlice = createSlice({
   },
 });
 
-export const { setTheme, setDefault } = settingsSlice.actions;
+export const { setTheme, setMotto, setDefault } = settingsSlice.actions;
 
 export const settings = (state: RootState): SettingsState => state.settings;
 

@@ -22,12 +22,14 @@ export interface NotesState {
   notes: Array<Note>;
   noteTypes: Array<NoteType>;
   reactions: Array<ReactionDetails>;
+  moreNote: boolean;
 }
 
 const initialState: NotesState = {
   notes: [],
   noteTypes: [],
   reactions: [],
+  moreNote: false,
 };
 
 export const notesSlice = createSlice({
@@ -98,18 +100,26 @@ export const notesSlice = createSlice({
         });
       }
     },
+    updateMoreNote: (state, action: PayloadAction<boolean>) => {
+      state.moreNote = action.payload;
+    },
     clear: (state) => {
       state.notes = [];
     },
   },
 });
 
-export const { addUpper, addLower, clear } = notesSlice.actions;
+export const { addUpper, addLower, updateMoreNote, clear } = notesSlice.actions;
 
 export const allNoteTypes = (state: RootState): Array<NoteType> =>
   state.notes.noteTypes;
 export const allNotes = (state: RootState): Array<Note> => state.notes.notes;
 export const allReactions = (state: RootState): Array<ReactionDetails> =>
   state.notes.reactions;
+export const moreNote = (state: RootState): boolean => state.notes.moreNote;
+export const oldestNoteId = (state: RootState): string =>
+  state.notes.notes.length > 0
+    ? state.notes.notes[state.notes.notes.length - 1].id
+    : "";
 
 export default notesSlice.reducer;
