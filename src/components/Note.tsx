@@ -205,6 +205,7 @@ const GeneralNote: React.VFC<{
                     <Box
                       whiteSpace="pre-wrap"
                       wordBreak="break-word"
+                      display="inline"
                       w="full"
                       color={colors.textColor}
                     >
@@ -231,6 +232,7 @@ const GeneralNote: React.VFC<{
                   <Box
                     whiteSpace="pre-wrap"
                     wordBreak="break-word"
+                    display="inline"
                     w="full"
                     color={colors.textColor}
                   >
