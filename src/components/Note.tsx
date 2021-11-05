@@ -10,8 +10,8 @@ import { Button } from "@chakra-ui/button";
 import { Icon } from "@chakra-ui/icon";
 import { Image } from "@chakra-ui/image";
 import { Box, Flex, HStack, Link, Text } from "@chakra-ui/layout";
-import { Note as mkNote } from "misskey-js/built/entities";
-import React from "react";
+import { Note as mkNote, User } from "misskey-js/built/entities";
+import React, { memo } from "react";
 import {
   IoArrowUndo,
   IoFastFood,
@@ -22,77 +22,82 @@ import {
 import { Link as RouterLink } from "react-router-dom";
 
 import { NoteType } from "../features/notesSlice";
+import { useColors } from "../utils/Colors";
 import { getRelativeTime } from "../utils/getRelativeTime";
 
 import { Files } from "./Files";
-import { ParseMFMMemo } from "./ParseMFM";
+import { ParseMFM } from "./ParseMFM";
 
 export const Note: React.VFC<{
   note: mkNote;
   type: NoteType;
   depth: number;
   colors: Record<string, string>;
-}> = ({ note, type, depth, colors }) => {
-  const name = note.user.name ? note.user.name : note.user.username;
-  const [cw, updateCw] = React.useState(
-    type.type === "renote"
-      ? note.renote?.cw || note.renote?.cw === ""
+}> = memo(
+  function Fn({ note, type, depth, colors }) {
+    const name = note.user.name ? note.user.name : note.user.username;
+    const [cw, updateCw] = React.useState(
+      type.type === "renote"
+        ? note.renote?.cw || note.renote?.cw === ""
+          ? true
+          : false
+        : note.cw || note.cw === ""
         ? true
         : false
-      : note.cw || note.cw === ""
-      ? true
-      : false
-  );
-  return (
-    <>
-      <Box
-        p="2"
-        borderRadius="lg"
-        overflow="hidden"
-        bgColor={colors.panelColor}
-      >
-        {type.type === "note" && (
-          <GeneralNote
-            note={note}
-            name={name}
-            depth={depth}
-            cw={cw}
-            updateCw={updateCw}
-            colors={colors}
-          />
-        )}
-        {type.type === "reply" && (
-          <Reply
-            note={note}
-            name={name}
-            cw={cw}
-            updateCw={updateCw}
-            colors={colors}
-          />
-        )}
-        {type.type === "renote" && (
-          <Renote
-            note={note}
-            name={name}
-            cw={cw}
-            updateCw={updateCw}
-            colors={colors}
-          />
-        )}
-        {type.type === "quote" && (
-          <Quote
-            note={note}
-            name={name}
-            depth={depth}
-            cw={cw}
-            updateCw={updateCw}
-            colors={colors}
-          />
-        )}
-      </Box>
-    </>
-  );
-};
+    );
+    return (
+      <>
+        <Box
+          p="2"
+          borderRadius="lg"
+          overflow="hidden"
+          bgColor={colors.panelColor}
+          color={colors.textColor}
+        >
+          {type.type === "note" && (
+            <GeneralNote
+              note={note}
+              name={name}
+              depth={depth}
+              cw={cw}
+              updateCw={updateCw}
+              colors={colors}
+            />
+          )}
+          {type.type === "reply" && (
+            <Reply
+              note={note}
+              name={name}
+              cw={cw}
+              updateCw={updateCw}
+              colors={colors}
+            />
+          )}
+          {type.type === "renote" && (
+            <Renote
+              note={note}
+              name={name}
+              cw={cw}
+              updateCw={updateCw}
+              colors={colors}
+            />
+          )}
+          {type.type === "quote" && (
+            <Quote
+              note={note}
+              name={name}
+              depth={depth}
+              cw={cw}
+              updateCw={updateCw}
+              colors={colors}
+            />
+          )}
+        </Box>
+      </>
+    );
+  },
+  (p, n) => p.note.id === n.note.id && p.colors === n.colors
+);
 
 const GeneralNote: React.VFC<{
   note: mkNote;
@@ -101,7 +106,8 @@ const GeneralNote: React.VFC<{
   cw: boolean;
   updateCw: React.Dispatch<React.SetStateAction<boolean>>;
   colors: Record<string, string>;
-}> = ({ note, name, depth, cw, updateCw, colors }) => {
+}> = memo(function Fn({ note, name, depth, cw, updateCw, colors }) {
+  const alpha = useColors("alpha");
   return (
     <>
       <Flex>
@@ -127,13 +133,8 @@ const GeneralNote: React.VFC<{
                   note.user.host ? `@${note.user.host}` : ""
                 }`}
                 isTruncated
-                color={colors.textColor}
               >
-                <ParseMFMMemo
-                  text={name}
-                  emojis={note.user.emojis}
-                  type="plain"
-                />
+                <ParseMFM text={name} emojis={note.user.emojis} type="plain" />
               </Link>
               <Text color="gray.400" isTruncated>{`@${note.user.username}${
                 note.user.host ? `@${note.user.host}` : ""
@@ -150,40 +151,19 @@ const GeneralNote: React.VFC<{
               />
             </HStack>
           </Flex>
-          {note.user.host && depth === 0 && (
-            <Flex
-              bgGradient={`linear(to-r, ${
-                note.user.instance?.themeColor
-                  ? note.user.instance.themeColor
-                  : colors.alpha600
-              }, #00000000)`}
-              paddingLeft="1"
-              borderRadius="md"
-              alignItems="center"
-            >
-              <Image
-                src={note.user.instance?.faviconUrl as string}
-                h="5"
-                marginRight="1"
-              />
-              <Text color="white">{note.user.instance?.name}</Text>
-            </Flex>
-          )}
+          {note.user.host && depth === 0 && <Instance user={note.user} />}
           <Box>
             {note.cw || note.cw === "" ? (
               <>
                 <HStack>
-                  {note.replyId && (
-                    <Icon as={IoArrowUndo} color={colors.textColor} />
-                  )}
+                  {note.replyId && <Icon as={IoArrowUndo} />}
                   <Box>
                     <Box
                       whiteSpace="pre-wrap"
                       wordBreak="break-word"
                       display="inline"
-                      color={colors.textColor}
                     >
-                      <ParseMFMMemo
+                      <ParseMFM
                         text={note.cw}
                         emojis={note.emojis}
                         type="full"
@@ -192,6 +172,8 @@ const GeneralNote: React.VFC<{
                     <Button
                       marginLeft="1"
                       size="xs"
+                      color={colors.headerTextColor}
+                      colorScheme="whiteAlpha"
                       onClick={() => {
                         updateCw(!cw);
                       }}
@@ -207,9 +189,8 @@ const GeneralNote: React.VFC<{
                       wordBreak="break-word"
                       display="inline"
                       w="full"
-                      color={colors.textColor}
                     >
-                      <ParseMFMMemo
+                      <ParseMFM
                         text={note.text}
                         emojis={note.emojis}
                         type="full"
@@ -225,18 +206,15 @@ const GeneralNote: React.VFC<{
               </>
             ) : (
               <HStack>
-                {note.replyId && (
-                  <Icon as={IoArrowUndo} color={colors.textColor} />
-                )}
+                {note.replyId && <Icon as={IoArrowUndo} />}
                 <Box paddingInline="1" w="full">
                   <Box
                     whiteSpace="pre-wrap"
                     wordBreak="break-word"
                     display="inline"
                     w="full"
-                    color={colors.textColor}
                   >
-                    <ParseMFMMemo
+                    <ParseMFM
                       text={note.text}
                       emojis={note.emojis}
                       type="full"
@@ -260,11 +238,7 @@ const GeneralNote: React.VFC<{
           ) : (
             <Accordion allowToggle m="1">
               <AccordionItem border="none">
-                <AccordionButton
-                  w="fit-content"
-                  bgColor={colors.alpha200}
-                  color={colors.textColor}
-                >
+                <AccordionButton w="fit-content" bgColor={alpha.alpha200}>
                   <AccordionIcon />
                   {`${note.files.length}個のファイル`}
                 </AccordionButton>
@@ -278,7 +252,7 @@ const GeneralNote: React.VFC<{
       )}
     </>
   );
-};
+});
 
 const Reply: React.VFC<{
   note: mkNote;
@@ -286,7 +260,7 @@ const Reply: React.VFC<{
   cw: boolean;
   updateCw: React.Dispatch<React.SetStateAction<boolean>>;
   colors: Record<string, string>;
-}> = ({ note, name, cw, updateCw, colors }) => {
+}> = memo(function Fn({ note, name, cw, updateCw, colors }) {
   return (
     <Box>
       <Box
@@ -331,7 +305,7 @@ const Reply: React.VFC<{
       )}
     </Box>
   );
-};
+});
 
 const Renote: React.VFC<{
   note: mkNote;
@@ -339,7 +313,7 @@ const Renote: React.VFC<{
   cw: boolean;
   updateCw: React.Dispatch<React.SetStateAction<boolean>>;
   colors: Record<string, string>;
-}> = ({ note, name, cw, updateCw, colors }) => {
+}> = memo(function Fn({ note, name, cw, updateCw, colors }) {
   return (
     <Box>
       {note.renote?.replyId && (
@@ -393,11 +367,7 @@ const Renote: React.VFC<{
                 note.user.host ? `@${note.user.host}` : ""
               }`}
             >
-              <ParseMFMMemo
-                text={name}
-                emojis={note.user.emojis}
-                type="plain"
-              />
+              <ParseMFM text={name} emojis={note.user.emojis} type="plain" />
             </Link>
             がRenote
           </Box>
@@ -448,7 +418,7 @@ const Renote: React.VFC<{
       )}
     </Box>
   );
-};
+});
 
 const Quote: React.VFC<{
   note: mkNote;
@@ -457,7 +427,7 @@ const Quote: React.VFC<{
   cw: boolean;
   updateCw: React.Dispatch<React.SetStateAction<boolean>>;
   colors: Record<string, string>;
-}> = ({ note, name, depth, cw, updateCw, colors }) => {
+}> = memo(function Fn({ note, name, depth, cw, updateCw, colors }) {
   return (
     <Box>
       <GeneralNote
@@ -488,13 +458,38 @@ const Quote: React.VFC<{
       )}
     </Box>
   );
-};
+});
+
+const Instance: React.VFC<{
+  user: User;
+}> = memo(function Fn({ user }) {
+  const alpha = useColors("alpha");
+  return (
+    <>
+      <Flex
+        bgGradient={`linear(to-r, ${
+          user.instance?.themeColor ? user.instance.themeColor : alpha.alpha600
+        }, #00000000)`}
+        paddingLeft="1"
+        borderRadius="md"
+        alignItems="center"
+      >
+        <Image
+          src={user.instance?.faviconUrl as string}
+          h="5"
+          marginRight="1"
+        />
+        <Text color="white">{user.instance?.name}</Text>
+      </Flex>
+    </>
+  );
+});
 
 const Visibility: React.VFC<{
   visibility: "public" | "home" | "followers" | "specified";
   local: boolean | undefined;
   renote: boolean;
-}> = ({ visibility, local, renote }) => {
+}> = memo(function Fn({ visibility, local, renote }) {
   let v = null;
   switch (visibility) {
     case "home":
@@ -517,4 +512,4 @@ const Visibility: React.VFC<{
       {v}
     </HStack>
   );
-};
+});

@@ -24,7 +24,7 @@ export const ParseMFM: React.VFC<{
     url: string;
   }[];
   type: "full" | "plain";
-}> = ({ text, emojis, type }) => {
+}> = memo(function fun({ text, emojis, type }) {
   const v: Array<React.ReactNode> = [];
   if (text) {
     switch (type) {
@@ -49,7 +49,7 @@ export const ParseMFM: React.VFC<{
     }
   }
   return <>{v}</>;
-};
+});
 
 const Judge: React.VFC<{
   element: MfmNode;
@@ -345,14 +345,3 @@ const JudgePlain: React.VFC<{
       );
   }
 };
-
-export const ParseMFMMemo: React.VFC<{
-  text: string | null;
-  emojis: {
-    name: string;
-    url: string;
-  }[];
-  type: "full" | "plain";
-}> = memo(function parseMFMMemo({ text, emojis, type }) {
-  return <ParseMFM text={text} emojis={emojis} type={type} />;
-});
