@@ -7,32 +7,40 @@ export interface SettingsState {
     lightTheme: string;
     darkTheme: string;
   };
+  autoMotto: boolean;
 }
 
 const initialState: SettingsState = {
   theme: {
-    lightTheme: localStorage.getItem("light-theme") as string,
-    darkTheme: localStorage.getItem("dark-theme") as string,
+    lightTheme: "",
+    darkTheme: "",
   },
+  autoMotto: true,
 };
 
 export const settingsSlice = createSlice({
   name: "settingsSlice",
   initialState,
   reducers: {
-    setTheme: (state, action: PayloadAction<SettingsState>) => {
+    setTheme: (
+      state,
+      action: PayloadAction<{
+        theme: { lightTheme: string; darkTheme: string };
+      }>
+    ) => {
       state.theme = action.payload.theme;
     },
+    setMotto: (state, action: PayloadAction<boolean>) => {
+      state.autoMotto = action.payload;
+    },
     setDefault: (state) => {
-      state.theme = {
-        lightTheme: "",
-        darkTheme: "",
-      };
+      state.theme = initialState.theme;
+      state = initialState;
     },
   },
 });
 
-export const { setTheme, setDefault } = settingsSlice.actions;
+export const { setTheme, setMotto, setDefault } = settingsSlice.actions;
 
 export const settings = (state: RootState): SettingsState => state.settings;
 

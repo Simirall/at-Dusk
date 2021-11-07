@@ -5,7 +5,7 @@ import { TimeLine } from "../components/TimeLine";
 
 export const Home: React.VFC = () => {
   return (
-    <Box>
+    <Box h="full">
       <TimeLine />
     </Box>
   );

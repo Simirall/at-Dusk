@@ -1,15 +1,30 @@
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
+import { combineReducers } from "redux";
+import { persistReducer } from "redux-persist";
+import storage from "redux-persist/lib/storage";
+import thunk from "redux-thunk";
 
 import noteDetailsReducer from "../features/noteDetailsSlice";
 import notesReducer from "../features/notesSlice";
 import settingsReducer from "../features/settingsSlice";
 
+const reducers = combineReducers({
+  notes: notesReducer,
+  noteDetails: noteDetailsReducer,
+  settings: settingsReducer,
+});
+
+const persistConfig = {
+  key: "root",
+  storage,
+  whitelist: ["settings"],
+};
+
+const persistedReducer = persistReducer(persistConfig, reducers);
+
 export const store = configureStore({
-  reducer: {
-    notes: notesReducer,
-    noteDetails: noteDetailsReducer,
-    settings: settingsReducer,
-  },
+  reducer: persistedReducer,
+  middleware: [thunk],
 });
 
 export type AppDispatch = typeof store.dispatch;

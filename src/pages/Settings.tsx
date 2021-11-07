@@ -1,39 +1,43 @@
 import { Button } from "@chakra-ui/button";
 import { FormLabel } from "@chakra-ui/form-control";
-import { Box, Flex, HStack } from "@chakra-ui/layout";
+import { Box, Flex, HStack, VStack } from "@chakra-ui/layout";
 import { Select } from "@chakra-ui/select";
+import { Switch } from "@chakra-ui/switch";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { useHistory } from "react-router-dom";
 
 import { useAppDispatch, useAppSelector } from "../app/hooks";
-import { setTheme, settings } from "../features/settingsSlice";
+import { setTheme, setMotto, settings } from "../features/settingsSlice";
 import { useColors } from "../utils/Colors";
 import { useLoginContext } from "../utils/LoginContext";
 
 export const Settings: React.VFC = () => {
   const history = useHistory();
   const dispatch = useAppDispatch();
-  const { updateLogin } = useLoginContext();
-  const { theme } = useAppSelector(settings);
   const { register, handleSubmit } = useForm();
+  const { updateLogin } = useLoginContext();
   const { headerTextColor } = useColors();
+  const settingsValue = useAppSelector(settings);
 
-  const onSubmit = (data: { lightTheme: string; darkTheme: string }) => {
+  const onSubmitTheme = (data: { lightTheme: string; darkTheme: string }) => {
     dispatch(setTheme({ theme: data }));
+  };
+  const onSubmitGenerall = (data: { autoMotto: boolean }) => {
+    dispatch(setMotto(data.autoMotto));
   };
 
   return (
     <>
       <Flex p="2" flexDir="column">
         <Box m="1">
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form onSubmit={handleSubmit(onSubmitTheme)}>
             <HStack color={headerTextColor}>
               <Box>
                 <FormLabel>Light Mode</FormLabel>
                 <Select
                   {...register("lightTheme")}
-                  defaultValue={theme.lightTheme}
+                  defaultValue={settingsValue.theme.lightTheme}
                   variant="flushed"
                 >
                   <option value="illuminating">illuminating</option>
@@ -44,7 +48,7 @@ export const Settings: React.VFC = () => {
                 <FormLabel>Dark Mode</FormLabel>
                 <Select
                   {...register("darkTheme")}
-                  defaultValue={theme.darkTheme}
+                  defaultValue={settingsValue.theme.darkTheme}
                   variant="flushed"
                 >
                   <option value="chillout">chillout</option>
@@ -54,6 +58,24 @@ export const Settings: React.VFC = () => {
             </HStack>
             <Button colorScheme="blue" marginTop="2" w="full" type="submit">
               更新
+            </Button>
+          </form>
+        </Box>
+        <Box m="1">
+          <form onSubmit={handleSubmit(onSubmitGenerall)}>
+            <VStack>
+              <FormLabel userSelect="none">
+                <Switch
+                  marginRight="2"
+                  size="lg"
+                  defaultChecked={settingsValue.autoMotto}
+                  {...register("autoMotto")}
+                />
+                自動でもっと読む
+              </FormLabel>
+            </VStack>
+            <Button colorScheme="blue" marginTop="2" w="ｌｇ" type="submit">
+              保存
             </Button>
           </form>
         </Box>

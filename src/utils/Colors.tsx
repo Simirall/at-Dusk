@@ -1,6 +1,6 @@
 import { useColorModeValue } from "@chakra-ui/color-mode";
 
-export const useColors = (): Record<string, string> => {
+export const useColors = (props?: string): Record<string, string> => {
   const alpha50 = useColorModeValue("blackAlpha.50", "whiteAlpha.50");
   const alpha200 = useColorModeValue("blackAlpha.200", "whiteAlpha.200");
   const alpha600 = useColorModeValue("blackAlpha.600", "whiteAlpha.600");
@@ -14,16 +14,24 @@ export const useColors = (): Record<string, string> => {
     "dark.headerText"
   );
   const borderColor = useColorModeValue("light.secondary", "dark.secondary");
-  return {
-    alpha50: alpha50,
-    alpha200: alpha200,
-    alpha600: alpha600,
-    baseColor: baseColor,
-    panelColor: panelColor,
-    primaryColor: primaryColor,
-    secondaryColor: secondaryColor,
-    textColor: textColor,
-    headerTextColor: headerTextColor,
-    borderColor: borderColor,
-  };
+  if (props === "alpha") {
+    return {
+      alpha50: alpha50,
+      alpha200: alpha200,
+      alpha600: alpha600,
+    };
+  } else {
+    return {
+      alpha50: alpha50,
+      alpha200: alpha200,
+      alpha600: alpha600,
+      baseColor: baseColor,
+      panelColor: panelColor,
+      primaryColor: primaryColor,
+      secondaryColor: secondaryColor,
+      textColor: textColor,
+      headerTextColor: headerTextColor,
+      borderColor: borderColor,
+    };
+  }
 };
