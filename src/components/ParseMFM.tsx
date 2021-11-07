@@ -221,7 +221,6 @@ const Judge: React.VFC<{
           decoding="async"
           display="inline"
           h="1.4em"
-          m="0.5"
         />
       );
     }
@@ -235,7 +234,6 @@ const Judge: React.VFC<{
           loading="lazy"
           display="inline"
           h="2.5em"
-          m="0.5"
         />
       ) : (
         <>{`:${element.props.name}:`}</>
