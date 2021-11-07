@@ -2,6 +2,8 @@ import { CSSReset, ColorModeScript } from "@chakra-ui/react";
 import * as React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
+import { persistStore } from "redux-persist";
+import { PersistGate } from "redux-persist/integration/react";
 
 import { store } from "./app/store";
 import "focus-visible";
@@ -11,17 +13,21 @@ import { FocusVisible } from "./utils/FocusVisible";
 import { LoginProvider } from "./utils/LoginContext";
 import * as serviceWorker from "./utils/serviceWorker";
 
+const persistor = persistStore(store);
+
 ReactDOM.render(
   <React.StrictMode>
     <ColorModeScript />
     <CSSReset />
     <FocusVisible />
     <Provider store={store}>
-      <LoginProvider>
-        <ThemeSelector>
-          <App />
-        </ThemeSelector>
-      </LoginProvider>
+      <PersistGate loading={null} persistor={persistor}>
+        <LoginProvider>
+          <ThemeSelector>
+            <App />
+          </ThemeSelector>
+        </LoginProvider>
+      </PersistGate>
     </Provider>
   </React.StrictMode>,
   document.getElementById("root")
