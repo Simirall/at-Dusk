@@ -15,7 +15,20 @@ export const Reactions: React.VFC<{ id: string }> = memo(function Fn({ id }) {
       {reaction?.reactions && Object.keys(reaction?.reactions).length > 0 && (
         <Flex p="1" overflow="hidden" flexWrap="wrap">
           {Object.keys(reaction?.reactions).map((key, i) => (
-            <Button key={i} size="sm" marginInline="0.5" paddingInline="1.5">
+            <Button
+              key={i}
+              size="sm"
+              marginInline="0.5"
+              paddingInline="1.5"
+              disabled={
+                key.includes("@") ? (key.includes("@.") ? false : true) : false
+              }
+              _disabled={{
+                opacity: 0.8,
+                bgColor: "#00000000",
+                cursor: "not-allowed",
+              }}
+            >
               <Flex alignItems="center">
                 <ParseReaction reaction={key} emojis={reaction.emojis} />
                 <Box marginLeft="1">{reaction.reactions[key]}</Box>
