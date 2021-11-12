@@ -23,6 +23,12 @@ export const ParseReaction: React.VFC<{
                 loading="lazy"
                 display="inline"
                 h="1.4em"
+                onError={(e) => {
+                  if (e.currentTarget.parentElement?.parentElement) {
+                    e.currentTarget.parentElement.parentElement.style.display =
+                      "none";
+                  }
+                }}
               />
             ) : (
               <>{reaction}</>

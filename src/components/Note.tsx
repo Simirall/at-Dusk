@@ -95,6 +95,7 @@ export const Note: React.VFC<{
         )}
         <Reactions
           id={type.type === "renote" ? (note.renote?.id as string) : note.id}
+          colors={colors}
         />
         <NoteFooter note={note} type={type} colors={colors} />
       </Box>
