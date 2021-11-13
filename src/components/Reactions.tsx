@@ -79,7 +79,6 @@ const ReactionButton: React.VFC<{
       }}
       {...props}
       onClick={() => {
-        console.log(reaction.myReaction !== text);
         if (reaction.myReaction && reaction.myReaction === text) {
           socket.send(JSON.stringify(reactionDeleteObject));
         } else {
