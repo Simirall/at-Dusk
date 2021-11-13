@@ -183,7 +183,17 @@ const GeneralNote: React.VFC<{
                         updateCw(!cw);
                       }}
                     >
-                      {!cw ? "隠す" : `もっと見る (${note.text?.length}文字)`}
+                      {!cw
+                        ? "隠す"
+                        : `もっと見る (${
+                            note.text?.length ? `${note.text?.length}文字` : ""
+                          }${
+                            note.text?.length && note.files.length ? " / " : ""
+                          }${
+                            note.files.length
+                              ? `${note.files.length}ファイル`
+                              : ""
+                          })`}
                     </Button>
                   </Box>
                 </HStack>
