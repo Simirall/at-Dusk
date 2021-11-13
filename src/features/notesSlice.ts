@@ -168,7 +168,7 @@ export const notesSlice = createSlice({
       );
       if (index >= 0) {
         if (
-          state.reactions[index].reactions[action.payload.body.reaction] > 2
+          state.reactions[index].reactions[action.payload.body.reaction] >= 2
         ) {
           state.reactions[index].reactions[action.payload.body.reaction]--;
         } else {

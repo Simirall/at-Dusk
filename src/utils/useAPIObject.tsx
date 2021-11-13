@@ -1,10 +1,5 @@
 import { useLoginContext } from "./LoginContext";
 
-interface obj {
-  type: string;
-  body: APIBody | StreamBody;
-}
-
 interface APIBody {
   id: string;
   endpoint: string;
@@ -18,6 +13,16 @@ interface StreamBody {
   channel: string;
 }
 
+export interface APIObject {
+  type: string;
+  body: APIBody;
+}
+
+export interface StreamObject {
+  type: string;
+  body: StreamBody;
+}
+
 interface Props {
   type: "api" | "connect";
   id: string;
@@ -26,27 +31,25 @@ interface Props {
   data?: Record<string, unknown>;
 }
 
-export const useAPIObject = (props: Props): obj => {
+export const useAPIObject = (props: Props): APIObject | StreamObject => {
   const { token } = useLoginContext();
-  const returnObject =
-    props.type === "api"
-      ? {
-          type: props.type,
-          body: {
-            id: props.id,
-            endpoint: props.endpoint,
-            data: {
-              i: token,
-              ...props.data,
-            },
-          } as APIBody,
-        }
-      : {
-          type: props.type,
-          body: {
-            id: props.id,
-            channel: props.channel,
-          } as StreamBody,
-        };
-  return returnObject as obj;
+  return props.type === "api"
+    ? ({
+        type: props.type,
+        body: {
+          id: props.id,
+          endpoint: props.endpoint,
+          data: {
+            i: token,
+            ...props.data,
+          },
+        },
+      } as APIObject)
+    : ({
+        type: props.type,
+        body: {
+          id: props.id,
+          channel: props.channel,
+        },
+      } as StreamObject);
 };
