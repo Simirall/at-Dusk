@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Redirect } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
 import { useLoginContext } from "../utils/LoginContext";
 
@@ -11,5 +11,5 @@ export const Auth: React.VFC<{
   useEffect(() => {
     if (isLogin) updateToken(localStorage.getItem("UserToken") as string);
   });
-  return isLogin ? <>{children}</> : <Redirect to={"/login"} />;
+  return isLogin ? <>{children}</> : <Navigate to="/login" />;
 };
