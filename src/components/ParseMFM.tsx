@@ -63,7 +63,11 @@ const Judge: React.VFC<{
   const secondaryColor = useColorModeValue("light.secondary", "dark.secondary");
   switch (element.type) {
     case "text":
-      return <Box display="inline">{element.props.text}</Box>;
+      return (
+        <Box display="inline" verticalAlign="middle">
+          {element.props.text}
+        </Box>
+      );
     case "fn":
       element.children.forEach((child, i) => {
         c.push(
@@ -78,7 +82,11 @@ const Judge: React.VFC<{
         element.props.name === "x4"
       ) {
         return (
-          <Box display="inline" className={`${element.props.name}`}>
+          <Box
+            display="inline"
+            verticalAlign="middle"
+            className={`${element.props.name}`}
+          >
             {c}
           </Box>
         );
@@ -86,6 +94,7 @@ const Judge: React.VFC<{
         return (
           <Box
             display="inline-block"
+            verticalAlign="middle"
             className={`${element.props.name}`}
             sx={{ "--speed": element.props.args.speed as string }}
           >
@@ -96,6 +105,7 @@ const Judge: React.VFC<{
         return (
           <Box
             display="inline-block"
+            verticalAlign="middle"
             className={`${element.props.name} ${Object.keys(
               element.props.args
             ).join(" ")}`}
@@ -182,7 +192,7 @@ const Judge: React.VFC<{
         );
       });
       return (
-        <Box display="inline" fontStyle="oblique">
+        <Box display="inline" fontStyle="oblique" verticalAlign="middle">
           {c}
         </Box>
       );
@@ -195,7 +205,12 @@ const Judge: React.VFC<{
         );
       });
       return (
-        <Box display="inline" opacity="0.7" fontSize="smaller">
+        <Box
+          display="inline"
+          opacity="0.7"
+          fontSize="smaller"
+          verticalAlign="middle"
+        >
           {c}
         </Box>
       );
@@ -208,7 +223,7 @@ const Judge: React.VFC<{
         );
       });
       return (
-        <Box fontWeight="bold" display="inline">
+        <Box fontWeight="bold" display="inline" verticalAlign="middle">
           {c}
         </Box>
       );
@@ -221,6 +236,7 @@ const Judge: React.VFC<{
           decoding="async"
           display="inline"
           h="1.4em"
+          verticalAlign="middle"
         />
       );
     }
@@ -234,6 +250,7 @@ const Judge: React.VFC<{
           loading="lazy"
           display="inline"
           h="2.5em"
+          verticalAlign="middle"
         />
       ) : (
         <>{`:${element.props.name}:`}</>
@@ -312,7 +329,11 @@ const JudgePlain: React.VFC<{
 }> = ({ element, emojis }) => {
   switch (element.type) {
     case "text":
-      return <Box display="inline">{element.props.text}</Box>;
+      return (
+        <Box display="inline" verticalAlign="middle">
+          {element.props.text}
+        </Box>
+      );
     case "unicodeEmoji": {
       const twemoji = parse(element.props.emoji);
       return (
@@ -322,7 +343,7 @@ const JudgePlain: React.VFC<{
           decoding="async"
           display="inline"
           h="1em"
-          m="0.5"
+          verticalAlign="middle"
         />
       );
     }
@@ -336,7 +357,7 @@ const JudgePlain: React.VFC<{
           loading="lazy"
           display="inline"
           h="1.2em"
-          m="0.5"
+          verticalAlign="middle"
         />
       ) : (
         <>{`:${element.props.name}:`}</>
