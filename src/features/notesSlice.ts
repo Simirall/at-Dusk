@@ -59,7 +59,7 @@ export const notesSlice = createSlice({
       } else {
         n = action.payload;
       }
-      if (!state.reactions.some((elm) => elm.id === n.id)) {
+      if (!state.reactions.some((r) => r.id === n.id)) {
         state.reactions.unshift({
           id: n.id,
           myReaction: n.myReaction,
@@ -103,13 +103,93 @@ export const notesSlice = createSlice({
     updateMoreNote: (state, action: PayloadAction<boolean>) => {
       state.moreNote = action.payload;
     },
+    noteDelete: (
+      state,
+      action: PayloadAction<{
+        id: string;
+        type: string;
+        body: { deletedAt: string };
+      }>
+    ) => {
+      state.notes = state.notes.filter((note) => note.id !== action.payload.id);
+      state.noteTypes = state.noteTypes.filter(
+        (note) => note.id !== action.payload.id
+      );
+    },
     clear: (state) => {
       state.notes = [];
+    },
+    reacted: (
+      state,
+      action: PayloadAction<{
+        id: string;
+        type: string;
+        body: {
+          reaction: string;
+          emoji?: { name: string; url: string };
+          userId: string;
+        };
+      }>
+    ) => {
+      const index = state.reactions.findIndex(
+        (reaction) => reaction.id === action.payload.id
+      );
+      if (index >= 0) {
+        if (
+          Object.keys(state.reactions[index].reactions).includes(
+            action.payload.body.reaction
+          )
+        ) {
+          state.reactions[index].reactions[action.payload.body.reaction]++;
+        } else {
+          if (action.payload.body.emoji) {
+            state.reactions[index].emojis.push(action.payload.body.emoji);
+          }
+          state.reactions[index].reactions[action.payload.body.reaction] = 1;
+        }
+        if (action.payload.body.userId === localStorage.getItem("UserId"))
+          state.reactions[index].myReaction = action.payload.body.reaction;
+      }
+    },
+    unreacted: (
+      state,
+      action: PayloadAction<{
+        id: string;
+        type: string;
+        body: {
+          reaction: string;
+          emoji?: { name: string; url: string };
+          userId: string;
+        };
+      }>
+    ) => {
+      const index = state.reactions.findIndex(
+        (reaction) => reaction.id === action.payload.id
+      );
+      if (index >= 0) {
+        if (
+          state.reactions[index].reactions[action.payload.body.reaction] >= 2
+        ) {
+          state.reactions[index].reactions[action.payload.body.reaction]--;
+        } else {
+          delete state.reactions[index].reactions[action.payload.body.reaction];
+        }
+        if (action.payload.body.userId === localStorage.getItem("UserId"))
+          delete state.reactions[index].myReaction;
+      }
     },
   },
 });
 
-export const { addUpper, addLower, updateMoreNote, clear } = notesSlice.actions;
+export const {
+  addUpper,
+  addLower,
+  updateMoreNote,
+  noteDelete,
+  clear,
+  reacted,
+  unreacted,
+} = notesSlice.actions;
 
 export const allNoteTypes = (state: RootState): Array<NoteType> =>
   state.notes.noteTypes;
