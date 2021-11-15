@@ -1,7 +1,7 @@
 import { useColorModeValue } from "@chakra-ui/color-mode";
 import { Flex } from "@chakra-ui/react";
 import React from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import { Auth } from "../components/Auth";
 import { Header } from "../components/Header";
@@ -25,34 +25,33 @@ export const App: React.VFC = () => (
       transitionDuration="normal"
       transitionProperty="background-color"
     >
-      <Switch>
-        <Route exact path="/login">
-          <Login />
-        </Route>
-        <Auth>
-          <SocketProvider>
-            <SocketManager>
-              <Header />
-              <CheckLocation>
-                <Switch>
-                  <Route exact path="/user/:id">
-                    <User />
-                  </Route>
-                  <Route exact path="/notes/:id">
-                    <Notes />
-                  </Route>
-                  <Route exact path="/settings">
-                    <Settings />
-                  </Route>
-                  <Route exact path="/">
-                    <Home />
-                  </Route>
-                </Switch>
-              </CheckLocation>
-            </SocketManager>
-          </SocketProvider>
-        </Auth>
-      </Switch>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route
+          path="*"
+          element={
+            <Auth>
+              <SocketProvider>
+                <SocketManager>
+                  <Header />
+                  <CheckLocation>
+                    <Routes>
+                      <Route path="/user">
+                        <Route path=":id" element={<User />} />
+                      </Route>
+                      <Route path="/notes">
+                        <Route path=":id" element={<Notes />} />
+                      </Route>
+                      <Route path="/settings" element={<Settings />} />
+                      <Route path="/" element={<Home />} />
+                    </Routes>
+                  </CheckLocation>
+                </SocketManager>
+              </SocketProvider>
+            </Auth>
+          }
+        />
+      </Routes>
     </Flex>
   </Router>
 );

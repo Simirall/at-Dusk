@@ -1,7 +1,6 @@
 import { Box, Center } from "@chakra-ui/layout";
-import { History } from "history";
 import React from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate, NavigateFunction } from "react-router-dom";
 
 import { Loading } from "../components/Loading";
 import { useLoginContext } from "../utils/LoginContext";
@@ -9,12 +8,12 @@ import { useLoginContext } from "../utils/LoginContext";
 export const GetToken: React.VFC<{
   uuid: string;
 }> = ({ uuid }) => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { updateLogin } = useLoginContext();
   const tokenUrl = `https://${localStorage.getItem(
     "instanceURL"
   )}/api/miauth/${uuid}/check`;
-  fetchData(tokenUrl, history, updateLogin);
+  fetchData(tokenUrl, navigate, updateLogin);
   return (
     <Box w="full">
       <Center>
@@ -26,7 +25,7 @@ export const GetToken: React.VFC<{
 
 function fetchData(
   tokenUrl: string,
-  history: History,
+  navigate: NavigateFunction,
   updateLogin: React.Dispatch<React.SetStateAction<boolean>>
 ) {
   fetch(tokenUrl, {
@@ -46,7 +45,7 @@ function fetchData(
         localStorage.setItem("UserName", text.user.username);
         Promise.allSettled([fetchMeta(), fetchUser()]).then(() => {
           updateLogin(true);
-          history.push("/");
+          navigate("/");
         });
       }
     })

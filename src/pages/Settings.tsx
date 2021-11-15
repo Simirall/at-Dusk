@@ -5,7 +5,7 @@ import { Select } from "@chakra-ui/select";
 import { Switch } from "@chakra-ui/switch";
 import React from "react";
 import { useForm } from "react-hook-form";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { setTheme, setMotto, settings } from "../features/settingsSlice";
@@ -13,7 +13,7 @@ import { useColors } from "../utils/Colors";
 import { useLoginContext } from "../utils/LoginContext";
 
 export const Settings: React.VFC = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { register, handleSubmit } = useForm();
   const { updateLogin } = useLoginContext();
@@ -86,7 +86,7 @@ export const Settings: React.VFC = () => {
           onClick={() => {
             localStorage.clear();
             updateLogin(false);
-            history.push("/login");
+            navigate("/login");
           }}
         >
           Logout
