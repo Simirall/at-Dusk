@@ -26,7 +26,9 @@ import { useColors } from "../utils/Colors";
 import { getRelativeTime } from "../utils/getRelativeTime";
 
 import { Files } from "./Files";
+import { NoteFooter } from "./NoteFooter";
 import { ParseMFM } from "./ParseMFM";
+import { Reactions } from "./Reactions";
 
 export const Note: React.VFC<{
   note: mkNote;
@@ -46,54 +48,57 @@ export const Note: React.VFC<{
         : false
     );
     return (
-      <>
-        <Box
-          p="2"
-          borderRadius="lg"
-          overflow="hidden"
-          bgColor={colors.panelColor}
-          color={colors.textColor}
-        >
-          {type.type === "note" && (
-            <GeneralNote
-              note={note}
-              name={name}
-              depth={depth}
-              cw={cw}
-              updateCw={updateCw}
-              colors={colors}
-            />
-          )}
-          {type.type === "reply" && (
-            <Reply
-              note={note}
-              name={name}
-              cw={cw}
-              updateCw={updateCw}
-              colors={colors}
-            />
-          )}
-          {type.type === "renote" && (
-            <Renote
-              note={note}
-              name={name}
-              cw={cw}
-              updateCw={updateCw}
-              colors={colors}
-            />
-          )}
-          {type.type === "quote" && (
-            <Quote
-              note={note}
-              name={name}
-              depth={depth}
-              cw={cw}
-              updateCw={updateCw}
-              colors={colors}
-            />
-          )}
-        </Box>
-      </>
+      <Box
+        p="2"
+        borderRadius="lg"
+        overflow="hidden"
+        bgColor={colors.panelColor}
+        color={colors.textColor}
+      >
+        {type.type === "note" && (
+          <GeneralNote
+            note={note}
+            name={name}
+            depth={depth}
+            cw={cw}
+            updateCw={updateCw}
+            colors={colors}
+          />
+        )}
+        {type.type === "reply" && (
+          <Reply
+            note={note}
+            name={name}
+            cw={cw}
+            updateCw={updateCw}
+            colors={colors}
+          />
+        )}
+        {type.type === "renote" && (
+          <Renote
+            note={note}
+            name={name}
+            cw={cw}
+            updateCw={updateCw}
+            colors={colors}
+          />
+        )}
+        {type.type === "quote" && (
+          <Quote
+            note={note}
+            name={name}
+            depth={depth}
+            cw={cw}
+            updateCw={updateCw}
+            colors={colors}
+          />
+        )}
+        <Reactions
+          id={type.type === "renote" ? (note.renote?.id as string) : note.id}
+          colors={colors}
+        />
+        <NoteFooter note={note} type={type} colors={colors} />
+      </Box>
     );
   },
   (p, n) => p.note.id === n.note.id && p.colors === n.colors
@@ -178,7 +183,17 @@ const GeneralNote: React.VFC<{
                         updateCw(!cw);
                       }}
                     >
-                      {!cw ? "隠す" : `もっと見る (${note.text?.length}文字)`}
+                      {!cw
+                        ? "隠す"
+                        : `もっと見る (${
+                            note.text?.length ? `${note.text?.length}文字` : ""
+                          }${
+                            note.text?.length && note.files.length ? " / " : ""
+                          }${
+                            note.files.length
+                              ? `${note.files.length}ファイル`
+                              : ""
+                          })`}
                     </Button>
                   </Box>
                 </HStack>
@@ -268,15 +283,20 @@ const Reply: React.VFC<{
         borderColor={colors.secondaryColor}
         borderRadius="lg"
         marginBottom="2"
+        paddingInline="1"
+        paddingBlock="2"
         opacity="0.6"
       >
-        <Note
+        <GeneralNote
           note={note.reply as mkNote}
-          type={{
-            id: note.id,
-            type: note.renoteId ? "quote" : "note",
-          }}
+          name={
+            note.reply?.user.name
+              ? note.reply.user.name
+              : (note.reply?.user.username as string)
+          }
           depth={1}
+          cw={cw}
+          updateCw={updateCw}
           colors={colors}
         />
       </Box>
@@ -441,17 +461,22 @@ const Quote: React.VFC<{
       {!((note.cw || note.cw === "") && cw) && depth === 0 && (
         <Box
           marginTop="1"
+          paddingInline="1"
+          paddingBlock="2"
           borderRadius="lg"
           border="1.5px dashed"
           borderColor={colors.borderColor}
         >
-          <Note
+          <GeneralNote
             note={note.renote as mkNote}
-            type={{
-              id: note.renoteId,
-              type: !note.renote?.renoteId ? "note" : "quote",
-            }}
+            name={
+              note.renote?.user.name
+                ? note.renote.user.name
+                : (note.renote?.user.username as string)
+            }
             depth={1}
+            cw={cw}
+            updateCw={updateCw}
             colors={colors}
           />
         </Box>
