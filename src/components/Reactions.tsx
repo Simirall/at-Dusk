@@ -75,7 +75,13 @@ const ReactionButton: React.VFC<{
       _disabled={{
         opacity: 0.8,
         bgColor: "#00000000",
-        cursor: "not-allowed",
+        cursor: "auto",
+        _active: {
+          bgColor: "#00000000",
+        },
+        _hover: {
+          bgColor: "#00000000",
+        },
       }}
       {...props}
       onClick={() => {

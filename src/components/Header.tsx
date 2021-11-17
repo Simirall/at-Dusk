@@ -1,7 +1,7 @@
 import { IconButton } from "@chakra-ui/button";
 import { useDisclosure } from "@chakra-ui/hooks";
 import { EditIcon, SettingsIcon } from "@chakra-ui/icons";
-import { Flex, Text } from "@chakra-ui/react";
+import { Flex, Text, Avatar } from "@chakra-ui/react";
 import { User } from "misskey-js/built/entities";
 import React from "react";
 import { Link as RouterLink } from "react-router-dom";
@@ -39,7 +39,20 @@ export const Header: React.VFC = () => {
         </Text>
         <Flex alignItems="center">
           <Text as={RouterLink} to={`/user/@${user.username}`} color="blue.200">
-            {user.username}
+            <Avatar
+              key={user.id}
+              name={user.username}
+              src={user.avatarUrl}
+              size="md"
+              bg="none"
+              cursor="pointer"
+              borderColor={colors.primaryColor}
+              borderWidth="2px"
+              _hover={{
+                borderColor: colors.secondaryColor,
+                borderWidth: "2px",
+              }}
+            />
           </Text>
           <IconButton
             aria-label="settings"
@@ -49,6 +62,9 @@ export const Header: React.VFC = () => {
             marginLeft="2"
             variant="ghost"
             color={colors.headerTextColor}
+            _hover={{
+              bgColor: colors.alpha50,
+            }}
           />
           <ColorModeSwitcher
             color={colors.headerTextColor}

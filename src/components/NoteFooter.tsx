@@ -12,12 +12,14 @@ import {
 } from "react-icons/io5";
 
 import { NoteType } from "../features/notesSlice";
+import { useStyleProps } from "../utils/StyleProps";
 
 export const NoteFooter: React.VFC<{
   note: mkNote;
   type: NoteType;
   colors: Record<string, string>;
 }> = memo(function Fn({ note, type, colors }) {
+  const styleProps = useStyleProps();
   return (
     <Flex
       overflow="hidden"
@@ -32,8 +34,7 @@ export const NoteFooter: React.VFC<{
           size="sm"
           icon={<IoArrowUndo />}
           marginRight="0.5"
-          bgColor={colors.alpha200}
-          _hover={{ bgColor: colors.alpha600 }}
+          {...styleProps.AlphaButton}
         />
         {type.type !== "renote" ? note.repliesCount : note.renote?.repliesCount}
       </Flex>
@@ -47,8 +48,7 @@ export const NoteFooter: React.VFC<{
               size="sm"
               icon={<IoBan size="1.4em" />}
               marginRight="0.5"
-              bgColor={colors.alpha200}
-              _hover={{ bgColor: colors.alpha600 }}
+              {...styleProps.DisabledBgColor}
               disabled
             />
           ) : (
@@ -58,11 +58,10 @@ export const NoteFooter: React.VFC<{
               size="sm"
               icon={<IoRepeat size="1.4em" />}
               marginRight="0.5"
-              bgColor={colors.alpha200}
-              _hover={{ bgColor: colors.alpha600 }}
+              {...styleProps.AlphaButton}
             />
           )}
-          <MenuList bgColor={colors.panelColor}>
+          <MenuList bgColor={colors.panelColor} borderColor={colors.alpha400}>
             <MenuItem _focus={{ bgColor: colors.alpha200 }}>Renote</MenuItem>
             <MenuItem _focus={{ bgColor: colors.alpha200 }}>引用</MenuItem>
           </MenuList>
@@ -73,8 +72,7 @@ export const NoteFooter: React.VFC<{
         aria-label="reaction"
         size="sm"
         icon={<IoAddCircle size="1.4em" />}
-        bgColor={colors.alpha200}
-        _hover={{ bgColor: colors.alpha600 }}
+        {...styleProps.AlphaButton}
       />
       <Menu>
         <MenuButton
@@ -82,10 +80,9 @@ export const NoteFooter: React.VFC<{
           aria-label="menu"
           size="sm"
           icon={<IoEllipsisHorizontal size="1.4em" />}
-          bgColor={colors.alpha200}
-          _hover={{ bgColor: colors.alpha600 }}
+          {...styleProps.AlphaButton}
         />
-        <MenuList bgColor={colors.panelColor}>
+        <MenuList bgColor={colors.panelColor} borderColor={colors.alpha400}>
           <MenuItem _focus={{ bgColor: colors.alpha200 }}>
             リンクをコピー
           </MenuItem>

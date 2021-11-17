@@ -37,6 +37,7 @@ import {
 } from "react-icons/io5";
 
 import { useColors } from "../utils/Colors";
+import { useStyleProps } from "../utils/StyleProps";
 import { APIObject, useAPIObject } from "../utils/useAPIObject";
 
 import { ParseMFM } from "./ParseMFM";
@@ -45,12 +46,14 @@ export const PostModal: React.VFC<{
   isModalOpen: boolean;
   onModalClose: () => void;
 }> = ({ isModalOpen, onModalClose }) => {
-  const { register, handleSubmit, reset } = useForm();
+  const { register, handleSubmit, watch, reset } = useForm();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const userAddDisclosure = useDisclosure();
-  const colors = useColors();
   const [visibility, setVisibility] = useState("public");
   const [users, updateUsers] = useState<Array<User>>([]);
+  const userAddDisclosure = useDisclosure();
+  const colors = useColors();
+  const styleProps = useStyleProps();
+
   const userAddObject = useAPIObject({
     id: "userAdd",
     type: "api",
@@ -96,8 +99,13 @@ export const PostModal: React.VFC<{
             <ModalHeader>
               <ModalCloseButton />
             </ModalHeader>
-            <ModalBody>
-              <Textarea {...register("text")} />
+            <ModalBody mt="1">
+              <Textarea
+                {...register("text")}
+                borderColor={colors.alpha400}
+                _hover={{ borderColor: colors.alpha600 }}
+                _focus={{ borderColor: colors.secondaryColor }}
+              />
               <Flex flexWrap="wrap" alignItems="center">
                 <Menu closeOnSelect={false} isOpen={isOpen} onClose={onClose}>
                   <MenuButton
@@ -107,11 +115,9 @@ export const PostModal: React.VFC<{
                     fontWeight="normal"
                     m="1"
                     color={colors.secondaryColor}
-                    bgColor={colors.alpha200}
-                    _hover={{ bgColor: colors.alpha600 }}
-                    _active={{ bgColor: colors.alpha200 }}
                     onClick={onOpen}
                     value={visibility}
+                    {...styleProps.AlphaButton}
                     {...register("visibility")}
                   >
                     <HStack spacing="0.5">
@@ -141,6 +147,7 @@ export const PostModal: React.VFC<{
                   <MenuList
                     bgColor={colors.panelColor}
                     color={colors.secondaryColor}
+                    borderColor={colors.alpha400}
                   >
                     <MenuItem
                       _focus={{ bgColor: colors.alpha200 }}
@@ -204,11 +211,7 @@ export const PostModal: React.VFC<{
                     >
                       <Box>
                         <HStack spacing="1">
-                          <Checkbox
-                            size="lg"
-                            {...register("localOnly")}
-                            m="0"
-                          />
+                          <Checkbox size="lg" {...register("localOnly")} />
                           <Icon fontSize="1.2em" as={IoFastFood} />
                           <Box>ローカルのみ</Box>
                         </HStack>
@@ -216,6 +219,9 @@ export const PostModal: React.VFC<{
                     </MenuItem>
                   </MenuList>
                 </Menu>
+                {watch("localOnly") && (
+                  <Icon as={IoFastFood} color={colors.secondaryColor} mr="1" />
+                )}
                 {visibility === "specified" && (
                   <>
                     <HStack wrap="wrap" spacing="0.5">
@@ -285,6 +291,8 @@ export const PostModal: React.VFC<{
                       size="xs"
                       placeholder="ユーザー名"
                       borderColor={colors.alpha200}
+                      _hover={{ borderColor: colors.alpha400 }}
+                      _focus={{ borderColor: colors.secondaryColor }}
                       required
                       {...register("username")}
                     />
@@ -301,6 +309,8 @@ export const PostModal: React.VFC<{
                       size="xs"
                       placeholder="ホスト(省略可能)"
                       borderColor={colors.alpha200}
+                      _hover={{ borderColor: colors.alpha400 }}
+                      _focus={{ borderColor: colors.secondaryColor }}
                       pattern="(\S+\.)*\S+\.\S+"
                       {...register("host")}
                     />
