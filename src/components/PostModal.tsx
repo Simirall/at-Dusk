@@ -26,7 +26,7 @@ import {
   Avatar,
 } from "@chakra-ui/react";
 import { User } from "misskey-js/built/entities";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import {
   IoFastFood,
@@ -51,8 +51,6 @@ export const PostModal: React.VFC<{
   const colors = useColors();
   const [visibility, setVisibility] = useState("public");
   const [users, updateUsers] = useState<Array<User>>([]);
-  const [resUser, updateResUser] = useState<User>({} as User);
-  const [deleteId, setDeleteId] = useState("");
   const userAddObject = useAPIObject({
     id: "userAdd",
     type: "api",
@@ -81,24 +79,13 @@ export const PostModal: React.VFC<{
         }
         return res.json();
       })
-      .then((text) => {
-        updateResUser(text);
+      .then((text: User) => {
+        if (text.id && !users.some((user) => user.id === text.id)) {
+          updateUsers([...users, text]);
+        }
       });
     reset({ username: "", host: "" });
   };
-
-  useEffect(() => {
-    if (resUser.id && !users.some((user) => user.id === resUser.id)) {
-      updateUsers([...users, resUser]);
-    }
-  }, [resUser, users]);
-
-  useEffect(() => {
-    if (deleteId) {
-      updateUsers(users.filter((u) => u.id !== deleteId));
-      setDeleteId("");
-    }
-  }, [deleteId, users]);
 
   return (
     <>
@@ -231,17 +218,36 @@ export const PostModal: React.VFC<{
                 </Menu>
                 {visibility === "specified" && (
                   <>
-                    <IconButton
-                      aria-label="add dm user"
-                      icon={<AddIcon />}
-                      bgColor={colors.primaryColor}
-                      _hover={{ bgColor: colors.alpha200 }}
-                      _active={{ bgColor: colors.alpha600 }}
-                      size="xs"
-                      onClick={() => {
-                        userAddDisclosure.onOpen();
-                      }}
-                    />
+                    <HStack wrap="wrap" spacing="0.5">
+                      {users.length > 0 &&
+                        users.map((user) => (
+                          <Avatar
+                            key={user.id}
+                            name={user.username}
+                            src={user.avatarUrl}
+                            size="xs"
+                            marginRight="1"
+                            bg="none"
+                            cursor="pointer"
+                            onClick={() => {
+                              updateUsers(
+                                users.filter((u) => u.id !== user.id)
+                              );
+                            }}
+                          />
+                        ))}
+                      <IconButton
+                        aria-label="add dm user"
+                        icon={<AddIcon />}
+                        bgColor={colors.primaryColor}
+                        _hover={{ bgColor: colors.alpha200 }}
+                        _active={{ bgColor: colors.alpha600 }}
+                        size="xs"
+                        onClick={() => {
+                          userAddDisclosure.onOpen();
+                        }}
+                      />
+                    </HStack>
                   </>
                 )}
               </Flex>
@@ -277,7 +283,6 @@ export const PostModal: React.VFC<{
                     </InputLeftElement>
                     <Input
                       size="xs"
-                      w="4xs"
                       placeholder="ユーザー名"
                       borderColor={colors.alpha200}
                       required
@@ -294,7 +299,6 @@ export const PostModal: React.VFC<{
                     </InputLeftElement>
                     <Input
                       size="xs"
-                      w="4xs"
                       placeholder="ホスト(省略可能)"
                       borderColor={colors.alpha200}
                       pattern="(\S+\.)*\S+\.\S+"
@@ -312,8 +316,8 @@ export const PostModal: React.VFC<{
                   />
                 </HStack>
                 {users.length > 0 &&
-                  users.map((user, i) => (
-                    <HStack key={i}>
+                  users.map((user) => (
+                    <HStack key={user.id}>
                       <IconButton
                         aria-label="add dm user"
                         icon={<CloseIcon />}
@@ -322,7 +326,7 @@ export const PostModal: React.VFC<{
                         _active={{ bgColor: colors.alpha600 }}
                         size="xs"
                         onClick={() => {
-                          setDeleteId(user.id);
+                          updateUsers(users.filter((u) => u.id !== user.id));
                         }}
                       />
                       <Avatar
