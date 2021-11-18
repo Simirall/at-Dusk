@@ -15,6 +15,15 @@ export const useStyleProps = (): Record<
         bgColor: colors.alpha400,
       },
     },
+    PrimaryButton: {
+      bgColor: colors.primaryColor,
+      _hover: {
+        bgColor: colors.primaryDarkerColor,
+      },
+      _active: {
+        bgColor: colors.primaryDarkerColor,
+      },
+    },
     DisabledBgColor: {
       bgColor: colors.alpha50,
       _hover: {

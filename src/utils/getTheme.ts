@@ -14,6 +14,15 @@ export const getTheme = (
       global: (props: Record<"colorMode", string>) => ({
         "*": {
           scrollbarWidth: "thin",
+          scrollbarColor: `${
+            props.colorMode === "dark"
+              ? "var(--chakra-colors-dark-primary)"
+              : "var(--chakra-colors-light-primary)"
+          } ${
+            props.colorMode === "dark"
+              ? "var(--chakra-colors-dark-base_lighter)"
+              : "var(--chakra-colors-light-base_darker)"
+          }`,
           transitionDuration: "normal",
           transitionProperty: "color, background-color, border-color",
         },
@@ -45,6 +54,7 @@ const getLightTheme = (lightTheme: string | undefined) => {
         base_darker: "#85a798",
         panel: "#6a7b74",
         primary: "#f2e5a2",
+        primary_darker: "#e1cc5b",
         secondary: "#d9af8b",
         text: "#fcf7e6",
         headerText: "#1a1117",
@@ -55,6 +65,7 @@ const getLightTheme = (lightTheme: string | undefined) => {
         base_darker: "#182521",
         panel: "#f0f3e9",
         primary: "#f5df4d",
+        primary_darker: "#e2d055",
         secondary: "#1a9069",
         text: "#182521",
         headerText: "#182521",
@@ -71,6 +82,7 @@ const getDarkTheme = (darkTheme: string | undefined) => {
         base_lighter: "#5f3c47",
         panel: "#1f151b",
         primary: "#3367d7",
+        primary_darker: "#2d54a6",
         secondary: "#fae732",
         text: "#fefde2",
         headerText: "#fefde2",
@@ -81,6 +93,7 @@ const getDarkTheme = (darkTheme: string | undefined) => {
         base_lighter: "#0f2f59",
         panel: "#0a2635",
         primary: "#075f73",
+        primary_darker: "#085061",
         secondary: "#89f3f8",
         text: "#dff8f9",
         headerText: "#a7d9cb",

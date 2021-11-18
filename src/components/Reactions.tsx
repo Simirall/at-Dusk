@@ -46,8 +46,11 @@ const ReactionButton: React.VFC<{
   const props =
     text === reaction?.myReaction
       ? {
-          bgColor: colors.primaryColor,
           color: colors.headerTextColor,
+          bgColor: colors.primaryColor,
+          _hover: {
+            bgColor: colors.primaryDarkerColor,
+          },
         }
       : {};
   const reactionCreateObject = useAPIObject({

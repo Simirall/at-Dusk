@@ -13,6 +13,7 @@ import { useColors } from "../utils/Colors";
 import { useLoginContext } from "../utils/LoginContext";
 
 export const Settings: React.VFC = () => {
+  const colors = useColors();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { register, handleSubmit } = useForm();
@@ -29,27 +30,29 @@ export const Settings: React.VFC = () => {
 
   return (
     <>
-      <Flex p="2" flexDir="column">
+      <Flex p="2" flexDir="column" color={colors.textColor}>
         <Box m="1">
           <form onSubmit={handleSubmit(onSubmitTheme)}>
             <HStack color={headerTextColor}>
               <Box>
-                <FormLabel>Light Mode</FormLabel>
+                <FormLabel color={colors.textColor}>Light Mode</FormLabel>
                 <Select
                   {...register("lightTheme")}
                   defaultValue={settingsValue.theme.lightTheme}
                   variant="flushed"
+                  color={colors.textColor}
                 >
                   <option value="illuminating">illuminating</option>
                   <option value="moss">moss gray</option>
                 </Select>
               </Box>
               <Box>
-                <FormLabel>Dark Mode</FormLabel>
+                <FormLabel color={colors.textColor}>Dark Mode</FormLabel>
                 <Select
                   {...register("darkTheme")}
                   defaultValue={settingsValue.theme.darkTheme}
                   variant="flushed"
+                  color={colors.textColor}
                 >
                   <option value="chillout">chillout</option>
                   <option value="Ginkgo">Ginkgo biloba</option>

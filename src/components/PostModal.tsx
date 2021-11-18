@@ -245,10 +245,8 @@ export const PostModal: React.VFC<{
                       <IconButton
                         aria-label="add dm user"
                         icon={<AddIcon />}
-                        bgColor={colors.primaryColor}
-                        _hover={{ bgColor: colors.alpha200 }}
-                        _active={{ bgColor: colors.alpha600 }}
                         size="xs"
+                        {...styleProps.PrimaryButton}
                         onClick={() => {
                           userAddDisclosure.onOpen();
                         }}
@@ -317,12 +315,10 @@ export const PostModal: React.VFC<{
                   </InputGroup>
                   <IconButton
                     aria-label="add dm user"
-                    icon={<AddIcon />}
-                    bgColor={colors.primaryColor}
-                    _hover={{ bgColor: colors.alpha200 }}
-                    _active={{ bgColor: colors.alpha600 }}
-                    size="xs"
                     type="submit"
+                    icon={<AddIcon />}
+                    size="xs"
+                    {...styleProps.PrimaryButton}
                   />
                 </HStack>
                 {users.length > 0 &&
@@ -331,10 +327,8 @@ export const PostModal: React.VFC<{
                       <IconButton
                         aria-label="add dm user"
                         icon={<CloseIcon />}
-                        bgColor={colors.primaryColor}
-                        _hover={{ bgColor: colors.alpha200 }}
-                        _active={{ bgColor: colors.alpha600 }}
                         size="xs"
+                        {...styleProps.PrimaryButton}
                         onClick={() => {
                           updateUsers(users.filter((u) => u.id !== user.id));
                         }}

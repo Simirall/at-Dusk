@@ -8,6 +8,10 @@ export const useColors = (props?: string): Record<string, string> => {
   const baseColor = useColorModeValue("light.base", "dark.base");
   const panelColor = useColorModeValue("light.panel", "dark.panel");
   const primaryColor = useColorModeValue("light.primary", "dark.primary");
+  const primaryDarkerColor = useColorModeValue(
+    "light.primary_darker",
+    "dark.primary_darker"
+  );
   const secondaryColor = useColorModeValue("light.secondary", "dark.secondary");
   const textColor = useColorModeValue("light.text", "dark.text");
   const headerTextColor = useColorModeValue(
@@ -31,6 +35,7 @@ export const useColors = (props?: string): Record<string, string> => {
       baseColor: baseColor,
       panelColor: panelColor,
       primaryColor: primaryColor,
+      primaryDarkerColor: primaryDarkerColor,
       secondaryColor: secondaryColor,
       textColor: textColor,
       headerTextColor: headerTextColor,
