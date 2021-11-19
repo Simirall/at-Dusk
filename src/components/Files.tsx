@@ -11,6 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { DriveFile } from "misskey-js/built/entities";
 import React, { useState } from "react";
+import { Blurhash } from "react-blurhash";
 import { IoDownload, IoEyeOff, IoMusicalNote } from "react-icons/io5";
 import { Carousel } from "react-responsive-carousel";
 
@@ -101,6 +102,7 @@ const ImageFile: React.VFC<{
   const [nsfw, toggleNSFW] = useState(image.isSensitive);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { panelColor } = useColors();
+  const [loaded, updateLoaded] = useState(false);
   return (
     <Box position="relative">
       <Modal isOpen={isOpen} onClose={onClose} isCentered size="4xl">
@@ -172,21 +174,35 @@ const ImageFile: React.VFC<{
         }}
       >
         {image.type.startsWith("image") && (
-          <Image
-            src={image.thumbnailUrl}
-            alt={image.name}
-            maxH={size}
-            minH="5rem"
-            minW="10rem"
-            p="0.5"
-            cursor="pointer"
-            objectFit="cover"
-            sx={{
-              filter: nsfw
-                ? "blur(30px) saturate(150%) brightness(60%)"
-                : "none",
-            }}
-          />
+          <>
+            <Image
+              src={image.thumbnailUrl}
+              alt={image.name}
+              maxH={size}
+              h={image.properties.height + "px"}
+              minH="5rem"
+              minW="10rem"
+              p="0.5"
+              cursor="pointer"
+              objectFit="cover"
+              sx={{
+                filter: nsfw
+                  ? "blur(30px) saturate(150%) brightness(60%)"
+                  : "none",
+              }}
+              display={loaded ? "block" : "none"}
+              onLoad={() => updateLoaded(true)}
+            />
+            {!loaded && (
+              <Box maxH={size} minH="5rem" minW="10rem" p="0.5">
+                <Blurhash
+                  hash={image.blurhash}
+                  height={image.properties.height}
+                  width={image.properties.width}
+                />
+              </Box>
+            )}
+          </>
         )}
         {image.type.startsWith("video") && (
           <Box maxH={size} p="0.5">
