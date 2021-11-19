@@ -11,6 +11,7 @@ import { ThemeSelector } from "./components/ThemeSelector";
 import { App } from "./pages/App";
 import { FocusVisible } from "./utils/FocusVisible";
 import { LoginProvider } from "./utils/LoginContext";
+import { ModalsProvider } from "./utils/ModalsContext";
 import * as serviceWorker from "./utils/serviceWorker";
 
 const persistor = persistStore(store);
@@ -23,9 +24,11 @@ ReactDOM.render(
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <LoginProvider>
-          <ThemeSelector>
-            <App />
-          </ThemeSelector>
+          <ModalsProvider>
+            <ThemeSelector>
+              <App />
+            </ThemeSelector>
+          </ModalsProvider>
         </LoginProvider>
       </PersistGate>
     </Provider>

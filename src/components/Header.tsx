@@ -7,10 +7,12 @@ import { Link as RouterLink } from "react-router-dom";
 
 import { ColorModeSwitcher } from "../components/ColorModeSwitcher";
 import { useColors } from "../utils/Colors";
+import { useModalsContext } from "../utils/ModalsContext";
 
-export const Header: React.VFC<{ onOpen: () => void }> = ({ onOpen }) => {
+export const Header: React.VFC = () => {
   const user = JSON.parse(localStorage.getItem("user") as string) as User;
   const colors = useColors();
+  const { onPostModalOpen } = useModalsContext();
 
   return (
     <>
@@ -74,7 +76,7 @@ export const Header: React.VFC<{ onOpen: () => void }> = ({ onOpen }) => {
             icon={<EditIcon />}
             bgColor={colors.panelColor}
             shadow="md"
-            onClick={onOpen}
+            onClick={onPostModalOpen}
           />
         </Flex>
       </Flex>

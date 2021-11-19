@@ -12,14 +12,26 @@ import {
 } from "react-icons/io5";
 
 import { NoteType } from "../features/notesSlice";
+import { useModalsContext } from "../utils/ModalsContext";
+import { useSocket } from "../utils/SocketContext";
 import { useStyleProps } from "../utils/StyleProps";
+import { APIObject, useAPIObject } from "../utils/useAPIObject";
 
 export const NoteFooter: React.VFC<{
   note: mkNote;
   type: NoteType;
   colors: Record<string, string>;
 }> = memo(function Fn({ note, type, colors }) {
+  const socket = useSocket();
+  const { onPostModalOpen, setType, updateModalNoteData, updateModalNoteType } =
+    useModalsContext();
   const styleProps = useStyleProps();
+
+  const renoteObject = useAPIObject({
+    id: "renote",
+    type: "api",
+    endpoint: "notes/create",
+  }) as APIObject;
   return (
     <Flex
       overflow="hidden"
@@ -35,6 +47,12 @@ export const NoteFooter: React.VFC<{
           icon={<IoArrowUndo />}
           marginRight="0.5"
           {...styleProps.AlphaButton}
+          onClick={() => {
+            setType("reply");
+            updateModalNoteData(note);
+            updateModalNoteType(type);
+            onPostModalOpen();
+          }}
         />
         {type.type !== "renote" ? note.repliesCount : note.renote?.repliesCount}
       </Flex>
@@ -62,8 +80,30 @@ export const NoteFooter: React.VFC<{
             />
           )}
           <MenuList bgColor={colors.panelColor} borderColor={colors.alpha400}>
-            <MenuItem _focus={{ bgColor: colors.alpha200 }}>Renote</MenuItem>
-            <MenuItem _focus={{ bgColor: colors.alpha200 }}>引用</MenuItem>
+            <MenuItem
+              _focus={{ bgColor: colors.alpha200 }}
+              onClick={() => {
+                Object.assign(renoteObject.body.data, {
+                  visibility: note.visibility,
+                  text: null,
+                  renoteId: note.id,
+                });
+                socket.send(JSON.stringify(renoteObject));
+              }}
+            >
+              Renote
+            </MenuItem>
+            <MenuItem
+              _focus={{ bgColor: colors.alpha200 }}
+              onClick={() => {
+                setType("quote");
+                updateModalNoteData(note);
+                updateModalNoteType(type);
+                onPostModalOpen();
+              }}
+            >
+              引用
+            </MenuItem>
           </MenuList>
         </Menu>
         {type.type !== "renote" ? note.renoteCount : note.renote?.renoteCount}

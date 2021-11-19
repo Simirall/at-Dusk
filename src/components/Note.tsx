@@ -35,8 +35,9 @@ export const Note: React.VFC<{
   type: NoteType;
   depth: number;
   colors: Record<string, string>;
+  onlyBody?: boolean;
 }> = memo(
-  function Fn({ note, type, depth, colors }) {
+  function Fn({ note, type, depth, colors, onlyBody }) {
     const name = note.user.name ? note.user.name : note.user.username;
     const [cw, updateCw] = React.useState(
       type.type === "renote"
@@ -93,11 +94,17 @@ export const Note: React.VFC<{
             colors={colors}
           />
         )}
-        <Reactions
-          id={type.type === "renote" ? (note.renote?.id as string) : note.id}
-          colors={colors}
-        />
-        <NoteFooter note={note} type={type} colors={colors} />
+        {!onlyBody && (
+          <>
+            <Reactions
+              id={
+                type.type === "renote" ? (note.renote?.id as string) : note.id
+              }
+              colors={colors}
+            />
+            <NoteFooter note={note} type={type} colors={colors} />
+          </>
+        )}
       </Box>
     );
   },
@@ -160,7 +167,7 @@ const GeneralNote: React.VFC<{
           <Box>
             {note.cw || note.cw === "" ? (
               <>
-                <HStack>
+                <HStack mb="0.5">
                   {note.replyId && <Icon as={IoArrowUndo} />}
                   <Box>
                     <Box
@@ -212,7 +219,12 @@ const GeneralNote: React.VFC<{
                       />
                     </Box>
                     {note.renoteId && note.renote?.text && (
-                      <Text marginLeft="1" color="green.400" display="inline">
+                      <Text
+                        marginLeft="1"
+                        color="green.400"
+                        display="inline"
+                        verticalAlign="middle"
+                      >
                         <i>RN:</i>
                       </Text>
                     )}
@@ -236,7 +248,12 @@ const GeneralNote: React.VFC<{
                     />
                   </Box>
                   {note.renoteId && note.renote?.text && (
-                    <Text marginLeft="1" color="green.400" display="inline">
+                    <Text
+                      marginLeft="1"
+                      color="green.400"
+                      display="inline"
+                      verticalAlign="middle"
+                    >
                       <i>RN:</i>
                     </Text>
                   )}

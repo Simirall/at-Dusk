@@ -1,5 +1,4 @@
 import { useColorModeValue } from "@chakra-ui/color-mode";
-import { useDisclosure } from "@chakra-ui/hooks";
 import { Flex } from "@chakra-ui/react";
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
@@ -18,7 +17,6 @@ import { Settings } from "./Settings";
 import { User } from "./User";
 
 export const App: React.VFC = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <Router>
       <Flex
@@ -37,7 +35,7 @@ export const App: React.VFC = () => {
               <Auth>
                 <SocketProvider>
                   <SocketManager>
-                    <Header onOpen={onOpen} />
+                    <Header />
                     <CheckLocation>
                       <Routes>
                         <Route path="/user">
@@ -50,7 +48,7 @@ export const App: React.VFC = () => {
                         <Route path="/" element={<Home />} />
                       </Routes>
                     </CheckLocation>
-                    <PostModal isModalOpen={isOpen} onModalClose={onClose} />
+                    <PostModal />
                   </SocketManager>
                 </SocketProvider>
               </Auth>
