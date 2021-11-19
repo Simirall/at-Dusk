@@ -1,14 +1,22 @@
 import { Button } from "@chakra-ui/button";
 import { FormLabel } from "@chakra-ui/form-control";
-import { Box, Flex, HStack, VStack } from "@chakra-ui/layout";
+import { Icon } from "@chakra-ui/icon";
+import { SettingsIcon } from "@chakra-ui/icons";
+import { Box, Divider, Flex, HStack, VStack } from "@chakra-ui/layout";
 import { Select } from "@chakra-ui/select";
 import { Switch } from "@chakra-ui/switch";
 import React from "react";
 import { useForm } from "react-hook-form";
+import { IoColorPalette } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 
 import { useAppDispatch, useAppSelector } from "../app/hooks";
-import { setTheme, setMotto, settings } from "../features/settingsSlice";
+import {
+  setTheme,
+  setMotto,
+  setTLPostForm,
+  settings,
+} from "../features/settingsSlice";
 import { useColors } from "../utils/Colors";
 import { useLoginContext } from "../utils/LoginContext";
 
@@ -24,8 +32,12 @@ export const Settings: React.VFC = () => {
   const onSubmitTheme = (data: { lightTheme: string; darkTheme: string }) => {
     dispatch(setTheme({ theme: data }));
   };
-  const onSubmitGenerall = (data: { autoMotto: boolean }) => {
+  const onSubmitGenerall = (data: {
+    autoMotto: boolean;
+    TLPostForm: boolean;
+  }) => {
     dispatch(setMotto(data.autoMotto));
+    dispatch(setTLPostForm(data.TLPostForm));
   };
 
   return (
@@ -33,6 +45,10 @@ export const Settings: React.VFC = () => {
       <Flex p="2" flexDir="column" color={colors.textColor}>
         <Box m="1">
           <form onSubmit={handleSubmit(onSubmitTheme)}>
+            <HStack mb="1">
+              <Icon as={IoColorPalette} fontSize="2xl" />
+              <Box>テーマ</Box>
+            </HStack>
             <HStack color={headerTextColor}>
               <Box>
                 <FormLabel color={colors.textColor}>Light Mode</FormLabel>
@@ -64,7 +80,12 @@ export const Settings: React.VFC = () => {
             </Button>
           </form>
         </Box>
+        <Divider marginBlock="4" />
         <Box m="1">
+          <HStack mb="2">
+            <SettingsIcon fontSize="xl" />
+            <Box>設定</Box>
+          </HStack>
           <form onSubmit={handleSubmit(onSubmitGenerall)}>
             <VStack>
               <FormLabel userSelect="none">
@@ -76,8 +97,17 @@ export const Settings: React.VFC = () => {
                 />
                 自動でもっと読む
               </FormLabel>
+              <FormLabel userSelect="none">
+                <Switch
+                  marginRight="2"
+                  size="lg"
+                  defaultChecked={settingsValue.TLPostForm}
+                  {...register("TLPostForm")}
+                />
+                TL上部に投稿フォームを表示する
+              </FormLabel>
             </VStack>
-            <Button colorScheme="blue" marginTop="2" w="ｌｇ" type="submit">
+            <Button colorScheme="blue" marginTop="2" w="full" type="submit">
               保存
             </Button>
           </form>

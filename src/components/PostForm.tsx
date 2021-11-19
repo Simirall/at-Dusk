@@ -44,7 +44,7 @@ import { APIObject, useAPIObject } from "../utils/useAPIObject";
 import { Note } from "./Note";
 import { ParseMFM } from "./ParseMFM";
 
-export const PostForm: React.VFC = () => {
+export const PostForm: React.VFC<{ isModal?: boolean }> = ({ isModal }) => {
   const socket = useSocket();
   const userAddDisclosure = useDisclosure();
   const colors = useColors();
@@ -58,9 +58,9 @@ export const PostForm: React.VFC = () => {
   const [cw, updateCw] = useState(false);
 
   useEffect(() => {
-    if (modalNoteData.visibility) setVisibility(modalNoteData.visibility);
-    else setVisibility("public");
-  }, [modalNoteData.visibility]);
+    if (isModal && modalNoteData.visibility)
+      setVisibility(modalNoteData.visibility);
+  }, [isModal, modalNoteData.visibility]);
 
   const postObject = useAPIObject({
     id: "post",
@@ -122,7 +122,7 @@ export const PostForm: React.VFC = () => {
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
-        {modalNoteData.id && type && (
+        {isModal && modalNoteData.id && type && (
           <Box
             p="1"
             mb="2"
@@ -152,7 +152,9 @@ export const PostForm: React.VFC = () => {
         <Textarea
           {...register("text")}
           placeholder={
-            type === "reply"
+            !isModal
+              ? "何を考えていますか？"
+              : type === "reply"
               ? "このノートに返信"
               : type === "quote"
               ? "このノートを引用"

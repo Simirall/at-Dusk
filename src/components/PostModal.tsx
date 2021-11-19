@@ -26,7 +26,7 @@ export const PostModal: React.VFC = () => {
             <ModalCloseButton />
           </ModalHeader>
           <ModalBody mt="1">
-            <PostForm />
+            <PostForm isModal />
           </ModalBody>
         </ModalContent>
       </Modal>

@@ -8,6 +8,7 @@ export interface SettingsState {
     darkTheme: string;
   };
   autoMotto: boolean;
+  TLPostForm: boolean;
 }
 
 const initialState: SettingsState = {
@@ -16,6 +17,7 @@ const initialState: SettingsState = {
     darkTheme: "",
   },
   autoMotto: true,
+  TLPostForm: false,
 };
 
 export const settingsSlice = createSlice({
@@ -33,6 +35,9 @@ export const settingsSlice = createSlice({
     setMotto: (state, action: PayloadAction<boolean>) => {
       state.autoMotto = action.payload;
     },
+    setTLPostForm: (state, action: PayloadAction<boolean>) => {
+      state.TLPostForm = action.payload;
+    },
     setDefault: (state) => {
       state.theme = initialState.theme;
       state = initialState;
@@ -40,7 +45,8 @@ export const settingsSlice = createSlice({
   },
 });
 
-export const { setTheme, setMotto, setDefault } = settingsSlice.actions;
+export const { setTheme, setMotto, setTLPostForm, setDefault } =
+  settingsSlice.actions;
 
 export const settings = (state: RootState): SettingsState => state.settings;
 
