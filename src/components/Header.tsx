@@ -1,5 +1,4 @@
 import { IconButton } from "@chakra-ui/button";
-import { useDisclosure } from "@chakra-ui/hooks";
 import { EditIcon, SettingsIcon } from "@chakra-ui/icons";
 import { Flex, Text, Avatar } from "@chakra-ui/react";
 import { User } from "misskey-js/built/entities";
@@ -9,11 +8,8 @@ import { Link as RouterLink } from "react-router-dom";
 import { ColorModeSwitcher } from "../components/ColorModeSwitcher";
 import { useColors } from "../utils/Colors";
 
-import { PostModal } from "./PostModal";
-
-export const Header: React.VFC = () => {
+export const Header: React.VFC<{ onOpen: () => void }> = ({ onOpen }) => {
   const user = JSON.parse(localStorage.getItem("user") as string) as User;
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const colors = useColors();
 
   return (
@@ -82,7 +78,6 @@ export const Header: React.VFC = () => {
           />
         </Flex>
       </Flex>
-      <PostModal isModalOpen={isOpen} onModalClose={onClose} />
     </>
   );
 };

@@ -1,6 +1,6 @@
 import { IconButton, Button } from "@chakra-ui/button";
 import { useDisclosure } from "@chakra-ui/hooks";
-import { AddIcon, AtSignIcon, CloseIcon } from "@chakra-ui/icons";
+import { AddIcon, AtSignIcon, CloseIcon, ViewOffIcon } from "@chakra-ui/icons";
 import {
   Modal,
   ModalOverlay,
@@ -37,6 +37,7 @@ import {
 } from "react-icons/io5";
 
 import { useColors } from "../utils/Colors";
+import { useSocket } from "../utils/SocketContext";
 import { useStyleProps } from "../utils/StyleProps";
 import { APIObject, useAPIObject } from "../utils/useAPIObject";
 
@@ -46,20 +47,42 @@ export const PostModal: React.VFC<{
   isModalOpen: boolean;
   onModalClose: () => void;
 }> = ({ isModalOpen, onModalClose }) => {
+  const socket = useSocket();
+  const userAddDisclosure = useDisclosure();
+  const colors = useColors();
+  const styleProps = useStyleProps();
   const { register, handleSubmit, watch, reset } = useForm();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [visibility, setVisibility] = useState("public");
   const [users, updateUsers] = useState<Array<User>>([]);
-  const userAddDisclosure = useDisclosure();
-  const colors = useColors();
-  const styleProps = useStyleProps();
+  const [cw, updateCw] = useState(false);
 
+  const postObject = useAPIObject({
+    id: "post",
+    type: "api",
+    endpoint: "notes/create",
+  }) as APIObject;
   const userAddObject = useAPIObject({
     id: "userAdd",
     type: "api",
     endpoint: "users/show",
   }) as APIObject;
-  const onSubmit = (data: Record<string, unknown>) => console.log(data);
+  const onSubmit = (data: Record<string, unknown>) => {
+    Object.assign(postObject.body.data, {
+      visibility: data.visibility,
+      text: data.text ? data.text : null,
+      cw: cw ? data.cw : null,
+      localOnly: data.localOnly,
+    });
+    if (data.visibility === "specified") {
+      Object.assign(postObject.body.data, {
+        visibleUserIds: users.map((user) => user.id),
+      });
+    }
+    onModalClose();
+    socket.send(JSON.stringify(postObject));
+    reset();
+  };
   const onSubmitUserAdd = (data: Record<string, unknown>) => {
     Object.assign(userAddObject.body.data, {
       i: localStorage.getItem("UserToken"),
@@ -100,11 +123,27 @@ export const PostModal: React.VFC<{
               <ModalCloseButton />
             </ModalHeader>
             <ModalBody mt="1">
+              {cw && (
+                <Input
+                  {...register("cw")}
+                  placeholder="注釈"
+                  mb="1"
+                  borderColor={colors.alpha200}
+                  _hover={{ borderColor: colors.alpha400 }}
+                  _focus={{ borderColor: colors.secondaryColor }}
+                />
+              )}
               <Textarea
                 {...register("text")}
+                placeholder="何を考えていますか？"
                 borderColor={colors.alpha400}
                 _hover={{ borderColor: colors.alpha600 }}
                 _focus={{ borderColor: colors.secondaryColor }}
+                required
+                autoFocus
+                onKeyDown={(e) => {
+                  if (e.ctrlKey && e.key === "Enter") handleSubmit(onSubmit)();
+                }}
               />
               <Flex flexWrap="wrap" alignItems="center">
                 <Menu closeOnSelect={false} isOpen={isOpen} onClose={onClose}>
@@ -257,9 +296,25 @@ export const PostModal: React.VFC<{
               </Flex>
             </ModalBody>
             <ModalFooter>
-              <Button colorScheme="teal" type="submit">
-                投稿
-              </Button>
+              <HStack>
+                <IconButton
+                  aria-label="content warning"
+                  icon={<ViewOffIcon />}
+                  size="sm"
+                  color={colors.secondaryColor}
+                  {...styleProps.AlphaButton}
+                  onClick={() => {
+                    updateCw(!cw);
+                  }}
+                />
+                <Button
+                  {...styleProps.PrimaryButton}
+                  type="submit"
+                  fontWeight="md"
+                >
+                  ノート
+                </Button>
+              </HStack>
             </ModalFooter>
           </form>
         </ModalContent>
@@ -269,7 +324,7 @@ export const PostModal: React.VFC<{
           isCentered
         >
           <ModalOverlay />
-          <ModalContent bgColor={colors.panelColor} pb="10">
+          <ModalContent bgColor={colors.panelColor} pb="5">
             <form onSubmit={handleSubmit(onSubmitUserAdd)}>
               <ModalBody>
                 <ModalHeader>
