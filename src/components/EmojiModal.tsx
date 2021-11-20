@@ -1,3 +1,4 @@
+import { TimeIcon } from "@chakra-ui/icons";
 import {
   Box,
   HStack,
@@ -20,6 +21,8 @@ import { useForm } from "react-hook-form";
 import { parse } from "twemoji-parser";
 import emojis from "unicode-emoji-json/data-by-group.json";
 
+import { useAppDispatch, useAppSelector } from "../app/hooks";
+import { addRUEmoji, settings } from "../features/settingsSlice";
 import { useColors } from "../utils/Colors";
 import { useModalsContext } from "../utils/ModalsContext";
 import { useSocket } from "../utils/SocketContext";
@@ -39,12 +42,14 @@ type EmojiCategory =
 
 export const EmojiModal: React.VFC = () => {
   const socket = useSocket();
+  const dispatch = useAppDispatch();
+  const RUEmoji = useAppSelector(settings).RUEmoji;
   const colors = useColors();
   const styleProps = useStyleProps();
   const { register, watch, handleSubmit, setValue, reset } = useForm();
   const { isEmojiModalOpen, onEmojiModalClose, emojiModalType, modalNoteData } =
     useModalsContext();
-  const [selectedEmoji, setEmoji] = useState("");
+  const [selectedEmoji, setEmoji] = useState<string | CustomEmoji>("");
   const customEmojis: Array<CustomEmoji> = JSON.parse(
     localStorage.getItem("meta") as string
   ).emojis;
@@ -68,8 +73,10 @@ export const EmojiModal: React.VFC = () => {
     };
 
     if (selectedEmoji) {
-      setValue("emoji", selectedEmoji);
+      if (typeof selectedEmoji === "string") setValue("emoji", selectedEmoji);
+      else setValue("emoji", `:${selectedEmoji.name}:`);
       handleSubmit(onSubmit)();
+      dispatch(addRUEmoji(selectedEmoji));
       setEmoji("");
     }
   }, [
@@ -77,6 +84,7 @@ export const EmojiModal: React.VFC = () => {
     emojiModalType,
     socket,
     setValue,
+    dispatch,
     handleSubmit,
     reactionObject,
     modalNoteData,
@@ -116,8 +124,7 @@ export const EmojiModal: React.VFC = () => {
                           {...styleProps.AlphaButton}
                           title={data.name}
                           onClick={() => {
-                            setEmoji(`:${data.name}:`);
-                            // onEmojiModalClose();
+                            setEmoji(data);
                           }}
                         >
                           <Image
@@ -145,7 +152,6 @@ export const EmojiModal: React.VFC = () => {
                           title={data.name}
                           onClick={() => {
                             setEmoji(data.emoji);
-                            // onEmojiModalClose();
                           }}
                         >
                           <Twemoji emoji={data.emoji} />
@@ -153,6 +159,51 @@ export const EmojiModal: React.VFC = () => {
                       </Box>
                     ))}
                 </HStack>
+              )}
+              {RUEmoji.length > 0 && (
+                <Box>
+                  <HStack spacing="0.5">
+                    <TimeIcon />
+                    <Box>最近使用</Box>
+                  </HStack>
+                  <HStack spacing="0.5" wrap="wrap" justify="center">
+                    {RUEmoji.map((emoji) => (
+                      <Box key={typeof emoji === "string" ? emoji : emoji.name}>
+                        {typeof emoji === "string" ? (
+                          <Button
+                            size="sm"
+                            p="1"
+                            mb="1"
+                            {...styleProps.AlphaButton}
+                            onClick={() => {
+                              setEmoji(emoji);
+                            }}
+                          >
+                            <Twemoji emoji={emoji} />
+                          </Button>
+                        ) : (
+                          <Button
+                            size="sm"
+                            p="1"
+                            mb="1"
+                            {...styleProps.AlphaButton}
+                            title={emoji.name}
+                            onClick={() => {
+                              setEmoji(emoji);
+                            }}
+                          >
+                            <Image
+                              src={emoji.url}
+                              alt={emoji.name}
+                              loading="lazy"
+                              maxH="1.6em"
+                            />
+                          </Button>
+                        )}
+                      </Box>
+                    ))}
+                  </HStack>
+                </Box>
               )}
               <CustomEmojis
                 emojis={customEmojis}
@@ -186,7 +237,7 @@ export const EmojiModal: React.VFC = () => {
 
 const CustomEmojis: React.VFC<{
   emojis: Array<CustomEmoji>;
-  setEmoji: React.Dispatch<React.SetStateAction<string>>;
+  setEmoji: React.Dispatch<React.SetStateAction<string | CustomEmoji>>;
   colors: Record<string, string>;
   styleProps: Record<string, Record<string, string | Record<string, string>>>;
 }> = memo(function Fn({ emojis, setEmoji, colors, styleProps }) {
@@ -217,7 +268,7 @@ const CustomEmojis: React.VFC<{
                                 {...styleProps.AlphaButton}
                                 title={data.name}
                                 onClick={() => {
-                                  setEmoji(`:${data.name}:`);
+                                  setEmoji(data);
                                 }}
                               >
                                 <Image
@@ -243,7 +294,7 @@ const CustomEmojis: React.VFC<{
 });
 
 const UnicodeEmojis: React.VFC<{
-  setEmoji: React.Dispatch<React.SetStateAction<string>>;
+  setEmoji: React.Dispatch<React.SetStateAction<string | CustomEmoji>>;
   colors: Record<string, string>;
   styleProps: Record<string, Record<string, string | Record<string, string>>>;
 }> = memo(function Fn({ setEmoji, colors, styleProps }) {
@@ -279,7 +330,7 @@ const UnicodeEmojis: React.VFC<{
 });
 
 const EmojiList: React.VFC<{
-  setEmoji: React.Dispatch<React.SetStateAction<string>>;
+  setEmoji: React.Dispatch<React.SetStateAction<string | CustomEmoji>>;
   category: EmojiCategory;
   styleProps: Record<string, Record<string, string | Record<string, string>>>;
 }> = memo(function Fn({ setEmoji, category, styleProps }) {
