@@ -4,6 +4,7 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import { Auth } from "../components/Auth";
+import { EmojiModal } from "../components/EmojiModal";
 import { Header } from "../components/Header";
 import { PostModal } from "../components/PostModal";
 import { CheckLocation } from "../utils/CheckLocation";
@@ -49,6 +50,7 @@ export const App: React.VFC = () => {
                       </Routes>
                     </CheckLocation>
                     <PostModal />
+                    <EmojiModal />
                   </SocketManager>
                 </SocketProvider>
               </Auth>

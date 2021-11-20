@@ -1,7 +1,7 @@
 import { IconButton } from "@chakra-ui/button";
 import { Flex } from "@chakra-ui/layout";
 import { Menu, MenuButton, MenuList, MenuItem } from "@chakra-ui/react";
-import { Note as mkNote } from "misskey-js/built/entities";
+import { Note as mkNote, Note } from "misskey-js/built/entities";
 import React, { memo } from "react";
 import {
   IoAddCircle,
@@ -23,8 +23,14 @@ export const NoteFooter: React.VFC<{
   colors: Record<string, string>;
 }> = memo(function Fn({ note, type, colors }) {
   const socket = useSocket();
-  const { onPostModalOpen, setType, updateModalNoteData, updateModalNoteType } =
-    useModalsContext();
+  const {
+    onPostModalOpen,
+    setPostModalType,
+    updateModalNoteData,
+    updateModalNoteType,
+    setEmojiModalType,
+    onEmojiModalOpen,
+  } = useModalsContext();
   const styleProps = useStyleProps();
 
   const renoteObject = useAPIObject({
@@ -48,7 +54,7 @@ export const NoteFooter: React.VFC<{
           marginRight="0.5"
           {...styleProps.AlphaButton}
           onClick={() => {
-            setType("reply");
+            setPostModalType("reply");
             updateModalNoteData(note);
             updateModalNoteType(type);
             onPostModalOpen();
@@ -96,7 +102,7 @@ export const NoteFooter: React.VFC<{
             <MenuItem
               _focus={{ bgColor: colors.alpha200 }}
               onClick={() => {
-                setType("quote");
+                setPostModalType("quote");
                 updateModalNoteData(note);
                 updateModalNoteType(type);
                 onPostModalOpen();
@@ -113,6 +119,13 @@ export const NoteFooter: React.VFC<{
         size="sm"
         icon={<IoAddCircle size="1.4em" />}
         {...styleProps.AlphaButton}
+        onClick={() => {
+          updateModalNoteData(
+            type.type === "renote" ? (note.renote as Note) : note
+          );
+          setEmojiModalType("reaction");
+          onEmojiModalOpen();
+        }}
       />
       <Menu>
         <MenuButton

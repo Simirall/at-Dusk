@@ -50,7 +50,7 @@ export const PostForm: React.VFC<{ isModal?: boolean }> = ({ isModal }) => {
   const colors = useColors();
   const styleProps = useStyleProps();
   const { register, handleSubmit, watch, reset } = useForm();
-  const { onPostModalClose, type, modalNoteData, modalNoteType } =
+  const { onPostModalClose, postModalType, modalNoteData, modalNoteType } =
     useModalsContext();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [visibility, setVisibility] = useState("public");
@@ -78,8 +78,8 @@ export const PostForm: React.VFC<{ isModal?: boolean }> = ({ isModal }) => {
       text: data.text ? data.text : null,
       cw: cw ? data.cw : null,
       localOnly: data.localOnly,
-      replyId: type === "reply" ? modalNoteData.id : null,
-      renoteId: type === "quote" ? modalNoteData.id : null,
+      replyId: postModalType === "reply" ? modalNoteData.id : null,
+      renoteId: postModalType === "quote" ? modalNoteData.id : null,
     });
     if (data.visibility === "specified") {
       Object.assign(postObject.body.data, {
@@ -122,7 +122,7 @@ export const PostForm: React.VFC<{ isModal?: boolean }> = ({ isModal }) => {
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
-        {isModal && modalNoteData.id && type && (
+        {isModal && modalNoteData.id && postModalType && (
           <Box
             p="1"
             mb="2"
@@ -154,9 +154,9 @@ export const PostForm: React.VFC<{ isModal?: boolean }> = ({ isModal }) => {
           placeholder={
             !isModal
               ? "何を考えていますか？"
-              : type === "reply"
+              : postModalType === "reply"
               ? "このノートに返信"
-              : type === "quote"
+              : postModalType === "quote"
               ? "このノートを引用"
               : "何を考えていますか？"
           }

@@ -123,14 +123,24 @@ const Judge: React.VFC<{
         );
       });
       return (
-        <Link href={element.props.url} color={secondaryColor} isExternal>
+        <Link
+          href={element.props.url}
+          color={secondaryColor}
+          verticalAlign="middle"
+          isExternal
+        >
           {c}
           <ExternalLinkIcon marginLeft="0.5" />
         </Link>
       );
     case "url":
       return (
-        <Link href={element.props.url} color={secondaryColor} isExternal>
+        <Link
+          href={element.props.url}
+          color={secondaryColor}
+          verticalAlign="middle"
+          isExternal
+        >
           {decodeURI(element.props.url)}
           <ExternalLinkIcon marginLeft="0.5" />
         </Link>
@@ -141,6 +151,7 @@ const Judge: React.VFC<{
           as={routerLink}
           to={`/tags/${element.props.hashtag}`}
           color={secondaryColor}
+          verticalAlign="middle"
         >
           {`#${element.props.hashtag}`}
         </Link>
@@ -151,6 +162,7 @@ const Judge: React.VFC<{
           <Link
             href={`https://twitter.com/${element.props.username}`}
             color={secondaryColor}
+            verticalAlign="middle"
             isExternal
           >
             {`@${element.props.username}`}
@@ -164,6 +176,7 @@ const Judge: React.VFC<{
             as={routerLink}
             to={`/user/${element.props.acct}`}
             color={secondaryColor}
+            verticalAlign="middle"
           >
             {`@${element.props.username}`}
             {element.props.host && <>{`@${element.props.host}`}</>}
