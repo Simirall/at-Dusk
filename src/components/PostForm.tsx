@@ -23,11 +23,16 @@ import {
   Checkbox,
   Text,
   Avatar,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverBody,
 } from "@chakra-ui/react";
 import { User } from "misskey-js/built/entities";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
+  IoAddCircle,
   IoFastFood,
   IoGlobe,
   IoHome,
@@ -41,6 +46,7 @@ import { useSocket } from "../utils/SocketContext";
 import { useStyleProps } from "../utils/StyleProps";
 import { APIObject, useAPIObject } from "../utils/useAPIObject";
 
+import { EmojiForm } from "./EmojiForm";
 import { Note } from "./Note";
 import { ParseMFM } from "./ParseMFM";
 
@@ -49,13 +55,27 @@ export const PostForm: React.VFC<{ isModal?: boolean }> = ({ isModal }) => {
   const userAddDisclosure = useDisclosure();
   const colors = useColors();
   const styleProps = useStyleProps();
-  const { register, handleSubmit, watch, reset } = useForm();
-  const { onPostModalClose, postModalType, modalNoteData, modalNoteType } =
-    useModalsContext();
+  const { register, handleSubmit, watch, reset, getValues, setValue } =
+    useForm();
+  const {
+    onPostModalClose,
+    postModalType,
+    modalNoteData,
+    modalNoteType,
+    setEmojiModalType,
+  } = useModalsContext();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [visibility, setVisibility] = useState("public");
   const [users, updateUsers] = useState<Array<User>>([]);
   const [cw, updateCw] = useState(false);
+  const [addedEmoji, addEmoji] = useState("");
+
+  useEffect(() => {
+    if (addedEmoji) {
+      setValue("text", getValues("text") + addedEmoji);
+      addEmoji("");
+    }
+  }, [addedEmoji, setValue, getValues]);
 
   useEffect(() => {
     if (isModal && modalNoteData.visibility)
@@ -86,9 +106,9 @@ export const PostForm: React.VFC<{ isModal?: boolean }> = ({ isModal }) => {
         visibleUserIds: users.map((user) => user.id),
       });
     }
-    onPostModalClose();
-    reset();
     socket.send(JSON.stringify(postObject));
+    if (isModal) onPostModalClose();
+    reset();
   };
   const onSubmitUserAdd = (data: Record<string, unknown>) => {
     Object.assign(userAddObject.body.data, {
@@ -328,6 +348,36 @@ export const PostForm: React.VFC<{ isModal?: boolean }> = ({ isModal }) => {
             updateCw(!cw);
           }}
         />
+        <Box>
+          <Popover isLazy>
+            {({ onClose }) => (
+              <>
+                <PopoverTrigger>
+                  <IconButton
+                    aria-label="reaction"
+                    size="sm"
+                    icon={<IoAddCircle size="1.4em" />}
+                    color={colors.secondaryColor}
+                    {...styleProps.AlphaButton}
+                    onClick={() => {
+                      setEmojiModalType("picker");
+                    }}
+                  />
+                </PopoverTrigger>
+                <PopoverContent
+                  bgColor={colors.panelColor}
+                  color={colors.textColor}
+                  w="md"
+                  maxW="90vw"
+                >
+                  <PopoverBody>
+                    <EmojiForm onClose={onClose} addEmoji={addEmoji} />
+                  </PopoverBody>
+                </PopoverContent>
+              </>
+            )}
+          </Popover>
+        </Box>
         <Button
           {...styleProps.PrimaryButton}
           fontWeight="md"

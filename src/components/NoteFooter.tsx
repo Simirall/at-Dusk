@@ -1,6 +1,15 @@
 import { IconButton } from "@chakra-ui/button";
 import { Flex } from "@chakra-ui/layout";
-import { Menu, MenuButton, MenuList, MenuItem } from "@chakra-ui/react";
+import {
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverBody,
+} from "@chakra-ui/react";
 import { Note as mkNote, Note } from "misskey-js/built/entities";
 import React, { memo } from "react";
 import {
@@ -17,6 +26,8 @@ import { useSocket } from "../utils/SocketContext";
 import { useStyleProps } from "../utils/StyleProps";
 import { APIObject, useAPIObject } from "../utils/useAPIObject";
 
+import { EmojiForm } from "./EmojiForm";
+
 export const NoteFooter: React.VFC<{
   note: mkNote;
   type: NoteType;
@@ -29,7 +40,6 @@ export const NoteFooter: React.VFC<{
     updateModalNoteData,
     updateModalNoteType,
     setEmojiModalType,
-    onEmojiModalOpen,
   } = useModalsContext();
   const styleProps = useStyleProps();
 
@@ -114,19 +124,36 @@ export const NoteFooter: React.VFC<{
         </Menu>
         {type.type !== "renote" ? note.renoteCount : note.renote?.renoteCount}
       </Flex>
-      <IconButton
-        aria-label="reaction"
-        size="sm"
-        icon={<IoAddCircle size="1.4em" />}
-        {...styleProps.AlphaButton}
-        onClick={() => {
-          updateModalNoteData(
-            type.type === "renote" ? (note.renote as Note) : note
-          );
-          setEmojiModalType("reaction");
-          onEmojiModalOpen();
-        }}
-      />
+      <Popover isLazy>
+        {({ onClose }) => (
+          <>
+            <PopoverTrigger>
+              <IconButton
+                aria-label="reaction"
+                size="sm"
+                icon={<IoAddCircle size="1.4em" />}
+                {...styleProps.AlphaButton}
+                onClick={() => {
+                  updateModalNoteData(
+                    type.type === "renote" ? (note.renote as Note) : note
+                  );
+                  setEmojiModalType("reaction");
+                }}
+              />
+            </PopoverTrigger>
+            <PopoverContent
+              bgColor={colors.panelColor}
+              color={colors.textColor}
+              w="md"
+              maxW="90vw"
+            >
+              <PopoverBody>
+                <EmojiForm onClose={onClose} />
+              </PopoverBody>
+            </PopoverContent>
+          </>
+        )}
+      </Popover>
       <Menu>
         <MenuButton
           as={IconButton}

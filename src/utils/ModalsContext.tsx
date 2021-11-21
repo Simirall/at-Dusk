@@ -8,9 +8,6 @@ interface ModalsType {
   isPostModalOpen: boolean;
   onPostModalOpen: () => void;
   onPostModalClose: () => void;
-  isEmojiModalOpen: boolean;
-  onEmojiModalOpen: () => void;
-  onEmojiModalClose: () => void;
   postModalType: string;
   setPostModalType: React.Dispatch<React.SetStateAction<string>>;
   emojiModalType: string;
@@ -19,6 +16,8 @@ interface ModalsType {
   updateModalNoteData: React.Dispatch<React.SetStateAction<Note>>;
   modalNoteType: NoteType;
   updateModalNoteType: React.Dispatch<React.SetStateAction<NoteType>>;
+  addedEmoji: string;
+  addEmoji: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const ModalsContext = createContext({} as ModalsType);
@@ -30,8 +29,8 @@ const ModalsProvider: React.VFC<{
   const [emojiModalType, setEmojiModalType] = useState("");
   const [modalNoteData, updateModalNoteData] = useState({} as Note);
   const [modalNoteType, updateModalNoteType] = useState({} as NoteType);
+  const [addedEmoji, addEmoji] = useState("");
   const postModal = useDisclosure();
-  const emojiModal = useDisclosure();
   const isPostModalOpen = postModal.isOpen;
   const onPostModalOpen = postModal.onOpen;
   const onPostModalClose = () => {
@@ -40,13 +39,6 @@ const ModalsProvider: React.VFC<{
     updateModalNoteType({} as NoteType);
     postModal.onClose();
   };
-  const isEmojiModalOpen = emojiModal.isOpen;
-  const onEmojiModalOpen = emojiModal.onOpen;
-  const onEmojiModalClose = () => {
-    setEmojiModalType("");
-    updateModalNoteData({} as Note);
-    emojiModal.onClose();
-  };
   return (
     <>
       <ModalsContext.Provider
@@ -54,9 +46,6 @@ const ModalsProvider: React.VFC<{
           isPostModalOpen,
           onPostModalOpen,
           onPostModalClose,
-          isEmojiModalOpen,
-          onEmojiModalOpen,
-          onEmojiModalClose,
           postModalType,
           setPostModalType,
           emojiModalType,
@@ -65,6 +54,8 @@ const ModalsProvider: React.VFC<{
           updateModalNoteData,
           modalNoteType,
           updateModalNoteType,
+          addedEmoji,
+          addEmoji,
         }}
       >
         {children}

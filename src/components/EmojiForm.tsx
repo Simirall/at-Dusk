@@ -5,10 +5,6 @@ import {
   Image,
   Button,
   Input,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalBody,
   Accordion,
   AccordionItem,
   AccordionButton,
@@ -40,15 +36,17 @@ type EmojiCategory =
   | "Symbols"
   | "Travel & Places";
 
-export const EmojiModal: React.VFC = () => {
+export const EmojiForm: React.VFC<{
+  onClose: () => void;
+  addEmoji?: React.Dispatch<React.SetStateAction<string>>;
+}> = memo(function Fn({ onClose, addEmoji }) {
   const socket = useSocket();
   const dispatch = useAppDispatch();
   const RUEmoji = useAppSelector(settings).RUEmoji;
   const colors = useColors();
   const styleProps = useStyleProps();
   const { register, watch, handleSubmit, setValue, reset } = useForm();
-  const { isEmojiModalOpen, onEmojiModalClose, emojiModalType, modalNoteData } =
-    useModalsContext();
+  const { emojiModalType, modalNoteData } = useModalsContext();
   const [selectedEmoji, setEmoji] = useState<string | CustomEmoji>("");
   const customEmojis: Array<CustomEmoji> = JSON.parse(
     localStorage.getItem("meta") as string
@@ -60,15 +58,17 @@ export const EmojiModal: React.VFC = () => {
   }) as APIObject;
 
   useEffect(() => {
-    const onSubmit = (data: Record<string, unknown>) => {
+    const onSubmit = (data: Record<string, string>) => {
       if (emojiModalType === "reaction") {
         Object.assign(reactionObject.body.data, {
           noteId: modalNoteData.id,
           reaction: data.emoji,
         });
         socket.send(JSON.stringify(reactionObject));
+        onClose();
+      } else if (emojiModalType === "picker" && addEmoji) {
+        addEmoji(data.emoji);
       }
-      onEmojiModalClose();
       reset();
     };
 
@@ -79,161 +79,130 @@ export const EmojiModal: React.VFC = () => {
       dispatch(addRUEmoji(selectedEmoji));
       setEmoji("");
     }
-  }, [
-    selectedEmoji,
-    emojiModalType,
-    socket,
-    setValue,
-    dispatch,
-    handleSubmit,
-    reactionObject,
-    modalNoteData,
-    onEmojiModalClose,
-    reset,
-  ]);
+  }, [selectedEmoji, emojiModalType, socket, setValue, dispatch, handleSubmit, reactionObject, modalNoteData, addEmoji, reset, onClose]);
 
   return (
     <>
-      <Modal
-        isOpen={isEmojiModalOpen}
-        onClose={onEmojiModalClose}
-        size="xl"
-        isCentered
-      >
-        <ModalOverlay />
-        <ModalContent bgColor={colors.panelColor} color={colors.textColor}>
-          <ModalBody p="1">
-            <Box h="15em" overflowY="scroll" p="1">
-              {watch("searchEmoji") && (
-                <HStack spacing="0.5" wrap="wrap" justify="center">
-                  {customEmojis
-                    .filter(
-                      (emoji) =>
-                        emoji.name.includes(watch("searchEmoji")) ||
-                        emoji.aliases.find((a) =>
-                          a.includes(watch("searchEmoji"))
-                        )
-                    )
-                    .slice(0, 24)
-                    .map((data) => (
-                      <Box key={data.id}>
-                        <Button
-                          size="sm"
-                          p="1"
-                          mb="1"
-                          {...styleProps.AlphaButton}
-                          title={data.name}
-                          onClick={() => {
-                            setEmoji(data);
-                          }}
-                        >
-                          <Image
-                            src={data.url}
-                            alt={data.name}
-                            loading="lazy"
-                            maxH="1.6em"
-                          />
-                        </Button>
-                      </Box>
-                    ))}
-                  {Object.values(emojis)
-                    .flat()
-                    .filter((emoji) =>
-                      emoji.name.includes(watch("searchEmoji"))
-                    )
-                    .slice(0, 24)
-                    .map((data) => (
-                      <Box key={data.slug}>
-                        <Button
-                          size="sm"
-                          p="1"
-                          mb="1"
-                          {...styleProps.AlphaButton}
-                          title={data.name}
-                          onClick={() => {
-                            setEmoji(data.emoji);
-                          }}
-                        >
-                          <Twemoji emoji={data.emoji} />
-                        </Button>
-                      </Box>
-                    ))}
-                </HStack>
-              )}
-              {RUEmoji.length > 0 && (
-                <Box>
-                  <HStack spacing="0.5">
-                    <TimeIcon />
-                    <Box>最近使用</Box>
-                  </HStack>
-                  <HStack spacing="0.5" wrap="wrap" justify="center">
-                    {RUEmoji.map((emoji) => (
-                      <Box key={typeof emoji === "string" ? emoji : emoji.name}>
-                        {typeof emoji === "string" ? (
-                          <Button
-                            size="sm"
-                            p="1"
-                            mb="1"
-                            {...styleProps.AlphaButton}
-                            onClick={() => {
-                              setEmoji(emoji);
-                            }}
-                          >
-                            <Twemoji emoji={emoji} />
-                          </Button>
-                        ) : (
-                          <Button
-                            size="sm"
-                            p="1"
-                            mb="1"
-                            {...styleProps.AlphaButton}
-                            title={emoji.name}
-                            onClick={() => {
-                              setEmoji(emoji);
-                            }}
-                          >
-                            <Image
-                              src={emoji.url}
-                              alt={emoji.name}
-                              loading="lazy"
-                              maxH="1.6em"
-                            />
-                          </Button>
-                        )}
-                      </Box>
-                    ))}
-                  </HStack>
+      <Box h="10em" overflowY="scroll" p="1">
+        {watch("searchEmoji") && (
+          <HStack spacing="0.5" wrap="wrap" justify="center">
+            {customEmojis
+              .filter(
+                (emoji) =>
+                  emoji.name.includes(watch("searchEmoji")) ||
+                  emoji.aliases.find((a) => a.includes(watch("searchEmoji")))
+              )
+              .slice(0, 24)
+              .map((data) => (
+                <Box key={data.id}>
+                  <Button
+                    p="1"
+                    mb="1"
+                    {...styleProps.AlphaButton}
+                    title={data.name}
+                    onClick={() => {
+                      setEmoji(data);
+                    }}
+                  >
+                    <Image
+                      src={data.url}
+                      alt={data.name}
+                      loading="lazy"
+                      maxH="1.6em"
+                    />
+                  </Button>
                 </Box>
-              )}
-              <CustomEmojis
-                emojis={customEmojis}
-                setEmoji={setEmoji}
-                colors={colors}
-                styleProps={styleProps}
-              />
-              <Box pb="2" />
-              <UnicodeEmojis
-                setEmoji={setEmoji}
-                colors={colors}
-                styleProps={styleProps}
-              />
-            </Box>
-            <Input
-              size="sm"
-              mt="2"
-              placeholder="検索"
-              borderColor={colors.alpha200}
-              _hover={{ borderColor: colors.alpha400 }}
-              _focus={{ borderColor: colors.secondaryColor }}
-              onSubmit={(e) => e.preventDefault()}
-              {...register("searchEmoji")}
-            />
-          </ModalBody>
-        </ModalContent>
-      </Modal>
+              ))}
+            {Object.values(emojis)
+              .flat()
+              .filter((emoji) => emoji.name.includes(watch("searchEmoji")))
+              .slice(0, 24)
+              .map((data) => (
+                <Box key={data.slug}>
+                  <Button
+                    p="1"
+                    mb="1"
+                    {...styleProps.AlphaButton}
+                    title={data.name}
+                    onClick={() => {
+                      setEmoji(data.emoji);
+                    }}
+                  >
+                    <Twemoji emoji={data.emoji} />
+                  </Button>
+                </Box>
+              ))}
+          </HStack>
+        )}
+        {RUEmoji.length > 0 && (
+          <Box>
+            <HStack spacing="0.5">
+              <TimeIcon />
+              <Box>最近使用</Box>
+            </HStack>
+            <HStack spacing="0.5" wrap="wrap" justify="center">
+              {RUEmoji.map((emoji) => (
+                <Box key={typeof emoji === "string" ? emoji : emoji.name}>
+                  {typeof emoji === "string" ? (
+                    <Button
+                      p="1"
+                      mb="1"
+                      {...styleProps.AlphaButton}
+                      onClick={() => {
+                        setEmoji(emoji);
+                      }}
+                    >
+                      <Twemoji emoji={emoji} />
+                    </Button>
+                  ) : (
+                    <Button
+                      p="1"
+                      mb="1"
+                      {...styleProps.AlphaButton}
+                      title={emoji.name}
+                      onClick={() => {
+                        setEmoji(emoji);
+                      }}
+                    >
+                      <Image
+                        src={emoji.url}
+                        alt={emoji.name}
+                        loading="lazy"
+                        maxH="1.6em"
+                      />
+                    </Button>
+                  )}
+                </Box>
+              ))}
+            </HStack>
+          </Box>
+        )}
+        <CustomEmojis
+          emojis={customEmojis}
+          setEmoji={setEmoji}
+          colors={colors}
+          styleProps={styleProps}
+        />
+        <Box pb="2" />
+        <UnicodeEmojis
+          setEmoji={setEmoji}
+          colors={colors}
+          styleProps={styleProps}
+        />
+      </Box>
+      <Input
+        size="sm"
+        mt="2"
+        placeholder="検索"
+        borderColor={colors.alpha200}
+        _hover={{ borderColor: colors.alpha400 }}
+        _focus={{ borderColor: colors.secondaryColor }}
+        onSubmit={(e) => e.preventDefault()}
+        {...register("searchEmoji")}
+      />
     </>
   );
-};
+});
 
 const CustomEmojis: React.VFC<{
   emojis: Array<CustomEmoji>;
@@ -262,7 +231,6 @@ const CustomEmojis: React.VFC<{
                           .map((data) => (
                             <Box key={data.id}>
                               <Button
-                                size="sm"
                                 p="1"
                                 mb="1"
                                 {...styleProps.AlphaButton}
@@ -339,7 +307,6 @@ const EmojiList: React.VFC<{
       {emojis[category as EmojiCategory].map((emoji) => (
         <Box key={emoji.slug}>
           <Button
-            size="sm"
             p="1"
             mb="1"
             {...styleProps.AlphaButton}
