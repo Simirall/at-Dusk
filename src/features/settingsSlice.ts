@@ -9,6 +9,8 @@ export interface SettingsState {
     darkTheme: string;
   };
   autoMotto: boolean;
+  defaultVisibility: "public" | "home" | "followers" | "specified";
+  defaultLocalOnly: boolean;
   TLPostForm: boolean;
   RUEmoji: Array<CustomEmoji | string>;
 }
@@ -18,6 +20,8 @@ const initialState: SettingsState = {
     lightTheme: "",
     darkTheme: "",
   },
+  defaultVisibility: "public",
+  defaultLocalOnly: false,
   autoMotto: true,
   TLPostForm: false,
   RUEmoji: [],
@@ -35,11 +39,19 @@ export const settingsSlice = createSlice({
     ) => {
       state.theme = action.payload.theme;
     },
-    setMotto: (state, action: PayloadAction<boolean>) => {
-      state.autoMotto = action.payload;
-    },
-    setTLPostForm: (state, action: PayloadAction<boolean>) => {
-      state.TLPostForm = action.payload;
+    setSettings: (
+      state,
+      action: PayloadAction<{
+        autoMotto: boolean;
+        TLPostForm: boolean;
+        defaultVisibility: "public" | "home" | "followers" | "specified";
+        defaultLocalOnly: boolean;
+      }>
+    ) => {
+      state.autoMotto = action.payload.autoMotto;
+      state.TLPostForm = action.payload.TLPostForm;
+      state.defaultVisibility = action.payload.defaultVisibility;
+      state.defaultLocalOnly = action.payload.defaultLocalOnly;
     },
     addRUEmoji: (state, action: PayloadAction<CustomEmoji | string>) => {
       if (typeof action.payload === "string") {
@@ -66,7 +78,7 @@ export const settingsSlice = createSlice({
   },
 });
 
-export const { setTheme, setMotto, setTLPostForm, addRUEmoji, setDefault } =
+export const { setTheme, setSettings, addRUEmoji, setDefault } =
   settingsSlice.actions;
 
 export const settings = (state: RootState): SettingsState => state.settings;

@@ -144,6 +144,7 @@ export const NoteFooter: React.VFC<{
             <PopoverContent
               bgColor={colors.panelColor}
               color={colors.textColor}
+              borderColor={colors.alpha400}
               w="md"
               maxW="90vw"
             >

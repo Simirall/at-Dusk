@@ -193,7 +193,7 @@ const ImageFile: React.VFC<{
               display={loaded ? "block" : "none"}
               onLoad={() => updateLoaded(true)}
             />
-            {!loaded && (
+            {!loaded && image.blurhash && (
               <Box maxH={size} minH="5rem" minW="10rem" p="0.5">
                 <Blurhash
                   hash={image.blurhash}

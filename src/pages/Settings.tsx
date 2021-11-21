@@ -11,12 +11,7 @@ import { IoColorPalette } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 
 import { useAppDispatch, useAppSelector } from "../app/hooks";
-import {
-  setTheme,
-  setMotto,
-  setTLPostForm,
-  settings,
-} from "../features/settingsSlice";
+import { setTheme, setSettings, settings } from "../features/settingsSlice";
 import { useColors } from "../utils/Colors";
 import { useLoginContext } from "../utils/LoginContext";
 
@@ -35,9 +30,10 @@ export const Settings: React.VFC = () => {
   const onSubmitGenerall = (data: {
     autoMotto: boolean;
     TLPostForm: boolean;
+    defaultVisibility: "public" | "home" | "followers" | "specified";
+    defaultLocalOnly: boolean;
   }) => {
-    dispatch(setMotto(data.autoMotto));
-    dispatch(setTLPostForm(data.TLPostForm));
+    dispatch(setSettings(data));
   };
 
   return (
@@ -49,7 +45,7 @@ export const Settings: React.VFC = () => {
               <Icon as={IoColorPalette} fontSize="2xl" />
               <Box>テーマ</Box>
             </HStack>
-            <HStack color={headerTextColor}>
+            <HStack color={headerTextColor} justify="center">
               <Box>
                 <FormLabel color={colors.textColor}>Light Mode</FormLabel>
                 <Select
@@ -57,6 +53,11 @@ export const Settings: React.VFC = () => {
                   defaultValue={settingsValue.theme.lightTheme}
                   variant="flushed"
                   color={colors.textColor}
+                  sx={{
+                    option: {
+                      backgroundColor: colors.panelColor,
+                    },
+                  }}
                 >
                   <option value="illuminating">illuminating</option>
                   <option value="moss">moss gray</option>
@@ -69,6 +70,11 @@ export const Settings: React.VFC = () => {
                   defaultValue={settingsValue.theme.darkTheme}
                   variant="flushed"
                   color={colors.textColor}
+                  sx={{
+                    option: {
+                      backgroundColor: colors.panelColor,
+                    },
+                  }}
                 >
                   <option value="chillout">chillout</option>
                   <option value="Ginkgo">Ginkgo biloba</option>
@@ -105,6 +111,33 @@ export const Settings: React.VFC = () => {
                   {...register("TLPostForm")}
                 />
                 TL上部に投稿フォームを表示する
+              </FormLabel>
+              <FormLabel userSelect="none">
+                デフォルトの公開範囲
+                <Select
+                  {...register("defaultVisibility")}
+                  defaultValue={settingsValue.defaultVisibility}
+                  color={colors.textColor}
+                  size="sm"
+                  sx={{
+                    option: {
+                      backgroundColor: colors.panelColor,
+                    },
+                  }}
+                >
+                  <option value="public">public</option>
+                  <option value="home">home</option>
+                  <option value="followers">followers</option>
+                  <option value="specified">specified</option>
+                </Select>
+              </FormLabel>
+              <FormLabel userSelect="none">
+                <Switch
+                  marginRight="2"
+                  defaultChecked={settingsValue.defaultLocalOnly}
+                  {...register("defaultLocalOnly")}
+                />
+                ローカルのみ
               </FormLabel>
             </VStack>
             <Button colorScheme="blue" marginTop="2" w="full" type="submit">

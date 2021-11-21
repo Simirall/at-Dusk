@@ -1,6 +1,12 @@
 import { IconButton, Button } from "@chakra-ui/button";
 import { useDisclosure } from "@chakra-ui/hooks";
-import { AddIcon, AtSignIcon, CloseIcon, ViewOffIcon } from "@chakra-ui/icons";
+import {
+  AddIcon,
+  AtSignIcon,
+  CheckIcon,
+  CloseIcon,
+  ViewOffIcon,
+} from "@chakra-ui/icons";
 import {
   Modal,
   ModalOverlay,
@@ -20,7 +26,6 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
-  Checkbox,
   Text,
   Avatar,
   Popover,
@@ -40,6 +45,8 @@ import {
   IoMail,
 } from "react-icons/io5";
 
+import { useAppSelector } from "../app/hooks";
+import { settings } from "../features/settingsSlice";
 import { useColors } from "../utils/Colors";
 import { useModalsContext } from "../utils/ModalsContext";
 import { useSocket } from "../utils/SocketContext";
@@ -52,11 +59,11 @@ import { ParseMFM } from "./ParseMFM";
 
 export const PostForm: React.VFC<{ isModal?: boolean }> = ({ isModal }) => {
   const socket = useSocket();
+  const settingsValue = useAppSelector(settings);
   const userAddDisclosure = useDisclosure();
   const colors = useColors();
   const styleProps = useStyleProps();
-  const { register, handleSubmit, watch, reset, getValues, setValue } =
-    useForm();
+  const { register, handleSubmit, reset, getValues, setValue } = useForm();
   const {
     onPostModalClose,
     postModalType,
@@ -65,7 +72,8 @@ export const PostForm: React.VFC<{ isModal?: boolean }> = ({ isModal }) => {
     setEmojiModalType,
   } = useModalsContext();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [visibility, setVisibility] = useState("public");
+  const [visibility, setVisibility] = useState(settingsValue.defaultVisibility);
+  const [localOnly, setLocalOnly] = useState(settingsValue.defaultLocalOnly);
   const [users, updateUsers] = useState<Array<User>>([]);
   const [cw, updateCw] = useState(false);
   const [addedEmoji, addEmoji] = useState("");
@@ -97,7 +105,7 @@ export const PostForm: React.VFC<{ isModal?: boolean }> = ({ isModal }) => {
       visibility: data.visibility,
       text: data.text ? data.text : null,
       cw: cw ? data.cw : null,
-      localOnly: data.localOnly,
+      localOnly: localOnly,
       replyId: postModalType === "reply" ? modalNoteData.id : null,
       renoteId: postModalType === "quote" ? modalNoteData.id : null,
     });
@@ -180,6 +188,7 @@ export const PostForm: React.VFC<{ isModal?: boolean }> = ({ isModal }) => {
               ? "このノートを引用"
               : "何を考えていますか？"
           }
+          color={colors.textColor}
           borderColor={colors.alpha400}
           _hover={{ borderColor: colors.alpha600 }}
           _focus={{ borderColor: colors.secondaryColor }}
@@ -293,8 +302,21 @@ export const PostForm: React.VFC<{ isModal?: boolean }> = ({ isModal }) => {
                 _active={{ bgColor: colors.alpha50 }}
               >
                 <Box>
-                  <HStack spacing="1">
-                    <Checkbox size="lg" {...register("localOnly")} />
+                  <HStack spacing="1" onClick={() => setLocalOnly(!localOnly)}>
+                    <HStack
+                      p="1"
+                      backgroundColor={colors.alpha200}
+                      borderRadius="md"
+                    >
+                      {localOnly ? (
+                        <CheckIcon color={colors.primaryColor} />
+                      ) : (
+                        <CloseIcon
+                          color={colors.secondaryColor}
+                          fontSize="sm"
+                        />
+                      )}
+                    </HStack>
                     <Icon fontSize="1.2em" as={IoFastFood} />
                     <Box>ローカルのみ</Box>
                   </HStack>
@@ -302,7 +324,7 @@ export const PostForm: React.VFC<{ isModal?: boolean }> = ({ isModal }) => {
               </MenuItem>
             </MenuList>
           </Menu>
-          {watch("localOnly") && (
+          {localOnly && (
             <Icon as={IoFastFood} color={colors.secondaryColor} mr="1" />
           )}
           {visibility === "specified" && (
@@ -367,6 +389,7 @@ export const PostForm: React.VFC<{ isModal?: boolean }> = ({ isModal }) => {
                 <PopoverContent
                   bgColor={colors.panelColor}
                   color={colors.textColor}
+                  borderColor={colors.alpha400}
                   w="md"
                   maxW="90vw"
                 >
