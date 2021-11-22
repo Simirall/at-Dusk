@@ -170,6 +170,7 @@ export const PostForm: React.VFC<{ isModal?: boolean }> = ({ isModal }) => {
             {...register("cw")}
             placeholder="注釈"
             mb="1"
+            color={colors.textColor}
             borderColor={colors.alpha200}
             _hover={{ borderColor: colors.alpha400 }}
             _focus={{ borderColor: colors.secondaryColor }}
