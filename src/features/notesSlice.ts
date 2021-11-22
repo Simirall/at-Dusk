@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ID, Note } from "misskey-js/built/entities";
 
-import { RootState } from "../app/store";
+import { RootState, store } from "../app/store";
 
 export interface ReactionDetails {
   id: ID;
@@ -147,7 +147,10 @@ export const notesSlice = createSlice({
           }
           state.reactions[index].reactions[action.payload.body.reaction] = 1;
         }
-        if (action.payload.body.userId === localStorage.getItem("UserId"))
+        if (
+          action.payload.body.userId ===
+          store.getState().settings.userInfo.userData.id
+        )
           state.reactions[index].myReaction = action.payload.body.reaction;
       }
     },
@@ -174,7 +177,10 @@ export const notesSlice = createSlice({
         } else {
           delete state.reactions[index].reactions[action.payload.body.reaction];
         }
-        if (action.payload.body.userId === localStorage.getItem("UserId"))
+        if (
+          action.payload.body.userId ===
+          store.getState().settings.userInfo.userData.id
+        )
           delete state.reactions[index].myReaction;
       }
     },

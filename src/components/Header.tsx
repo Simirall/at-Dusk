@@ -1,16 +1,17 @@
 import { IconButton } from "@chakra-ui/button";
 import { EditIcon, SettingsIcon } from "@chakra-ui/icons";
 import { Flex, Text, Avatar } from "@chakra-ui/react";
-import { User } from "misskey-js/built/entities";
 import React from "react";
 import { Link as RouterLink } from "react-router-dom";
 
+import { useAppSelector } from "../app/hooks";
 import { ColorModeSwitcher } from "../components/ColorModeSwitcher";
+import { settings } from "../features/settingsSlice";
 import { useColors } from "../utils/Colors";
 import { useModalsContext } from "../utils/ModalsContext";
 
 export const Header: React.VFC = () => {
-  const user = JSON.parse(localStorage.getItem("user") as string) as User;
+  const user = useAppSelector(settings).userInfo.userData;
   const colors = useColors();
   const { onPostModalOpen } = useModalsContext();
 

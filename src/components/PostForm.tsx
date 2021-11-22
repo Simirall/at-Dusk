@@ -120,14 +120,12 @@ export const PostForm: React.VFC<{ isModal?: boolean }> = ({ isModal }) => {
   };
   const onSubmitUserAdd = (data: Record<string, unknown>) => {
     Object.assign(userAddObject.body.data, {
-      i: localStorage.getItem("UserToken"),
+      i: settingsValue.userInfo.userToken,
       username: data.username,
       host: data.host ? data.host : null,
     });
     fetch(
-      `https://${localStorage.getItem("instanceURL")}/api/${
-        userAddObject.body.endpoint
-      }`,
+      `https://${settingsValue.userInfo.instance}/api/${userAddObject.body.endpoint}`,
       {
         method: "POST",
         body: JSON.stringify(userAddObject.body.data),

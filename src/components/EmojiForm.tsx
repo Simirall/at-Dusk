@@ -48,9 +48,7 @@ export const EmojiForm: React.VFC<{
   const { register, watch, handleSubmit, setValue, reset } = useForm();
   const { emojiModalType, modalNoteData } = useModalsContext();
   const [selectedEmoji, setEmoji] = useState<string | CustomEmoji>("");
-  const customEmojis: Array<CustomEmoji> = JSON.parse(
-    localStorage.getItem("meta") as string
-  ).emojis;
+  const customEmojis = useAppSelector(settings).userInfo.instanceMeta.emojis;
   const reactionObject = useAPIObject({
     id: "reaction",
     type: "api",

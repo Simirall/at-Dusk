@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { CustomEmoji } from "misskey-js/built/entities";
+import { CustomEmoji, InstanceMetadata, User } from "misskey-js/built/entities";
 
 import { RootState } from "../app/store";
 
@@ -13,6 +13,13 @@ export interface SettingsState {
   defaultLocalOnly: boolean;
   TLPostForm: boolean;
   RUEmoji: Array<CustomEmoji | string>;
+  userInfo: {
+    login: boolean;
+    userToken: string;
+    instance: string;
+    userData: User;
+    instanceMeta: InstanceMetadata;
+  };
 }
 
 const initialState: SettingsState = {
@@ -25,6 +32,13 @@ const initialState: SettingsState = {
   autoMotto: true,
   TLPostForm: false,
   RUEmoji: [],
+  userInfo: {
+    login: false,
+    userToken: "",
+    instance: "",
+    userData: {} as User,
+    instanceMeta: {} as InstanceMetadata,
+  },
 };
 
 export const settingsSlice = createSlice({
@@ -38,6 +52,22 @@ export const settingsSlice = createSlice({
       }>
     ) => {
       state.theme = action.payload.theme;
+    },
+    setUserInfo: (
+      state,
+      action: PayloadAction<{
+        login: boolean;
+        userToken: string;
+        instance: string;
+        userData: User;
+        instanceMeta: InstanceMetadata;
+      }>
+    ) => {
+      state.userInfo.login = action.payload.login;
+      state.userInfo.userToken = action.payload.userToken;
+      state.userInfo.instance = action.payload.instance;
+      state.userInfo.userData = action.payload.userData;
+      state.userInfo.instanceMeta = action.payload.instanceMeta;
     },
     setSettings: (
       state,
@@ -78,7 +108,7 @@ export const settingsSlice = createSlice({
   },
 });
 
-export const { setTheme, setSettings, addRUEmoji, setDefault } =
+export const { setTheme, setUserInfo, setSettings, addRUEmoji, setDefault } =
   settingsSlice.actions;
 
 export const settings = (state: RootState): SettingsState => state.settings;

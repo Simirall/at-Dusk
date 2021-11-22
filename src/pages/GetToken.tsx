@@ -1,19 +1,26 @@
 import { Box, Center } from "@chakra-ui/layout";
-import React from "react";
-import { useNavigate, NavigateFunction } from "react-router-dom";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
+import { store } from "../app/store";
 import { Loading } from "../components/Loading";
+import { setUserInfo } from "../features/settingsSlice";
 import { useLoginContext } from "../utils/LoginContext";
 
 export const GetToken: React.VFC<{
   uuid: string;
 }> = ({ uuid }) => {
   const navigate = useNavigate();
-  const { updateLogin } = useLoginContext();
-  const tokenUrl = `https://${localStorage.getItem(
-    "instanceURL"
-  )}/api/miauth/${uuid}/check`;
-  fetchData(tokenUrl, navigate, updateLogin);
+  const { login, updateLogin } = useLoginContext();
+  const tokenUrl = `https://${
+    store.getState().settings.userInfo.instance
+  }/api/miauth/${uuid}/check`;
+  fetchData(tokenUrl, updateLogin);
+  useEffect(() => {
+    if (login) {
+      navigate("/");
+    }
+  }, [login, navigate]);
   return (
     <Box w="full">
       <Center>
@@ -25,7 +32,6 @@ export const GetToken: React.VFC<{
 
 function fetchData(
   tokenUrl: string,
-  navigate: NavigateFunction,
   updateLogin: React.Dispatch<React.SetStateAction<boolean>>
 ) {
   fetch(tokenUrl, {
@@ -39,13 +45,12 @@ function fetchData(
     })
     .then((text) => {
       if (text.token) {
-        localStorage.setItem("login", text.ok);
-        localStorage.setItem("UserToken", text.token);
-        localStorage.setItem("UserId", text.user.id);
-        localStorage.setItem("UserName", text.user.username);
-        Promise.allSettled([fetchMeta(), fetchUser()]).then(() => {
+        const settings = store.getState().settings.userInfo;
+        store.dispatch(
+          setUserInfo({ ...settings, login: text.ok, userToken: text.token })
+        );
+        Promise.allSettled([fetchMeta(), fetchUser(text.user.id)]).then(() => {
           updateLogin(true);
-          navigate("/");
         });
       }
     })
@@ -55,9 +60,12 @@ function fetchData(
 }
 
 async function fetchMeta() {
-  await fetch(`https://${localStorage.getItem("instanceURL")}/api/meta`, {
-    method: "POST",
-  })
+  await fetch(
+    `https://${store.getState().settings.userInfo.instance}/api/meta`,
+    {
+      method: "POST",
+    }
+  )
     .then((res) => {
       if (!res.ok) {
         throw new Error(`${res.status} ${res.statusText}`);
@@ -65,7 +73,8 @@ async function fetchMeta() {
       return res.json();
     })
     .then((text) => {
-      localStorage.setItem("meta", JSON.stringify(text));
+      const settings = store.getState().settings.userInfo;
+      store.dispatch(setUserInfo({ ...settings, instanceMeta: text }));
       Promise.resolve();
     })
     .catch((err) => {
@@ -73,14 +82,17 @@ async function fetchMeta() {
       Promise.reject(err);
     });
 }
-async function fetchUser() {
+async function fetchUser(id: string) {
   const body = {
-    username: localStorage.getItem("UserName"),
+    userId: id,
   };
-  await fetch(`https://${localStorage.getItem("instanceURL")}/api/users/show`, {
-    method: "POST",
-    body: JSON.stringify(body),
-  })
+  await fetch(
+    `https://${store.getState().settings.userInfo.instance}/api/users/show`,
+    {
+      method: "POST",
+      body: JSON.stringify(body),
+    }
+  )
     .then((res) => {
       if (!res.ok) {
         throw new Error(`${res.status} ${res.statusText}`);
@@ -88,7 +100,8 @@ async function fetchUser() {
       return res.json();
     })
     .then((text) => {
-      localStorage.setItem("user", JSON.stringify(text));
+      const settings = store.getState().settings.userInfo;
+      store.dispatch(setUserInfo({ ...settings, userData: text }));
       Promise.resolve();
     })
     .catch((err) => {
