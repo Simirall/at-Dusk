@@ -1,5 +1,7 @@
 import React, { useRef, createContext, useContext, useState } from "react";
 
+import { store } from "../app/store";
+
 const SocketContext = createContext<{
   socket: React.MutableRefObject<WebSocket>;
   isSocketOpen: boolean;
@@ -16,13 +18,9 @@ const SocketProvider: React.VFC<{
   children: React.ReactChild;
 }> = ({ children }) => {
   const [isSocketOpen, updateSocketOpen] = useState<boolean>(false);
+  const info = store.getState().settings.userInfo;
   const socketRef = useRef<WebSocket>(
-    new WebSocket(
-      "wss://" +
-        localStorage.getItem("instanceURL") +
-        "/streaming?i=" +
-        localStorage.getItem("UserToken")
-    )
+    new WebSocket("wss://" + info.instance + "/streaming?i=" + info.userToken)
   );
 
   socketRef.current.onerror = (e) => {

@@ -35,17 +35,12 @@ export const Note: React.VFC<{
   type: NoteType;
   depth: number;
   colors: Record<string, string>;
+  onlyBody?: boolean;
 }> = memo(
-  function Fn({ note, type, depth, colors }) {
+  function Fn({ note, type, depth, colors, onlyBody }) {
     const name = note.user.name ? note.user.name : note.user.username;
     const [cw, updateCw] = React.useState(
-      type.type === "renote"
-        ? note.renote?.cw || note.renote?.cw === ""
-          ? true
-          : false
-        : note.cw || note.cw === ""
-        ? true
-        : false
+      note.cw || note.cw === "" ? true : false
     );
     return (
       <Box
@@ -66,22 +61,10 @@ export const Note: React.VFC<{
           />
         )}
         {type.type === "reply" && (
-          <Reply
-            note={note}
-            name={name}
-            cw={cw}
-            updateCw={updateCw}
-            colors={colors}
-          />
+          <Reply note={note} name={name} colors={colors} />
         )}
         {type.type === "renote" && (
-          <Renote
-            note={note}
-            name={name}
-            cw={cw}
-            updateCw={updateCw}
-            colors={colors}
-          />
+          <Renote note={note} name={name} colors={colors} />
         )}
         {type.type === "quote" && (
           <Quote
@@ -93,11 +76,17 @@ export const Note: React.VFC<{
             colors={colors}
           />
         )}
-        <Reactions
-          id={type.type === "renote" ? (note.renote?.id as string) : note.id}
-          colors={colors}
-        />
-        <NoteFooter note={note} type={type} colors={colors} />
+        {!onlyBody && (
+          <>
+            <Reactions
+              id={
+                type.type === "renote" ? (note.renote?.id as string) : note.id
+              }
+              colors={colors}
+            />
+            <NoteFooter note={note} type={type} colors={colors} />
+          </>
+        )}
       </Box>
     );
   },
@@ -160,7 +149,7 @@ const GeneralNote: React.VFC<{
           <Box>
             {note.cw || note.cw === "" ? (
               <>
-                <HStack>
+                <HStack mb="0.5">
                   {note.replyId && <Icon as={IoArrowUndo} />}
                   <Box>
                     <Box
@@ -212,7 +201,12 @@ const GeneralNote: React.VFC<{
                       />
                     </Box>
                     {note.renoteId && note.renote?.text && (
-                      <Text marginLeft="1" color="green.400" display="inline">
+                      <Text
+                        marginLeft="1"
+                        color="green.400"
+                        display="inline"
+                        verticalAlign="middle"
+                      >
                         <i>RN:</i>
                       </Text>
                     )}
@@ -236,7 +230,12 @@ const GeneralNote: React.VFC<{
                     />
                   </Box>
                   {note.renoteId && note.renote?.text && (
-                    <Text marginLeft="1" color="green.400" display="inline">
+                    <Text
+                      marginLeft="1"
+                      color="green.400"
+                      display="inline"
+                      verticalAlign="middle"
+                    >
                       <i>RN:</i>
                     </Text>
                   )}
@@ -272,10 +271,14 @@ const GeneralNote: React.VFC<{
 const Reply: React.VFC<{
   note: mkNote;
   name: string;
-  cw: boolean;
-  updateCw: React.Dispatch<React.SetStateAction<boolean>>;
   colors: Record<string, string>;
-}> = memo(function Fn({ note, name, cw, updateCw, colors }) {
+}> = memo(function Fn({ note, name, colors }) {
+  const [replyCw, updateReplyCw] = React.useState(
+    note.reply && (note.reply?.cw || note.reply?.cw === "") ? true : false
+  );
+  const [cw, updateCw] = React.useState(
+    note.cw || note.cw === "" ? true : false
+  );
   return (
     <Box>
       <Box
@@ -295,8 +298,8 @@ const Reply: React.VFC<{
               : (note.reply?.user.username as string)
           }
           depth={1}
-          cw={cw}
-          updateCw={updateCw}
+          cw={replyCw}
+          updateCw={updateReplyCw}
           colors={colors}
         />
       </Box>
@@ -330,10 +333,11 @@ const Reply: React.VFC<{
 const Renote: React.VFC<{
   note: mkNote;
   name: string;
-  cw: boolean;
-  updateCw: React.Dispatch<React.SetStateAction<boolean>>;
   colors: Record<string, string>;
-}> = memo(function Fn({ note, name, cw, updateCw, colors }) {
+}> = memo(function Fn({ note, name, colors }) {
+  const [cw, updateCw] = React.useState(
+    note.renote && (note.renote.cw || note.renote.cw === "") ? true : false
+  );
   return (
     <Box>
       {note.renote?.replyId && (
@@ -448,6 +452,9 @@ const Quote: React.VFC<{
   updateCw: React.Dispatch<React.SetStateAction<boolean>>;
   colors: Record<string, string>;
 }> = memo(function Fn({ note, name, depth, cw, updateCw, colors }) {
+  const [quoteCw, updateQuoteCw] = React.useState(
+    note.cw || note.cw === "" ? true : false
+  );
   return (
     <Box>
       <GeneralNote
@@ -475,8 +482,8 @@ const Quote: React.VFC<{
                 : (note.renote?.user.username as string)
             }
             depth={1}
-            cw={cw}
-            updateCw={updateCw}
+            cw={quoteCw}
+            updateCw={updateQuoteCw}
             colors={colors}
           />
         </Box>

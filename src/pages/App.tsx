@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import { Auth } from "../components/Auth";
 import { Header } from "../components/Header";
+import { PostModal } from "../components/PostModal";
 import { CheckLocation } from "../utils/CheckLocation";
 import { SocketProvider } from "../utils/SocketContext";
 import { SocketManager } from "../utils/SocketManager";
@@ -15,43 +16,46 @@ import { Notes } from "./Notes";
 import { Settings } from "./Settings";
 import { User } from "./User";
 
-export const App: React.VFC = () => (
-  <Router>
-    <Flex
-      minH="100vh"
-      direction="column"
-      alignItems="center"
-      bgColor={useColorModeValue("light.base", "dark.base")}
-      transitionDuration="normal"
-      transitionProperty="background-color"
-    >
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route
-          path="*"
-          element={
-            <Auth>
-              <SocketProvider>
-                <SocketManager>
-                  <Header />
-                  <CheckLocation>
-                    <Routes>
-                      <Route path="/user">
-                        <Route path=":id" element={<User />} />
-                      </Route>
-                      <Route path="/notes">
-                        <Route path=":id" element={<Notes />} />
-                      </Route>
-                      <Route path="/settings" element={<Settings />} />
-                      <Route path="/" element={<Home />} />
-                    </Routes>
-                  </CheckLocation>
-                </SocketManager>
-              </SocketProvider>
-            </Auth>
-          }
-        />
-      </Routes>
-    </Flex>
-  </Router>
-);
+export const App: React.VFC = () => {
+  return (
+    <Router>
+      <Flex
+        minH="100vh"
+        direction="column"
+        alignItems="center"
+        bgColor={useColorModeValue("light.base", "dark.base")}
+        transitionDuration="normal"
+        transitionProperty="background-color"
+      >
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route
+            path="*"
+            element={
+              <Auth>
+                <SocketProvider>
+                  <SocketManager>
+                    <Header />
+                    <CheckLocation>
+                      <Routes>
+                        <Route path="/user">
+                          <Route path=":id" element={<User />} />
+                        </Route>
+                        <Route path="/notes">
+                          <Route path=":id" element={<Notes />} />
+                        </Route>
+                        <Route path="/settings" element={<Settings />} />
+                        <Route path="/" element={<Home />} />
+                      </Routes>
+                    </CheckLocation>
+                    <PostModal />
+                  </SocketManager>
+                </SocketProvider>
+              </Auth>
+            }
+          />
+        </Routes>
+      </Flex>
+    </Router>
+  );
+};

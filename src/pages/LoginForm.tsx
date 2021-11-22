@@ -6,22 +6,21 @@ import {
   FormControl,
   Input,
   Button,
-  Radio,
-  RadioGroup,
   Stack,
   Heading,
 } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
-import { useForm, SubmitHandler, Controller } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
 import { v4 as uuid } from "uuid";
 
+import { store } from "../app/store";
 import { ColorModeSwitcher } from "../components/ColorModeSwitcher";
+import { setUserInfo } from "../features/settingsSlice";
 
 export const LoginForm: React.VFC = () => {
   const {
     handleSubmit,
     register,
-    control,
     formState: { errors, isSubmitting },
   } = useForm();
 
@@ -37,7 +36,6 @@ export const LoginForm: React.VFC = () => {
   type Inputs = {
     appname: string;
     instance: string;
-    mode: "simple" | "advanced";
   };
 
   const [fetchState, updateFetchState] = useState<{
@@ -46,11 +44,10 @@ export const LoginForm: React.VFC = () => {
   }>({ ok: true, message: "" });
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    localStorage.setItem("mode", data.mode);
     const id = uuid();
     const appURL = document.location.href;
-    const instanceURL = data.instance;
-    const checkMiAuthURL = `https://${instanceURL}/api/endpoints`;
+    const instance = data.instance;
+    const checkMiAuthURL = `https://${instance}/api/endpoints`;
     fetch(checkMiAuthURL, {
       method: "POST",
     })
@@ -62,9 +59,10 @@ export const LoginForm: React.VFC = () => {
       })
       .then((text) => {
         if (text.includes("miauth/gen-token")) {
-          localStorage.setItem("instanceURL", instanceURL);
+          const settings = store.getState().settings.userInfo;
+          store.dispatch(setUserInfo({ ...settings, instance: instance }));
           const authURL =
-            `https://${instanceURL}/miauth/${id}?name=${data.appname}&callback=${appURL}` +
+            `https://${instance}/miauth/${id}?name=${data.appname}&callback=${appURL}` +
             "&permission=read:account,write:account,read:blocks,write:blocks,read:drive,write:drive,read:favorites,write:favorites,read:following,write:following,read:messaging,write:messaging,read:mutes,write:mutes,write:notes,read:notifications,write:notifications,read:reactions,write:reactions,write:votes,read:pages,write:pages,write:page-likes,read:page-likes,read:user-groups,write:user-groups,read:channels,write:channels,read:gallery,write:gallery,read:gallery-likes,write:gallery-likes";
           window.location.href = authURL;
         } else {
@@ -132,22 +130,6 @@ export const LoginForm: React.VFC = () => {
                   {errors.instance && errors.instance.message}
                 </FormErrorMessage>
               </FormControl>
-              <Controller
-                name="mode"
-                control={control}
-                defaultValue="simple"
-                render={({ field }) => (
-                  <RadioGroup {...field}>
-                    <FormLabel htmlFor="mode">アプリモード</FormLabel>
-                    <Stack direction="row">
-                      <Radio value="simple" name="simple" />
-                      <FormLabel htmlFor="simple">simple</FormLabel>
-                      <Radio value="advanced" name="advanced" />
-                      <FormLabel htmlFor="advanced">advanced</FormLabel>
-                    </Stack>
-                  </RadioGroup>
-                )}
-              />
               {!fetchState.ok && (
                 <FormControl isInvalid={!fetchState.ok}>
                   <FormErrorMessage>{fetchState.message}</FormErrorMessage>

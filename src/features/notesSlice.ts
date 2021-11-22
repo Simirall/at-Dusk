@@ -147,7 +147,7 @@ export const notesSlice = createSlice({
           }
           state.reactions[index].reactions[action.payload.body.reaction] = 1;
         }
-        if (action.payload.body.userId === localStorage.getItem("UserId"))
+        if (action.payload.body.userId === localStorage.getItem("userId"))
           state.reactions[index].myReaction = action.payload.body.reaction;
       }
     },
@@ -174,7 +174,7 @@ export const notesSlice = createSlice({
         } else {
           delete state.reactions[index].reactions[action.payload.body.reaction];
         }
-        if (action.payload.body.userId === localStorage.getItem("UserId"))
+        if (action.payload.body.userId === localStorage.getItem("userId"))
           delete state.reactions[index].myReaction;
       }
     },
