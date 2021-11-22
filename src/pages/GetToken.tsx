@@ -45,6 +45,7 @@ function fetchData(
     })
     .then((text) => {
       if (text.token) {
+        localStorage.setItem("userId", text.user.id);
         const settings = store.getState().settings.userInfo;
         store.dispatch(
           setUserInfo({ ...settings, login: text.ok, userToken: text.token })
