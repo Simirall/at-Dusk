@@ -1,6 +1,8 @@
 import { IconButton } from "@chakra-ui/button";
+import { DeleteIcon, LinkIcon, CopyIcon } from "@chakra-ui/icons";
 import { Flex } from "@chakra-ui/layout";
 import {
+  Box,
   Menu,
   MenuButton,
   MenuList,
@@ -23,6 +25,7 @@ import {
 
 import { useAppSelector } from "../app/hooks";
 import { allReactions, NoteType } from "../features/notesSlice";
+import { settings } from "../features/settingsSlice";
 import { useModalsContext } from "../utils/ModalsContext";
 import { useSocket } from "../utils/SocketContext";
 import { useStyleProps } from "../utils/StyleProps";
@@ -48,6 +51,7 @@ export const NoteFooter: React.VFC<{
     (reaction) =>
       reaction.id === (type.type === "renote" ? note.renote?.id : note.id)
   );
+  const userInfo = useAppSelector(settings).userInfo;
 
   const renoteObject = useAPIObject({
     id: "renote",
@@ -60,6 +64,12 @@ export const NoteFooter: React.VFC<{
     endpoint: "notes/reactions/delete",
     data: { noteId: note.id },
   });
+  const noteDeleteObject = useAPIObject({
+    id: "noteDelete",
+    type: "api",
+    endpoint: "notes/delete",
+    data: { noteId: note.id },
+  }) as APIObject;
   return (
     <Flex
       overflow="hidden"
@@ -189,9 +199,41 @@ export const NoteFooter: React.VFC<{
           {...styleProps.AlphaButton}
         />
         <MenuList bgColor={colors.panelColor} borderColor={colors.alpha400}>
-          <MenuItem _focus={{ bgColor: colors.alpha200 }}>
-            リンクをコピー
+          <MenuItem
+            _focus={{ bgColor: colors.alpha200 }}
+            _active={{ bgColor: colors.alpha400 }}
+            onClick={() => {
+              navigator.clipboard.writeText(
+                `https://${userInfo.instance}/notes/${note.id}`
+              );
+            }}
+          >
+            <LinkIcon mr="1" />
+            <Box>リンクをコピー</Box>
           </MenuItem>
+          <MenuItem
+            _focus={{ bgColor: colors.alpha200 }}
+            _active={{ bgColor: colors.alpha400 }}
+            onClick={() => {
+              navigator.clipboard.writeText(note.text ? note.text : "");
+            }}
+          >
+            <CopyIcon mr="1" />
+            <Box>内容をコピー</Box>
+          </MenuItem>
+          {note.user.id === userInfo.userData.id && (
+            <MenuItem
+              color={colors.secondaryColor}
+              _focus={{ bgColor: colors.alpha200 }}
+              _active={{ bgColor: colors.alpha400 }}
+              onClick={() => {
+                socket.send(JSON.stringify(noteDeleteObject));
+              }}
+            >
+              <DeleteIcon mr="1" />
+              <Box>ノートを削除</Box>
+            </MenuItem>
+          )}
         </MenuList>
       </Menu>
     </Flex>
