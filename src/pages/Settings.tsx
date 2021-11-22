@@ -121,10 +121,10 @@ export const Settings: React.VFC = () => {
                     },
                   }}
                 >
-                  <option value="public">public</option>
-                  <option value="home">home</option>
-                  <option value="followers">followers</option>
-                  <option value="specified">specified</option>
+                  <option value="public">公開</option>
+                  <option value="home">ホーム</option>
+                  <option value="followers">フォロワー</option>
+                  <option value="specified">ダイレクト</option>
                 </Select>
               </FormLabel>
               <FormLabel userSelect="none">
