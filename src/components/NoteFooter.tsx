@@ -17,10 +17,12 @@ import {
   IoArrowUndo,
   IoBan,
   IoEllipsisHorizontal,
+  IoRemoveCircle,
   IoRepeat,
 } from "react-icons/io5";
 
-import { NoteType } from "../features/notesSlice";
+import { useAppSelector } from "../app/hooks";
+import { allReactions, NoteType } from "../features/notesSlice";
 import { useModalsContext } from "../utils/ModalsContext";
 import { useSocket } from "../utils/SocketContext";
 import { useStyleProps } from "../utils/StyleProps";
@@ -42,12 +44,22 @@ export const NoteFooter: React.VFC<{
     setEmojiModalType,
   } = useModalsContext();
   const styleProps = useStyleProps();
+  const reactions = useAppSelector(allReactions).find(
+    (reaction) =>
+      reaction.id === (type.type === "renote" ? note.renote?.id : note.id)
+  );
 
   const renoteObject = useAPIObject({
     id: "renote",
     type: "api",
     endpoint: "notes/create",
   }) as APIObject;
+  const reactionDeleteObject = useAPIObject({
+    id: "reactionDelete",
+    type: "api",
+    endpoint: "notes/reactions/delete",
+    data: { noteId: note.id },
+  });
   return (
     <Flex
       overflow="hidden"
@@ -124,37 +136,50 @@ export const NoteFooter: React.VFC<{
         </Menu>
         {type.type !== "renote" ? note.renoteCount : note.renote?.renoteCount}
       </Flex>
-      <Popover isLazy>
-        {({ onClose }) => (
-          <>
-            <PopoverTrigger>
-              <IconButton
-                aria-label="reaction"
-                size="sm"
-                icon={<IoAddCircle size="1.4em" />}
-                {...styleProps.AlphaButton}
-                onClick={() => {
-                  updateModalNoteData(
-                    type.type === "renote" ? (note.renote as Note) : note
-                  );
-                  setEmojiModalType("reaction");
-                }}
-              />
-            </PopoverTrigger>
-            <PopoverContent
-              bgColor={colors.panelColor}
-              color={colors.textColor}
-              borderColor={colors.alpha400}
-              w="md"
-              maxW="90vw"
-            >
-              <PopoverBody>
-                <EmojiForm onClose={onClose} />
-              </PopoverBody>
-            </PopoverContent>
-          </>
-        )}
-      </Popover>
+      {reactions?.myReaction ? (
+        <IconButton
+          aria-label="reaction"
+          size="sm"
+          icon={<IoRemoveCircle size="1.4em" />}
+          color={colors.secondaryColor}
+          {...styleProps.AlphaButton}
+          onClick={() => {
+            socket.send(JSON.stringify(reactionDeleteObject));
+          }}
+        />
+      ) : (
+        <Popover isLazy>
+          {({ onClose }) => (
+            <>
+              <PopoverTrigger>
+                <IconButton
+                  aria-label="reaction"
+                  size="sm"
+                  icon={<IoAddCircle size="1.4em" />}
+                  {...styleProps.AlphaButton}
+                  onClick={() => {
+                    updateModalNoteData(
+                      type.type === "renote" ? (note.renote as Note) : note
+                    );
+                    setEmojiModalType("reaction");
+                  }}
+                />
+              </PopoverTrigger>
+              <PopoverContent
+                bgColor={colors.panelColor}
+                color={colors.textColor}
+                borderColor={colors.alpha400}
+                w="md"
+                maxW="90vw"
+              >
+                <PopoverBody>
+                  <EmojiForm onClose={onClose} />
+                </PopoverBody>
+              </PopoverContent>
+            </>
+          )}
+        </Popover>
+      )}
       <Menu>
         <MenuButton
           as={IconButton}
