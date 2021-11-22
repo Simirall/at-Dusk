@@ -8,19 +8,15 @@ import { Switch } from "@chakra-ui/switch";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { IoColorPalette } from "react-icons/io5";
-import { useNavigate } from "react-router-dom";
 
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { setTheme, setSettings, settings } from "../features/settingsSlice";
 import { useColors } from "../utils/Colors";
-import { useLoginContext } from "../utils/LoginContext";
 
 export const Settings: React.VFC = () => {
   const colors = useColors();
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { register, handleSubmit } = useForm();
-  const { updateLogin } = useLoginContext();
   const { headerTextColor } = useColors();
   const settingsValue = useAppSelector(settings);
 
@@ -151,8 +147,7 @@ export const Settings: React.VFC = () => {
           size="lg"
           onClick={() => {
             localStorage.clear();
-            updateLogin(false);
-            navigate("/login");
+            location.reload();
           }}
         >
           Logout
