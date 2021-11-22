@@ -1,12 +1,16 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
 
+import { useAppSelector } from "../app/hooks";
+import { settings } from "../features/settingsSlice";
+
 import { GetToken } from "./GetToken";
 import { LoginForm } from "./LoginForm";
 
 export const Login: React.VFC = () => {
   const session = getUuid();
-  return localStorage.getItem("login") ? (
+  const login = useAppSelector(settings).userInfo?.login;
+  return login ? (
     <Navigate to="/" />
   ) : session ? (
     <GetToken uuid={session} />

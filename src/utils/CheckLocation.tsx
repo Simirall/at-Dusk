@@ -16,7 +16,7 @@ export const CheckLocation: React.VFC<{ children: React.ReactNode }> = ({
   const { isSocketOpen } = useSocketOpen();
   useEffect(() => {
     dispatch(clear());
-  }, [location, dispatch]);
+  }, [location.pathname, dispatch]);
   return (
     <>
       {isSocketOpen ? (
