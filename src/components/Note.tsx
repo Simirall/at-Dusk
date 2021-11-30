@@ -28,6 +28,7 @@ import { getRelativeTime } from "../utils/getRelativeTime";
 import { Files } from "./Files";
 import { NoteFooter } from "./NoteFooter";
 import { ParseMFM } from "./ParseMFM";
+import { Poll } from "./Poll";
 import { Reactions } from "./Reactions";
 
 export const Note: React.VFC<{
@@ -245,22 +246,58 @@ const GeneralNote: React.VFC<{
           </Box>
         </Box>
       </Flex>
-      {!cw && note.files.length > 0 && (
+      {!cw && depth === 0 ? (
         <>
-          {depth === 0 ? (
+          {note.fileIds.length > 0 && (
             <Files files={note.files} colors={colors} />
-          ) : (
-            <Accordion allowToggle m="1">
-              <AccordionItem border="none">
-                <AccordionButton w="fit-content" bgColor={alpha.alpha200}>
-                  <AccordionIcon />
-                  {`${note.files.length}個のファイル`}
-                </AccordionButton>
-                <AccordionPanel>
-                  <Files files={note.files} colors={colors} />
-                </AccordionPanel>
-              </AccordionItem>
-            </Accordion>
+          )}
+          {note.poll?.choices && (
+            <Poll poll={note.poll} id={note.id} emojis={note.emojis} />
+          )}
+        </>
+      ) : (
+        <>
+          {(note.fileIds.length > 0 || note.poll?.choices) && (
+            <>
+              {note.fileIds.length > 0 && (
+                <Accordion allowToggle m="1">
+                  <AccordionItem border="none">
+                    <AccordionButton
+                      w="fit-content"
+                      bgColor={alpha.alpha200}
+                      paddingBlock="0"
+                    >
+                      <AccordionIcon />
+                      {`${note.fileIds.length}個のファイル`}
+                    </AccordionButton>
+                    <AccordionPanel>
+                      <Files files={note.files} colors={colors} />
+                    </AccordionPanel>
+                  </AccordionItem>
+                </Accordion>
+              )}
+              {note.poll?.choices && (
+                <Accordion allowToggle m="1">
+                  <AccordionItem border="none">
+                    <AccordionButton
+                      w="fit-content"
+                      bgColor={alpha.alpha200}
+                      paddingBlock="0"
+                    >
+                      <AccordionIcon />
+                      アンケート
+                    </AccordionButton>
+                    <AccordionPanel>
+                      <Poll
+                        poll={note.poll}
+                        id={note.id}
+                        emojis={note.emojis}
+                      />
+                    </AccordionPanel>
+                  </AccordionItem>
+                </Accordion>
+              )}
+            </>
           )}
         </>
       )}
