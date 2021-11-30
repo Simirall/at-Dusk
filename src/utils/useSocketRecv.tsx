@@ -10,6 +10,7 @@ import {
   noteDelete,
   reacted,
   unreacted,
+  pollVote,
 } from "../features/notesSlice";
 
 import { useSocket } from "./SocketContext";
@@ -50,6 +51,10 @@ export const useSocketRecv = (): void => {
               break;
             case "deleted":
               dispatch(noteDelete(data));
+              break;
+            case "pollVoted":
+              dispatch(pollVote(data));
+              console.log(data);
               break;
           }
           break;

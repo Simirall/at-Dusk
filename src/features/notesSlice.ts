@@ -18,10 +18,21 @@ export interface NoteType {
   type: "note" | "reply" | "renote" | "quote";
 }
 
+export interface Poll {
+  expiresAt: string | null;
+  multiple: boolean;
+  choices: {
+    isVoted: boolean;
+    text: string;
+    votes: number;
+  }[];
+}
+
 export interface NotesState {
   notes: Array<Note>;
   noteTypes: Array<NoteType>;
   reactions: Array<ReactionDetails>;
+  polls: Array<Poll>;
   moreNote: boolean;
 }
 
@@ -29,6 +40,7 @@ const initialState: NotesState = {
   notes: [],
   noteTypes: [],
   reactions: [],
+  polls: [],
   moreNote: false,
 };
 
@@ -178,6 +190,24 @@ export const notesSlice = createSlice({
           delete state.reactions[index].myReaction;
       }
     },
+    pollVote: (
+      state,
+      action: PayloadAction<{
+        id: string;
+        type: string;
+        body: {
+          choice: number;
+          userId: string;
+        };
+      }>
+    ) => {
+      const i = state.notes.findIndex((note) => note.id === action.payload.id);
+      if (state.notes[i].poll) {
+        console.log(
+          state.notes[i].poll?.choices[action.payload.body.choice].votes
+        );
+      }
+    },
   },
 });
 
@@ -189,6 +219,7 @@ export const {
   clear,
   reacted,
   unreacted,
+  pollVote,
 } = notesSlice.actions;
 
 export const allNoteTypes = (state: RootState): Array<NoteType> =>
