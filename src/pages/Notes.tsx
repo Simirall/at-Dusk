@@ -32,7 +32,13 @@ export const Notes: React.VFC = () => {
     <Box maxW="95vw" w="6xl">
       {details.id ? (
         <Box marginBlock="2">
-          <Note note={details} depth={0} type={detailsType} colors={colors} />
+          <Note
+            note={details}
+            depth={0}
+            type={detailsType}
+            colors={colors}
+            detail
+          />
         </Box>
       ) : (
         <Center>

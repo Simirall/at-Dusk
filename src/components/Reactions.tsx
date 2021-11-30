@@ -3,6 +3,7 @@ import { Box, Flex } from "@chakra-ui/layout";
 import React, { memo } from "react";
 
 import { useAppSelector } from "../app/hooks";
+import { noteDetailsReaction } from "../features/noteDetailsSlice";
 import { allReactions, ReactionDetails } from "../features/notesSlice";
 import { useSocket } from "../utils/SocketContext";
 import { APIObject, useAPIObject } from "../utils/useAPIObject";
@@ -12,9 +13,13 @@ import { ParseReaction } from "./ParseReaction";
 export const Reactions: React.VFC<{
   id: string;
   colors: Record<string, string>;
-}> = memo(function Fn({ id, colors }) {
+  detail: boolean;
+}> = memo(function Fn({ id, colors, detail }) {
   const reactions = useAppSelector(allReactions);
-  const reaction = reactions.find((reaction) => reaction.id === id);
+  const detailsReaction = useAppSelector(noteDetailsReaction);
+  const reaction = detail
+    ? detailsReaction
+    : reactions.find((reaction) => reaction.id === id);
   return (
     <>
       {reaction?.reactions && Object.keys(reaction?.reactions).length > 0 && (
