@@ -5,6 +5,7 @@ import {
   AtSignIcon,
   CheckIcon,
   CloseIcon,
+  DeleteIcon,
   ViewOffIcon,
 } from "@chakra-ui/icons";
 import {
@@ -17,10 +18,13 @@ import {
   Textarea,
   Box,
   HStack,
+  VStack,
   Flex,
   Input,
   InputGroup,
   InputLeftElement,
+  InputRightElement,
+  Switch,
   Icon,
   Menu,
   MenuButton,
@@ -43,6 +47,7 @@ import {
   IoHome,
   IoLockClosed,
   IoMail,
+  IoStatsChart,
 } from "react-icons/io5";
 
 import { useAppSelector } from "../app/hooks";
@@ -71,11 +76,17 @@ export const PostForm: React.VFC<{ isModal?: boolean }> = ({ isModal }) => {
     modalNoteType,
     setEmojiModalType,
   } = useModalsContext();
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const visibilityOpen = useDisclosure();
+  const pollOpen = useDisclosure();
+  const pollTimeUnitOpen = useDisclosure();
   const [visibility, setVisibility] = useState(settingsValue.defaultVisibility);
   const [localOnly, setLocalOnly] = useState(settingsValue.defaultLocalOnly);
   const [users, updateUsers] = useState<Array<User>>([]);
   const [cw, updateCw] = useState(false);
+  const [poll, updatePoll] = useState(false);
+  const [pollNum, updatePollNum] = useState([0, 1]);
+  const [pollTime, updatePollTime] = useState("inf");
+  const [pollTimeUnit, updatePollTimeUnit] = useState("秒");
   const [addedEmoji, addEmoji] = useState("");
 
   useEffect(() => {
@@ -113,6 +124,41 @@ export const PostForm: React.VFC<{ isModal?: boolean }> = ({ isModal }) => {
       Object.assign(postObject.body.data, {
         visibleUserIds: users.map((user) => user.id),
       });
+    }
+    if (poll) {
+      const choices = Object.values(
+        Object.fromEntries(
+          Object.entries(data).filter((e) => e[0].startsWith("choice"))
+        )
+      );
+      if (!choices.some((c) => !c)) {
+        const expiresAt = data.pollDate
+          ? Date.parse(`${data.pollDate} ${data.pollTime}`)
+          : null;
+        let expiredAfter = data.pollProg
+          ? parseInt(data.pollProg as string)
+          : null;
+        if (expiredAfter) {
+          expiredAfter =
+            expiredAfter *
+            1000 *
+            (pollTimeUnit === "分"
+              ? 60
+              : pollTimeUnit === "時間"
+              ? 60 * 60
+              : pollTimeUnit === "日"
+              ? 24 * 60 * 60
+              : 1);
+        }
+        Object.assign(postObject.body.data, {
+          poll: {
+            choices: choices,
+            multiple: data.multiple,
+            expiresAt: expiresAt,
+            expiredAfter: expiredAfter,
+          },
+        });
+      }
     }
     socket.send(JSON.stringify(postObject));
     if (isModal) onPostModalClose();
@@ -198,7 +244,11 @@ export const PostForm: React.VFC<{ isModal?: boolean }> = ({ isModal }) => {
           }}
         />
         <Flex flexWrap="wrap" alignItems="center">
-          <Menu closeOnSelect={false} isOpen={isOpen} onClose={onClose}>
+          <Menu
+            closeOnSelect={false}
+            isOpen={visibilityOpen.isOpen}
+            onClose={visibilityOpen.onClose}
+          >
             <MenuButton
               as={Button}
               aria-label="menu"
@@ -206,7 +256,7 @@ export const PostForm: React.VFC<{ isModal?: boolean }> = ({ isModal }) => {
               fontWeight="normal"
               m="1"
               color={colors.secondaryColor}
-              onClick={onOpen}
+              onClick={visibilityOpen.onOpen}
               value={visibility}
               {...styleProps.AlphaButton}
               {...register("visibility")}
@@ -244,7 +294,7 @@ export const PostForm: React.VFC<{ isModal?: boolean }> = ({ isModal }) => {
                 _focus={{ bgColor: colors.alpha200 }}
                 onClick={() => {
                   setVisibility("public");
-                  onClose();
+                  visibilityOpen.onClose();
                 }}
               >
                 <Box>
@@ -258,7 +308,7 @@ export const PostForm: React.VFC<{ isModal?: boolean }> = ({ isModal }) => {
                 _focus={{ bgColor: colors.alpha200 }}
                 onClick={() => {
                   setVisibility("home");
-                  onClose();
+                  visibilityOpen.onClose();
                 }}
               >
                 <Box>
@@ -272,7 +322,7 @@ export const PostForm: React.VFC<{ isModal?: boolean }> = ({ isModal }) => {
                 _focus={{ bgColor: colors.alpha200 }}
                 onClick={() => {
                   setVisibility("followers");
-                  onClose();
+                  visibilityOpen.onClose();
                 }}
               >
                 <Box>
@@ -286,7 +336,7 @@ export const PostForm: React.VFC<{ isModal?: boolean }> = ({ isModal }) => {
                 _focus={{ bgColor: colors.alpha200 }}
                 onClick={() => {
                   setVisibility("specified");
-                  onClose();
+                  visibilityOpen.onClose();
                 }}
               >
                 <Box>
@@ -357,8 +407,214 @@ export const PostForm: React.VFC<{ isModal?: boolean }> = ({ isModal }) => {
             </>
           )}
         </Flex>
+        {poll && (
+          <VStack color={colors.textColor}>
+            {pollNum.map((p, i) => (
+              <InputGroup key={i}>
+                <Input
+                  placeholder={`選択肢 ${p + 1}`}
+                  borderColor={colors.alpha400}
+                  _hover={{ borderColor: colors.alpha600 }}
+                  _focus={{ borderColor: colors.secondaryColor }}
+                  required
+                  {...register(`choice${i}`)}
+                />
+                {pollNum.length > 2 && i === pollNum.length - 1 && (
+                  <InputRightElement>
+                    <IconButton
+                      aria-label="delete choice"
+                      icon={<DeleteIcon />}
+                      size="sm"
+                      {...styleProps.AlphaButton}
+                      onClick={() => {
+                        updatePollNum(
+                          pollNum.filter((p) => p < pollNum.length - 1)
+                        );
+                      }}
+                    />
+                  </InputRightElement>
+                )}
+              </InputGroup>
+            ))}
+            <HStack>
+              <Button
+                {...styleProps.AlphaButton}
+                color={colors.secondaryColor}
+                size="sm"
+                onClick={() => {
+                  updatePollNum([...pollNum, pollNum[pollNum.length - 1] + 1]);
+                }}
+              >
+                <AddIcon mr="1" />
+                追加
+              </Button>
+              <Box>
+                <Menu isOpen={pollOpen.isOpen} onClose={pollOpen.onClose}>
+                  <MenuButton
+                    as={Button}
+                    aria-label="menu"
+                    size="sm"
+                    fontWeight="normal"
+                    m="1"
+                    color={colors.secondaryColor}
+                    onClick={pollOpen.onOpen}
+                    {...styleProps.AlphaButton}
+                  >
+                    <HStack spacing="0.5">
+                      {pollTime === "inf" ? (
+                        <Box>無制限</Box>
+                      ) : pollTime === "date" ? (
+                        <Box>時間指定</Box>
+                      ) : (
+                        <Box>経過指定</Box>
+                      )}
+                    </HStack>
+                  </MenuButton>
+                  <MenuList
+                    bgColor={colors.panelColor}
+                    color={colors.secondaryColor}
+                    borderColor={colors.alpha400}
+                    zIndex="5"
+                  >
+                    <MenuItem
+                      _focus={{ bgColor: colors.alpha200 }}
+                      onClick={() => {
+                        updatePollTime("inf");
+                      }}
+                    >
+                      <Box>無制限</Box>
+                    </MenuItem>
+                    <MenuItem
+                      _focus={{ bgColor: colors.alpha200 }}
+                      onClick={() => {
+                        updatePollTime("date");
+                      }}
+                    >
+                      <Box>時間指定</Box>
+                    </MenuItem>
+                    <MenuItem
+                      _focus={{ bgColor: colors.alpha200 }}
+                      onClick={() => {
+                        updatePollTime("prog");
+                      }}
+                    >
+                      <Box>経過指定</Box>
+                    </MenuItem>
+                  </MenuList>
+                </Menu>
+              </Box>
+              <HStack spacing="0.5">
+                <Switch {...register("multiple")} />
+                <Box>複数投票可</Box>
+              </HStack>
+            </HStack>
+            {pollTime === "date" && (
+              <HStack wrap="wrap" justify="center">
+                <Input
+                  w="4xs"
+                  type="date"
+                  color={colors.secondaryColor}
+                  borderColor={colors.alpha400}
+                  _hover={{ borderColor: colors.alpha600 }}
+                  _focus={{ borderColor: colors.secondaryColor }}
+                  {...register("pollDate")}
+                />
+                <Input
+                  w="4xs"
+                  type="time"
+                  color={colors.secondaryColor}
+                  borderColor={colors.alpha400}
+                  _hover={{ borderColor: colors.alpha600 }}
+                  _focus={{ borderColor: colors.secondaryColor }}
+                  {...register("pollTime")}
+                />
+              </HStack>
+            )}
+            {pollTime === "prog" && (
+              <InputGroup w="2xs">
+                <Input
+                  type="number"
+                  defaultValue="10"
+                  color={colors.secondaryColor}
+                  borderColor={colors.alpha400}
+                  _hover={{ borderColor: colors.alpha600 }}
+                  _focus={{ borderColor: colors.secondaryColor }}
+                  {...register("pollProg")}
+                />
+                <InputRightElement>
+                  <Box>
+                    <Menu
+                      isOpen={pollTimeUnitOpen.isOpen}
+                      onClose={pollTimeUnitOpen.onClose}
+                    >
+                      <MenuButton
+                        as={Button}
+                        aria-label="select time unit"
+                        paddingInline="1"
+                        size="sm"
+                        fontWeight="normal"
+                        onClick={pollTimeUnitOpen.onOpen}
+                        {...styleProps.AlphaButton}
+                      >
+                        <Box>{pollTimeUnit}</Box>
+                      </MenuButton>
+                      <MenuList
+                        bgColor={colors.panelColor}
+                        color={colors.secondaryColor}
+                        borderColor={colors.alpha400}
+                      >
+                        <MenuItem
+                          _focus={{ bgColor: colors.alpha200 }}
+                          onClick={() => {
+                            updatePollTimeUnit("秒");
+                          }}
+                        >
+                          <Box>秒</Box>
+                        </MenuItem>
+                        <MenuItem
+                          _focus={{ bgColor: colors.alpha200 }}
+                          onClick={() => {
+                            updatePollTimeUnit("分");
+                          }}
+                        >
+                          <Box>分</Box>
+                        </MenuItem>
+                        <MenuItem
+                          _focus={{ bgColor: colors.alpha200 }}
+                          onClick={() => {
+                            updatePollTimeUnit("時間");
+                          }}
+                        >
+                          <Box>時間</Box>
+                        </MenuItem>
+                        <MenuItem
+                          _focus={{ bgColor: colors.alpha200 }}
+                          onClick={() => {
+                            updatePollTimeUnit("日");
+                          }}
+                        >
+                          <Box>日</Box>
+                        </MenuItem>
+                      </MenuList>
+                    </Menu>
+                  </Box>
+                </InputRightElement>
+              </InputGroup>
+            )}
+          </VStack>
+        )}
       </form>
       <HStack justifyContent="end" marginBlock="2">
+        <IconButton
+          aria-label="create poll"
+          icon={<IoStatsChart />}
+          size="sm"
+          color={colors.secondaryColor}
+          {...styleProps.AlphaButton}
+          onClick={() => {
+            updatePoll(!poll);
+          }}
+        />
         <IconButton
           aria-label="content warning"
           icon={<ViewOffIcon />}

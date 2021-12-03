@@ -2,7 +2,7 @@ import { Note } from "misskey-js/built/entities";
 import { useEffect } from "react";
 
 import { useAppDispatch } from "../app/hooks";
-import { set } from "../features/noteDetailsSlice";
+import { detailPollVote, set } from "../features/noteDetailsSlice";
 import {
   addUpper,
   addLower,
@@ -10,6 +10,7 @@ import {
   noteDelete,
   reacted,
   unreacted,
+  pollVote,
 } from "../features/notesSlice";
 
 import { useSocket } from "./SocketContext";
@@ -50,6 +51,10 @@ export const useSocketRecv = (): void => {
               break;
             case "deleted":
               dispatch(noteDelete(data));
+              break;
+            case "pollVoted":
+              dispatch(pollVote(data));
+              dispatch(detailPollVote(data));
               break;
           }
           break;
