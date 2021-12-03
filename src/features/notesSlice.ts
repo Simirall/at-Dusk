@@ -163,6 +163,7 @@ export const notesSlice = createSlice({
     },
     clear: (state) => {
       state.notes = [];
+      state.noteTypes = [];
     },
     reacted: (
       state,
