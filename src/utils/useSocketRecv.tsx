@@ -31,13 +31,20 @@ export const useSocketRecv = (): void => {
                 JSON.stringify({
                   type: "subNote",
                   body: {
-                    id:
-                      data.body.renoteId && !data.body.text
-                        ? data.body.renoteId
-                        : data.body.id,
+                    id: data.body.id,
                   },
                 })
               );
+              if (data.body.renoteId && !data.body.text) {
+                socket.send(
+                  JSON.stringify({
+                    type: "subNote",
+                    body: {
+                      id: data.body.renoteId,
+                    },
+                  })
+                );
+              }
               break;
           }
           break;
@@ -59,30 +66,44 @@ export const useSocketRecv = (): void => {
           }
           break;
         case "api:initNotes":
-          data.res.forEach((note: Note) => {
-            dispatch(addLower(note));
-            socket.send(
-              JSON.stringify({
-                type: "subNote",
-                body: {
-                  id: note.renoteId && !note.text ? note.renoteId : note.id,
-                },
-              })
-            );
-          });
+          dispatch(addLower(data.res));
+          (async () => {
+            data.res.forEach((note: Note) => {
+              socket.send(
+                JSON.stringify({
+                  type: "subNote",
+                  body: {
+                    id: note.id,
+                  },
+                })
+              );
+              if (data.body.renoteId && !data.body.text) {
+                socket.send(
+                  JSON.stringify({
+                    type: "subNote",
+                    body: {
+                      id: note.renoteId,
+                    },
+                  })
+                );
+              }
+            });
+          })();
           break;
         case "api:moreNotes":
-          data.res.forEach((note: Note) => {
-            dispatch(addLower(note));
-            socket.send(
-              JSON.stringify({
-                type: "subNote",
-                body: {
-                  id: note.renoteId && !note.text ? note.renoteId : note.id,
-                },
-              })
-            );
-          });
+          dispatch(addLower(data.res));
+          (async () => {
+            data.res.forEach((note: Note) => {
+              socket.send(
+                JSON.stringify({
+                  type: "subNote",
+                  body: {
+                    id: note.renoteId && !note.text ? note.renoteId : note.id,
+                  },
+                })
+              );
+            });
+          })();
           dispatch(updateMoreNote(false));
           break;
         case "api:noteDetails":

@@ -8,6 +8,11 @@ export interface SettingsState {
     lightTheme: string;
     darkTheme: string;
   };
+  timeline:
+    | "homeTimeline"
+    | "localTimeline"
+    | "hybridTimeline"
+    | "globalTimeline";
   autoMotto: boolean;
   defaultVisibility: "public" | "home" | "followers" | "specified";
   defaultLocalOnly: boolean;
@@ -27,6 +32,7 @@ const initialState: SettingsState = {
     lightTheme: "",
     darkTheme: "",
   },
+  timeline: "homeTimeline",
   defaultVisibility: "public",
   defaultLocalOnly: false,
   autoMotto: true,
@@ -69,6 +75,18 @@ export const settingsSlice = createSlice({
       state.userInfo.userData = action.payload.userData;
       state.userInfo.instanceMeta = action.payload.instanceMeta;
     },
+    setTimeline: (
+      state,
+      action: PayloadAction<{
+        timeline:
+          | "homeTimeline"
+          | "localTimeline"
+          | "hybridTimeline"
+          | "globalTimeline";
+      }>
+    ) => {
+      state.timeline = action.payload.timeline;
+    },
     setSettings: (
       state,
       action: PayloadAction<{
@@ -108,8 +126,14 @@ export const settingsSlice = createSlice({
   },
 });
 
-export const { setTheme, setUserInfo, setSettings, addRUEmoji, setDefault } =
-  settingsSlice.actions;
+export const {
+  setTheme,
+  setUserInfo,
+  setTimeline,
+  setSettings,
+  addRUEmoji,
+  setDefault,
+} = settingsSlice.actions;
 
 export const settings = (state: RootState): SettingsState => state.settings;
 

@@ -50,6 +50,7 @@ export const notesSlice = createSlice({
   initialState,
   reducers: {
     addUpper: (state, action: PayloadAction<Note>) => {
+      state.notes.unshift(action.payload);
       state.noteTypes.unshift({
         id: action.payload.id,
         type:
@@ -61,17 +62,13 @@ export const notesSlice = createSlice({
             ? "quote"
             : "note",
       });
-      state.notes.unshift(action.payload);
       (async () => {
-        let n: Note;
-        if (state.noteTypes[0].type === "renote") {
-          n = action.payload;
-          while (n.renoteId && n.renote) {
+        let n = action.payload;
+        if (n.renoteId && !n.text) {
+          while (n.renoteId && !n.text && n.renote) {
             n = n.renote;
             if (n.text) break;
           }
-        } else {
-          n = action.payload;
         }
         if (!state.reactions.some((r) => r.id === n.id)) {
           state.reactions.unshift({
@@ -97,52 +94,57 @@ export const notesSlice = createSlice({
         }
       })();
     },
-    addLower: (state, action: PayloadAction<Note>) => {
-      state.noteTypes.push({
-        id: action.payload.id,
-        type:
-          action.payload.renoteId && !action.payload.text
-            ? "renote"
-            : action.payload.replyId
-            ? "reply"
-            : action.payload.renoteId
-            ? "quote"
-            : "note",
-      });
-      state.notes.push(action.payload);
+    addLower: (state, action: PayloadAction<Array<Note>>) => {
+      state.notes = state.notes.concat(action.payload);
       (async () => {
-        let n: Note;
-        if (state.noteTypes[state.noteTypes.length - 1].type === "renote") {
-          n = action.payload;
-          while (n.renoteId && n.renote) {
-            n = n.renote;
-            if (n.text) break;
-          }
-        } else {
-          n = action.payload;
-        }
-        if (!state.reactions.some((elm) => elm.id === n.id)) {
-          state.reactions.push({
-            id: n.id,
-            myReaction: n.myReaction,
-            reactions: n.reactions,
-            emojis: n.emojis,
+        action.payload.forEach((note) => {
+          state.noteTypes.push({
+            id: note.id,
+            type:
+              note.renoteId && !note.text
+                ? "renote"
+                : note.replyId
+                ? "reply"
+                : note.renoteId
+                ? "quote"
+                : "note",
           });
-        }
+        });
       })();
       (async () => {
-        if (action.payload.poll) {
-          state.polls.push({
-            id: action.payload.id,
-            ...action.payload.poll,
-          });
-        }
-        if (action.payload.renote?.poll) {
-          state.polls.push({
-            id: action.payload.renote.id,
-            ...action.payload.renote.poll,
-          });
-        }
+        action.payload.forEach((note) => {
+          let n = note;
+          if (n.renoteId && !n.text) {
+            while (n.renoteId && !n.text && n.renote) {
+              n = n.renote;
+              if (n.text) break;
+            }
+          }
+          if (!state.reactions.some((elm) => elm.id === n.id)) {
+            state.reactions.push({
+              id: n.id,
+              myReaction: n.myReaction,
+              reactions: n.reactions,
+              emojis: n.emojis,
+            });
+          }
+        });
+      })();
+      (async () => {
+        action.payload.forEach((note) => {
+          if (note.poll) {
+            state.polls.push({
+              id: note.id,
+              ...note.poll,
+            });
+          }
+          if (note.renote?.poll) {
+            state.polls.push({
+              id: note.renote.id,
+              ...note.renote.poll,
+            });
+          }
+        });
       })();
     },
     updateMoreNote: (state, action: PayloadAction<boolean>) => {
@@ -163,6 +165,7 @@ export const notesSlice = createSlice({
     },
     clear: (state) => {
       state.notes = [];
+      state.noteTypes = [];
     },
     reacted: (
       state,
