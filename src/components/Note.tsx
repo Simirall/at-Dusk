@@ -155,8 +155,8 @@ const GeneralNote: React.VFC<{
           <Box>
             {note.cw || note.cw === "" ? (
               <>
-                <HStack mb="0.5">
-                  {note.replyId && <Icon as={IoArrowUndo} />}
+                <HStack mb="0.5" alignItems="start">
+                  {note.replyId && <Icon as={IoArrowUndo} mt="2" />}
                   <Box>
                     <Box
                       whiteSpace="pre-wrap"
@@ -225,8 +225,8 @@ const GeneralNote: React.VFC<{
                 )}
               </>
             ) : (
-              <HStack>
-                {note.replyId && <Icon as={IoArrowUndo} />}
+              <HStack alignItems="start">
+                {note.replyId && <Icon as={IoArrowUndo} mt="2" />}
                 <Box paddingInline="1" w="full">
                   <Box
                     whiteSpace="pre-wrap"

@@ -23,15 +23,24 @@ export interface StreamObject {
   body: StreamBody;
 }
 
+export interface DisconnectObject {
+  type: string;
+  body: {
+    id: string;
+  };
+}
+
 interface Props {
-  type: "api" | "connect";
+  type: "api" | "connect" | "disconnect";
   id: string;
   endpoint?: string;
   channel?: string;
   data?: Record<string, unknown>;
 }
 
-export const useAPIObject = (props: Props): APIObject | StreamObject => {
+export const useAPIObject = (
+  props: Props
+): APIObject | StreamObject | DisconnectObject => {
   const { token } = useLoginContext();
   return props.type === "api"
     ? ({
@@ -45,11 +54,18 @@ export const useAPIObject = (props: Props): APIObject | StreamObject => {
           },
         },
       } as APIObject)
-    : ({
+    : props.type === "connect"
+    ? ({
         type: props.type,
         body: {
           id: props.id,
           channel: props.channel,
         },
-      } as StreamObject);
+      } as StreamObject)
+    : ({
+        type: props.type,
+        body: {
+          id: props.id,
+        },
+      } as DisconnectObject);
 };
