@@ -7,11 +7,13 @@ import thunk from "redux-thunk";
 import noteDetailsReducer from "../features/noteDetailsSlice";
 import notesReducer from "../features/notesSlice";
 import settingsReducer from "../features/settingsSlice";
+import userReducer from "../features/userSlice";
 
 const reducers = combineReducers({
   notes: notesReducer,
   noteDetails: noteDetailsReducer,
   settings: settingsReducer,
+  user: userReducer,
 });
 
 const persistConfig = {

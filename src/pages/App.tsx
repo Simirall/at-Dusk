@@ -39,7 +39,33 @@ export const App: React.VFC = () => {
                     <CheckLocation>
                       <Routes>
                         <Route path="/user">
-                          <Route path=":id" element={<User />} />
+                          <Route
+                            path=":id/following"
+                            element={
+                              <>
+                                <User />
+                                FING
+                              </>
+                            }
+                          />
+                          <Route
+                            path=":id/followers"
+                            element={
+                              <>
+                                <User />
+                                FERS
+                              </>
+                            }
+                          />
+                          <Route
+                            path=":id"
+                            element={
+                              <>
+                                <User />
+                                NOTES
+                              </>
+                            }
+                          />
                         </Route>
                         <Route path="/notes">
                           <Route path=":id" element={<Notes />} />

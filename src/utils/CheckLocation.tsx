@@ -4,7 +4,8 @@ import { useLocation } from "react-router";
 
 import { useAppDispatch } from "../app/hooks";
 import { Loading } from "../components/Loading";
-import { clear } from "../features/noteDetailsSlice";
+import { clearNoteDetails } from "../features/noteDetailsSlice";
+// import { clearUserData } from "../features/userSlice";
 
 import { useSocketOpen } from "./SocketContext";
 
@@ -15,7 +16,8 @@ export const CheckLocation: React.VFC<{ children: React.ReactNode }> = ({
   const location = useLocation();
   const { isSocketOpen } = useSocketOpen();
   useEffect(() => {
-    dispatch(clear());
+    dispatch(clearNoteDetails());
+    // dispatch(clearUserData());
   }, [location.pathname, dispatch]);
   return (
     <>

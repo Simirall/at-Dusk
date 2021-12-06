@@ -2,7 +2,7 @@ import { Note } from "misskey-js/built/entities";
 import { useEffect } from "react";
 
 import { useAppDispatch } from "../app/hooks";
-import { detailPollVote, set } from "../features/noteDetailsSlice";
+import { detailPollVote, setNoteDetails } from "../features/noteDetailsSlice";
 import {
   addUpper,
   addLower,
@@ -12,6 +12,7 @@ import {
   unreacted,
   pollVote,
 } from "../features/notesSlice";
+import { setUserData } from "../features/userSlice";
 
 import { useSocket } from "./SocketContext";
 
@@ -77,7 +78,7 @@ export const useSocketRecv = (): void => {
                   },
                 })
               );
-              if (data.body.renoteId && !data.body.text) {
+              if (note.renoteId && !note.text) {
                 socket.send(
                   JSON.stringify({
                     type: "subNote",
@@ -107,7 +108,10 @@ export const useSocketRecv = (): void => {
           dispatch(updateMoreNote(false));
           break;
         case "api:noteDetails":
-          dispatch(set(data.res));
+          dispatch(setNoteDetails(data.res));
+          break;
+        case "api:userData":
+          dispatch(setUserData(data.res));
           break;
       }
     };

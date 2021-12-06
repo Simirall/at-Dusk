@@ -21,7 +21,7 @@ export const noteDetailsSlice = createSlice({
   name: "noteDetails",
   initialState,
   reducers: {
-    set: (state, action: PayloadAction<Note>) => {
+    setNoteDetails: (state, action: PayloadAction<Note>) => {
       state.noteDetails = action.payload;
       const rn = action.payload.renote && !action.payload.text;
       state.reaction = {
@@ -68,14 +68,15 @@ export const noteDetailsSlice = createSlice({
         }
       }
     },
-    clear: (state) => {
+    clearNoteDetails: (state) => {
       state.noteDetails = {} as Note;
       state = initialState;
     },
   },
 });
 
-export const { set, detailPollVote, clear } = noteDetailsSlice.actions;
+export const { setNoteDetails, detailPollVote, clearNoteDetails } =
+  noteDetailsSlice.actions;
 
 export const noteDetails = (state: RootState): Note =>
   state.noteDetails.noteDetails;
