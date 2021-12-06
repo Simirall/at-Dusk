@@ -28,6 +28,9 @@ export const User: React.VFC = () => {
   const colors = useColors();
   const props = useStyleProps();
   const [banner404, setBanner404] = useState(false);
+  const [userBody, updateUserBody] = useState<
+    "note" | "following" | "followers"
+  >("note");
   const userName = document.location.pathname.split("@")[1].split("/")[0];
   const userHost = document.location.pathname.split("@")[2]
     ? document.location.pathname.split("@")[2].split("/")[0]
@@ -44,7 +47,6 @@ export const User: React.VFC = () => {
       },
     })
   );
-  console.log(userData);
   useEffect(() => {
     socket.send(userObject);
   }, [socket, userObject]);
@@ -235,6 +237,9 @@ export const User: React.VFC = () => {
                 )}
                 <HStack justifyContent="space-around" paddingInline="5" mb="2">
                   <VStack
+                    color={
+                      userBody === "note" ? colors.secondaryColor : "inherit"
+                    }
                     spacing="0"
                     as={Button}
                     variant="text"
@@ -243,12 +248,18 @@ export const User: React.VFC = () => {
                       navigate(
                         `/user/@${userName}${userHost ? `@${userHost}` : ""}`
                       );
+                      updateUserBody("note");
                     }}
                   >
                     <Box>{userData.notesCount}</Box>
                     <Box>ノート</Box>
                   </VStack>
                   <VStack
+                    color={
+                      userBody === "following"
+                        ? colors.secondaryColor
+                        : "inherit"
+                    }
                     spacing="0"
                     as={Button}
                     variant="text"
@@ -259,12 +270,18 @@ export const User: React.VFC = () => {
                           userHost ? `@${userHost}` : ""
                         }/following`
                       );
+                      updateUserBody("following");
                     }}
                   >
                     <Box>{userData.followingCount}</Box>
                     <Box>フォロー</Box>
                   </VStack>
                   <VStack
+                    color={
+                      userBody === "followers"
+                        ? colors.secondaryColor
+                        : "inherit"
+                    }
                     spacing="0"
                     as={Button}
                     variant="text"
@@ -275,6 +292,7 @@ export const User: React.VFC = () => {
                           userHost ? `@${userHost}` : ""
                         }/followers`
                       );
+                      updateUserBody("followers");
                     }}
                   >
                     <Box>{userData.followersCount}</Box>
@@ -292,7 +310,6 @@ export const User: React.VFC = () => {
 
 const getDate = (d: string) => {
   const date = new Date(d);
-  console.log(date);
   return `${("0000" + date.getFullYear()).slice(-4)}/${
     date.getMonth() + 1
   }/${date.getDate()}`;

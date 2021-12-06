@@ -34,14 +34,16 @@ type UserShow = {
 
 export interface userState {
   user: User & UserShow;
+  moreNote: boolean;
 }
 
 const initialState: userState = {
   user: {} as User & UserShow,
+  moreNote: false,
 };
 
 export const userSlice = createSlice({
-  name: "noteDetails",
+  name: "user",
   initialState,
   reducers: {
     setUserData: (state, action: PayloadAction<User & UserShow>) => {

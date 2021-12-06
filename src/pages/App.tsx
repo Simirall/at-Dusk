@@ -15,6 +15,7 @@ import { Login } from "./Login";
 import { Notes } from "./Notes";
 import { Settings } from "./Settings";
 import { User } from "./User";
+import { UserNotes } from "./UserNotes";
 
 export const App: React.VFC = () => {
   return (
@@ -62,7 +63,7 @@ export const App: React.VFC = () => {
                             element={
                               <>
                                 <User />
-                                NOTES
+                                <UserNotes />
                               </>
                             }
                           />

@@ -2,16 +2,20 @@ import { Note } from "misskey-js/built/entities";
 import { useEffect } from "react";
 
 import { useAppDispatch } from "../app/hooks";
-import { detailPollVote, setNoteDetails } from "../features/noteDetailsSlice";
+import { setNoteDetails } from "../features/noteDetailsSlice";
 import {
   addUpper,
   addLower,
   updateMoreNote,
   noteDelete,
+} from "../features/notesSlice";
+import { addPoll, pollVote } from "../features/pollSlice";
+import {
+  addReaction,
+  addReactions,
   reacted,
   unreacted,
-  pollVote,
-} from "../features/notesSlice";
+} from "../features/reactionsSlice";
 import { setUserData } from "../features/userSlice";
 
 import { useSocket } from "./SocketContext";
@@ -28,6 +32,8 @@ export const useSocketRecv = (): void => {
           switch (data.id) {
             case "timeline":
               dispatch(addUpper(data.body));
+              dispatch(addReaction(data.body));
+              dispatch(addPoll(data.body));
               socket.send(
                 JSON.stringify({
                   type: "subNote",
@@ -62,14 +68,13 @@ export const useSocketRecv = (): void => {
               break;
             case "pollVoted":
               dispatch(pollVote(data));
-              dispatch(detailPollVote(data));
               break;
           }
           break;
         case "api:initNotes":
           dispatch(addLower(data.res));
           (async () => {
-            data.res.forEach((note: Note) => {
+            data.res.forEach(async (note: Note) => {
               socket.send(
                 JSON.stringify({
                   type: "subNote",
@@ -90,11 +95,15 @@ export const useSocketRecv = (): void => {
               }
             });
           })();
+          (async () => {
+            dispatch(addReactions(data.res));
+            dispatch(addReactions(data.res));
+          })();
           break;
         case "api:moreNotes":
           dispatch(addLower(data.res));
           (async () => {
-            data.res.forEach((note: Note) => {
+            data.res.forEach(async (note: Note) => {
               socket.send(
                 JSON.stringify({
                   type: "subNote",
@@ -103,15 +112,33 @@ export const useSocketRecv = (): void => {
                   },
                 })
               );
+              if (note.renoteId && !note.text) {
+                socket.send(
+                  JSON.stringify({
+                    type: "subNote",
+                    body: {
+                      id: note.renoteId,
+                    },
+                  })
+                );
+              }
             });
+          })();
+          (async () => {
+            dispatch(addReactions(data.res));
+            dispatch(addReactions(data.res));
           })();
           dispatch(updateMoreNote(false));
           break;
         case "api:noteDetails":
           dispatch(setNoteDetails(data.res));
+          dispatch(addReaction(data.res));
+          dispatch(addPoll(data.res));
           break;
         case "api:userData":
           dispatch(setUserData(data.res));
+          dispatch(addReactions(data.res.pinnedNotes));
+          dispatch(addReactions(data.res.pinnedNotes));
           break;
       }
     };
