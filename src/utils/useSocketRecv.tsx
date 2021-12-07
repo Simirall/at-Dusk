@@ -20,6 +20,7 @@ import {
   addUserNotes,
   setUserData,
   updateMoreUserNote,
+  updateUserData,
   userNoteDelete,
 } from "../features/userSlice";
 
@@ -112,6 +113,27 @@ export const useSocketRecv = (): void => {
             dispatch(updateMoreUserNote(false)),
             sendSubNotes(socket, data.res),
           ]);
+          break;
+        case "api:follow":
+          dispatch(updateUserData("follow"));
+          break;
+        case "api:unfollow":
+          dispatch(updateUserData("unfollow"));
+          break;
+        case "api:invalidate":
+          dispatch(updateUserData("invalidate"));
+          break;
+        case "api:mute":
+          dispatch(updateUserData("mute"));
+          break;
+        case "api:unmute":
+          dispatch(updateUserData("unmute"));
+          break;
+        case "api:block":
+          dispatch(updateUserData("block"));
+          break;
+        case "api:unblock":
+          dispatch(updateUserData("unblock"));
           break;
       }
     };

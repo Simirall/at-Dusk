@@ -1,3 +1,4 @@
+import { Alert, AlertIcon } from "@chakra-ui/alert";
 import { Button } from "@chakra-ui/button";
 import { Box, HStack, Center } from "@chakra-ui/layout";
 import { Note as mkNote, User } from "misskey-js/built/entities";
@@ -103,65 +104,84 @@ export const UserNotes: React.VFC = () => {
             {userData.pinnedNoteIds.length > 0 && (
               <PinnedNotes userData={userData} colors={colors} />
             )}
-            <HStack justify="space-around" mb="1">
-              <Button
-                {...(userNotesType === "note"
-                  ? { ...props.PrimaryButton }
-                  : { ...props.AlphaButton })}
-                onClick={() => {
-                  if (userNotesType !== "note") {
-                    updateUserNotesType("note");
-                    dispatch(clearUserNotes());
-                  }
-                }}
-              >
-                ノート
-              </Button>
-              <Button
-                {...(userNotesType === "note-reply"
-                  ? { ...props.PrimaryButton }
-                  : { ...props.AlphaButton })}
-                onClick={() => {
-                  if (userNotesType !== "note-reply") {
-                    updateUserNotesType("note-reply");
-                    dispatch(clearUserNotes());
-                  }
-                }}
-              >
-                投稿と返信
-              </Button>
-              <Button
-                {...(userNotesType === "files"
-                  ? { ...props.PrimaryButton }
-                  : { ...props.AlphaButton })}
-                onClick={() => {
-                  if (userNotesType !== "files") {
-                    updateUserNotesType("files");
-                    dispatch(clearUserNotes());
-                  }
-                }}
-              >
-                ファイル付き
-              </Button>
-            </HStack>
-            <UserNotesData userNotesData={userNotesData} colors={colors} />
-            {autoMotto ? (
-              <Center>
-                {!motto ? <Box p="9" ref={ref} /> : <Loading small />}
-              </Center>
+            {!userData.isBlocking && !userData.isBlocked ? (
+              <>
+                <HStack justify="space-around" mb="1">
+                  <Button
+                    {...(userNotesType === "note"
+                      ? { ...props.PrimaryButton }
+                      : { ...props.AlphaButton })}
+                    onClick={() => {
+                      if (userNotesType !== "note") {
+                        updateUserNotesType("note");
+                        dispatch(clearUserNotes());
+                      }
+                    }}
+                  >
+                    ノート
+                  </Button>
+                  <Button
+                    {...(userNotesType === "note-reply"
+                      ? { ...props.PrimaryButton }
+                      : { ...props.AlphaButton })}
+                    onClick={() => {
+                      if (userNotesType !== "note-reply") {
+                        updateUserNotesType("note-reply");
+                        dispatch(clearUserNotes());
+                      }
+                    }}
+                  >
+                    投稿と返信
+                  </Button>
+                  <Button
+                    {...(userNotesType === "files"
+                      ? { ...props.PrimaryButton }
+                      : { ...props.AlphaButton })}
+                    onClick={() => {
+                      if (userNotesType !== "files") {
+                        updateUserNotesType("files");
+                        dispatch(clearUserNotes());
+                      }
+                    }}
+                  >
+                    ファイル付き
+                  </Button>
+                </HStack>
+                <UserNotesData
+                  userNotesData={userNotesData}
+                  loaded={initLoaded}
+                  change={changeType}
+                  colors={colors}
+                />
+              </>
             ) : (
-              <Center marginBottom="2">
-                <Button
-                  aria-label="more notes"
-                  size="lg"
-                  onClick={() => {
-                    dispatch(updateMoreUserNote(true));
-                    socket.send(JSON.stringify(moreUserNotesObject));
-                  }}
-                >
-                  {motto ? <Loading small /> : "もっと"}
-                </Button>
-              </Center>
+              <Alert status="error" borderRadius="md">
+                <AlertIcon />
+                ブロック{userData.isBlocking ? "して" : "されて"}
+                いるため、投稿を閲覧できません
+              </Alert>
+            )}
+            {!initLoaded && userNotes.length > 0 && (
+              <>
+                {autoMotto ? (
+                  <Center>
+                    {!motto ? <Box p="9" ref={ref} /> : <Loading small />}
+                  </Center>
+                ) : (
+                  <Center marginBottom="2">
+                    <Button
+                      aria-label="more notes"
+                      size="lg"
+                      onClick={() => {
+                        dispatch(updateMoreUserNote(true));
+                        socket.send(JSON.stringify(moreUserNotesObject));
+                      }}
+                    >
+                      {motto ? <Loading small /> : "もっと"}
+                    </Button>
+                  </Center>
+                )}
+              </>
             )}
           </Box>
         )}
@@ -212,8 +232,10 @@ const PinnedNotes: React.VFC<{
 
 const UserNotesData: React.VFC<{
   userNotesData: Array<mkNote>;
+  loaded: boolean;
+  change: boolean;
   colors: Record<string, string>;
-}> = ({ userNotesData, colors }) => {
+}> = ({ userNotesData, loaded, change, colors }) => {
   return (
     <>
       {userNotesData.length > 0 ? (
@@ -237,6 +259,8 @@ const UserNotesData: React.VFC<{
             />
           </Box>
         ))
+      ) : loaded && !change ? (
+        <Center>投稿はありません</Center>
       ) : (
         <Center>
           <Loading />

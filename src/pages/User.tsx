@@ -1,15 +1,31 @@
 import { Avatar, AvatarBadge } from "@chakra-ui/avatar";
-import { Button } from "@chakra-ui/button";
+import { Button, IconButton } from "@chakra-ui/button";
+import { useDisclosure } from "@chakra-ui/hooks";
 import Icon from "@chakra-ui/icon";
+import { WarningTwoIcon } from "@chakra-ui/icons";
 import { Image } from "@chakra-ui/image";
 import { Box, Heading, HStack, Text, Divider, VStack } from "@chakra-ui/layout";
-import { Center } from "@chakra-ui/react";
+import {
+  Center,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalBody,
+} from "@chakra-ui/react";
 import { useEffect } from "react";
 import React, { useState } from "react";
 import {
+  IoBan,
   IoBookmark,
   IoBookmarkOutline,
   IoCalendar,
+  IoCut,
+  IoEllipsisHorizontal,
+  IoEyeOff,
   IoFlame,
   IoLocation,
 } from "react-icons/io5";
@@ -18,17 +34,20 @@ import { useNavigate } from "react-router";
 import { useAppSelector } from "../app/hooks";
 import { Loading } from "../components/Loading";
 import { ParseMFM } from "../components/ParseMFM";
+import { settings } from "../features/settingsSlice";
 import { user } from "../features/userSlice";
 import { useColors } from "../utils/Colors";
 import { useSocket } from "../utils/SocketContext";
 import { useStyleProps } from "../utils/StyleProps";
-import { useAPIObject } from "../utils/useAPIObject";
+import { APIObject, useAPIObject } from "../utils/useAPIObject";
 
 export const User: React.VFC = () => {
   const socket = useSocket();
   const navigate = useNavigate();
   const colors = useColors();
   const props = useStyleProps();
+  const me = useAppSelector(settings).userInfo.userData;
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const [banner404, setBanner404] = useState(false);
   const [userBody, updateUserBody] = useState<
     "note" | "following" | "followers"
@@ -49,6 +68,11 @@ export const User: React.VFC = () => {
       },
     })
   );
+  const followingObject = useAPIObject({
+    id: "",
+    type: "api",
+    endpoint: "",
+  }) as APIObject;
   useEffect(() => {
     socket.send(userObject);
   }, [socket, userObject]);
@@ -83,6 +107,38 @@ export const User: React.VFC = () => {
                       bgGradient={`linear(to-b, ${colors.secondaryColor}, #00000000)`}
                     />
                   )}
+                  {userData.isMuted && (
+                    <Box
+                      position="absolute"
+                      zIndex="2"
+                      top="0"
+                      left="0"
+                      m="2"
+                      p="0.5"
+                      fontSize="0.8em"
+                      borderRadius="md"
+                      color={colors.headerTextColor}
+                      bgColor={colors.primaryDarkerColor}
+                    >
+                      ミュートしています
+                    </Box>
+                  )}
+                  {userData.isFollowed && (
+                    <Box
+                      position="absolute"
+                      zIndex="2"
+                      top="0"
+                      left="0"
+                      m="2"
+                      p="0.5"
+                      fontSize="0.8em"
+                      borderRadius="md"
+                      color={colors.headerTextColor}
+                      bgColor={colors.primaryDarkerColor}
+                    >
+                      フォローされています
+                    </Box>
+                  )}
                   <HStack
                     position="absolute"
                     zIndex="2"
@@ -90,12 +146,95 @@ export const User: React.VFC = () => {
                     right="0"
                     p="2"
                   >
+                    <Box>
+                      <Menu>
+                        <MenuButton
+                          as={IconButton}
+                          aria-label="user menu"
+                          icon={<IoEllipsisHorizontal />}
+                          {...props.AlphaButton}
+                        />
+                        <MenuList
+                          bgColor={colors.panelColor}
+                          borderColor={colors.alpha400}
+                        >
+                          {userData.isFollowed && (
+                            <MenuItem
+                              _focus={{ bgColor: colors.alpha200 }}
+                              color="blue.500"
+                              onClick={() => {
+                                followingObject.body.id = "invalidate";
+                                followingObject.body.endpoint =
+                                  "following/invalidate";
+                                followingObject.body.data.userId = userData.id;
+                                socket.send(JSON.stringify(followingObject));
+                              }}
+                            >
+                              <IoCut />
+                              フォロワーを解除
+                            </MenuItem>
+                          )}
+                          <MenuItem
+                            _focus={{ bgColor: colors.alpha200 }}
+                            color="orange"
+                            onClick={() => {
+                              followingObject.body.id = userData.isMuted
+                                ? "unmute"
+                                : "mute";
+                              followingObject.body.endpoint = userData.isMuted
+                                ? "mute/delete"
+                                : "mute/create";
+                              followingObject.body.data.userId = userData.id;
+                              socket.send(JSON.stringify(followingObject));
+                            }}
+                          >
+                            <IoEyeOff />
+                            ミュート{userData.isMuted && "解除"}
+                          </MenuItem>
+                          {!userData.isBlocking && (
+                            <MenuItem
+                              _focus={{ bgColor: colors.alpha200 }}
+                              color="red"
+                              onClick={onOpen}
+                            >
+                              <IoBan />
+                              ブロック
+                            </MenuItem>
+                          )}
+                        </MenuList>
+                      </Menu>
+                    </Box>
                     {userData.isBlocking ? (
-                      <Button colorScheme="red">ブロック中</Button>
+                      <Button colorScheme="red" onClick={onOpen}>
+                        ブロック中
+                      </Button>
                     ) : userData.isFollowing ? (
-                      <Button {...props.PrimaryButton}>フォロー中</Button>
+                      <Button
+                        {...props.PrimaryButton}
+                        onClick={() => {
+                          followingObject.body.id = "unfollow";
+                          followingObject.body.endpoint = "following/delete";
+                          followingObject.body.data.userId = userData.id;
+                          socket.send(JSON.stringify(followingObject));
+                        }}
+                      >
+                        フォロー中
+                      </Button>
                     ) : (
-                      <Button {...props.AlphaButton}>フォロー</Button>
+                      !userData.isBlocked &&
+                      userData.id !== me.id && (
+                        <Button
+                          {...props.AlphaButton}
+                          onClick={() => {
+                            followingObject.body.id = "follow";
+                            followingObject.body.endpoint = "following/create";
+                            followingObject.body.data.userId = userData.id;
+                            socket.send(JSON.stringify(followingObject));
+                          }}
+                        >
+                          フォロー
+                        </Button>
+                      )
                     )}
                   </HStack>
                 </Box>
@@ -310,6 +449,39 @@ export const User: React.VFC = () => {
           <Loading />
         </Center>
       )}
+      <Modal isOpen={isOpen} onClose={onClose} isCentered>
+        <ModalOverlay />
+        <ModalContent w="fit-content" bgColor={colors.panelColor} p="2">
+          <ModalBody>
+            <VStack spacing="0.5">
+              <WarningTwoIcon fontSize="2em" color="yellow.500" />
+              <Box>confirm</Box>
+              <Box>ブロック{userData.isBlocking && "解除"}しますか?</Box>
+              <HStack>
+                <Button
+                  {...props.PrimaryButton}
+                  onClick={() => {
+                    followingObject.body.id = userData.isBlocking
+                      ? "unblock"
+                      : "block";
+                    followingObject.body.endpoint = userData.isBlocking
+                      ? "blocking/delete"
+                      : "blocking/create";
+                    followingObject.body.data.userId = userData.id;
+                    socket.send(JSON.stringify(followingObject));
+                    onClose();
+                  }}
+                >
+                  はい
+                </Button>
+                <Button {...props.AlphaButton} onClick={onClose}>
+                  いいえ
+                </Button>
+              </HStack>
+            </VStack>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </>
   );
 };

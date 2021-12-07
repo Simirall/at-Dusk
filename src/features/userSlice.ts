@@ -55,6 +55,15 @@ export const userSlice = createSlice({
     setUserData: (state, action: PayloadAction<User & UserShow>) => {
       state.user = action.payload;
     },
+    updateUserData: (state, action: PayloadAction<string>) => {
+      if (action.payload === "follow") state.user.isFollowing = true;
+      else if (action.payload === "unfollow") state.user.isFollowing = false;
+      else if (action.payload === "invalidate") state.user.isFollowed = false;
+      else if (action.payload === "mute") state.user.isMuted = true;
+      else if (action.payload === "unmute") state.user.isMuted = false;
+      else if (action.payload === "block") state.user.isBlocking = true;
+      else if (action.payload === "unblock") state.user.isBlocking = false;
+    },
     addUserNotes: (state, action: PayloadAction<Array<Note>>) => {
       state.notes = state.notes.concat(action.payload);
       state.initNoteLoaded = true;
@@ -87,6 +96,7 @@ export const userSlice = createSlice({
 
 export const {
   setUserData,
+  updateUserData,
   addUserNotes,
   updateMoreUserNote,
   userNoteDelete,
