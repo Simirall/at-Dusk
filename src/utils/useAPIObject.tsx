@@ -5,9 +5,7 @@ import { useLoginContext } from "./LoginContext";
 interface APIBody {
   id: string;
   endpoint: string;
-  data: {
-    i: string;
-  };
+  data: Record<string, unknown>;
 }
 
 interface StreamBody {

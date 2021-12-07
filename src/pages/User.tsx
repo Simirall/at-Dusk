@@ -3,6 +3,7 @@ import { Button } from "@chakra-ui/button";
 import Icon from "@chakra-ui/icon";
 import { Image } from "@chakra-ui/image";
 import { Box, Heading, HStack, Text, Divider, VStack } from "@chakra-ui/layout";
+import { Center } from "@chakra-ui/react";
 import { useEffect } from "react";
 import React, { useState } from "react";
 import {
@@ -15,6 +16,7 @@ import {
 import { useNavigate } from "react-router";
 
 import { useAppSelector } from "../app/hooks";
+import { Loading } from "../components/Loading";
 import { ParseMFM } from "../components/ParseMFM";
 import { user } from "../features/userSlice";
 import { useColors } from "../utils/Colors";
@@ -52,10 +54,10 @@ export const User: React.VFC = () => {
   }, [socket, userObject]);
   return (
     <>
-      {userData.id && (
+      {userData.id ? (
         <>
           <Box maxW="95vw" w="6xl" color={colors.textColor}>
-            <Box w="full" p="2" fontSize="1.1em">
+            <Box w="full" marginBlock="2" fontSize="1.1em">
               <Box
                 w="full"
                 borderRadius="lg"
@@ -303,6 +305,10 @@ export const User: React.VFC = () => {
             </Box>
           </Box>
         </>
+      ) : (
+        <Center>
+          <Loading />
+        </Center>
       )}
     </>
   );
