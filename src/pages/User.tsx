@@ -29,7 +29,7 @@ import {
   IoFlame,
   IoLocation,
 } from "react-icons/io5";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 
 import { useAppSelector } from "../app/hooks";
 import { Loading } from "../components/Loading";
@@ -46,12 +46,19 @@ export const User: React.VFC = () => {
   const navigate = useNavigate();
   const colors = useColors();
   const props = useStyleProps();
+  const location = useLocation();
   const me = useAppSelector(settings).userInfo.userData;
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [banner404, setBanner404] = useState(false);
   const [userBody, updateUserBody] = useState<
     "note" | "following" | "followers"
-  >("note");
+  >(
+    location.pathname.includes("following")
+      ? "following"
+      : location.pathname.includes("followers")
+      ? "followers"
+      : "note"
+  );
   const userName = document.location.pathname.split("@")[1].split("/")[0];
   const userHost = document.location.pathname.split("@")[2]
     ? document.location.pathname.split("@")[2].split("/")[0]
@@ -76,6 +83,15 @@ export const User: React.VFC = () => {
   useEffect(() => {
     socket.send(userObject);
   }, [socket, userObject]);
+  useEffect(() => {
+    updateUserBody(
+      location.pathname.includes("following")
+        ? "following"
+        : location.pathname.includes("followers")
+        ? "followers"
+        : "note"
+    );
+  }, [location.pathname]);
   return (
     <>
       {userData.id ? (
@@ -96,6 +112,7 @@ export const User: React.VFC = () => {
                       w="full"
                       h="full"
                       objectFit="cover"
+                      loading="lazy"
                       onError={() => {
                         setBanner404(true);
                       }}

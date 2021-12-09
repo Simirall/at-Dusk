@@ -1,18 +1,21 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { DateString, ID, Note, User } from "misskey-js/built/entities";
+import { DateString, ID, Note, Page, User } from "misskey-js/built/entities";
 
 import { RootState } from "../app/store";
 
 export interface UserShow {
-  bannerId: ID;
-  bannerUrl: string;
-  birthday: DateString;
+  bannerBlurhash: string | null;
+  bannerColor: string | null;
+  bannerUrl: string | null;
+  birthday: string | null;
   createdAt: DateString;
-  description: string;
+  description: string | null;
   ffVisibility: "public" | "followers" | "private";
-  fields: Array<{ name: string; value: string }>;
+  fields: { name: string; value: string }[];
   followersCount: number;
   followingCount: number;
+  hasPendingFollowRequestFromYou: boolean;
+  hasPendingFollowRequestToYou: boolean;
   isAdmin: boolean;
   isBlocked: boolean;
   isBlocking: boolean;
@@ -25,11 +28,19 @@ export interface UserShow {
   isMuted: boolean;
   isSilenced: boolean;
   isSuspended: boolean;
-  location: string;
+  lang: string | null;
+  location: string | null;
   notesCount: number;
-  pinnedNoteIds: Array<ID>;
-  pinnedNotes: Array<Note>;
+  pinnedNoteIds: ID[];
+  pinnedNotes: Note[];
+  pinnedPage: Page | null;
+  pinnedPageId: string | null;
   publicReactions: boolean;
+  securityKeys: boolean;
+  twoFactorEnabled: boolean;
+  updatedAt: DateString | null;
+  uri: string | null;
+  url: string | null;
 }
 
 export interface userState {
@@ -38,6 +49,23 @@ export interface userState {
   initNoteLoaded: boolean;
   moreUserNote: boolean;
   changeUserNotesType: boolean;
+  followers: Array<{
+    createdAt: string;
+    follower: User & UserShow;
+    followeeId: string;
+    followerId: string;
+    id: string;
+  }>;
+  followings: Array<{
+    createdAt: string;
+    followee: User & UserShow;
+    followeeId: string;
+    followerId: string;
+    id: string;
+  }>;
+  followerLoaded: boolean;
+  followingsLoaded: boolean;
+  moreFF: boolean;
 }
 
 const initialState: userState = {
@@ -46,6 +74,11 @@ const initialState: userState = {
   initNoteLoaded: false,
   moreUserNote: false,
   changeUserNotesType: false,
+  followers: [],
+  followings: [],
+  followerLoaded: false,
+  followingsLoaded: false,
+  moreFF: false,
 };
 
 export const userSlice = createSlice({
@@ -82,14 +115,57 @@ export const userSlice = createSlice({
     ) => {
       state.notes = state.notes.filter((note) => note.id !== action.payload.id);
     },
+    addFollowings: (
+      state,
+      action: PayloadAction<
+        Array<{
+          createdAt: string;
+          followee: User & UserShow;
+          followeeId: string;
+          followerId: string;
+          id: string;
+        }>
+      >
+    ) => {
+      state.followings = state.followings.concat(action.payload);
+      state.followingsLoaded = true;
+    },
+    addFollowers: (
+      state,
+      action: PayloadAction<
+        Array<{
+          createdAt: string;
+          follower: User & UserShow;
+          followeeId: string;
+          followerId: string;
+          id: string;
+        }>
+      >
+    ) => {
+      state.followers = state.followers.concat(action.payload);
+      state.followerLoaded = true;
+    },
+    updateMoreFF: (state, action: PayloadAction<boolean>) => {
+      state.moreFF = action.payload;
+    },
+    changeUserNotesType: (state, action: PayloadAction<boolean>) => {
+      state.changeUserNotesType = action.payload;
+    },
     clearUserNotes: (state) => {
       state.notes = [];
-      state.changeUserNotesType = true;
+    },
+    clearFF: (state) => {
+      state.followings = [];
+      state.followers = [];
     },
     clearUserData: (state) => {
       state.user = initialState.user;
       state.notes = [];
+      state.followings = [];
+      state.followers = [];
       state.initNoteLoaded = false;
+      state.followerLoaded = false;
+      state.followingsLoaded = false;
     },
   },
 });
@@ -100,7 +176,12 @@ export const {
   addUserNotes,
   updateMoreUserNote,
   userNoteDelete,
+  addFollowings,
+  addFollowers,
+  updateMoreFF,
+  changeUserNotesType,
   clearUserNotes,
+  clearFF,
   clearUserData,
 } = userSlice.actions;
 
@@ -112,9 +193,40 @@ export const oldestUserNoteId = (state: RootState): string =>
     : "";
 export const initNoteLoaded = (state: RootState): boolean =>
   state.user.initNoteLoaded;
-export const changeUserNotesType = (state: RootState): boolean =>
+export const isChangedUserNoteType = (state: RootState): boolean =>
   state.user.changeUserNotesType;
 export const moreUserNote = (state: RootState): boolean =>
   state.user.moreUserNote;
+export const followers = (
+  state: RootState
+): Array<{
+  createdAt: string;
+  follower: User & UserShow;
+  followeeId: string;
+  followerId: string;
+  id: string;
+}> => state.user.followers;
+export const followings = (
+  state: RootState
+): Array<{
+  createdAt: string;
+  followee: User & UserShow;
+  followeeId: string;
+  followerId: string;
+  id: string;
+}> => state.user.followings;
+export const followingsLoaded = (state: RootState): boolean =>
+  state.user.followingsLoaded;
+export const followerLoaded = (state: RootState): boolean =>
+  state.user.followerLoaded;
+export const moreFF = (state: RootState): boolean => state.user.moreFF;
+export const oldestFollowingId = (state: RootState): string =>
+  state.user.followings.length > 0
+    ? state.user.followings[state.user.followings.length - 1]?.id
+    : "";
+export const oldestFollowerId = (state: RootState): string =>
+  state.user.followers.length > 0
+    ? state.user.followers[state.user.followers.length - 1]?.id
+    : "";
 
 export default userSlice.reducer;

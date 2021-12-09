@@ -15,6 +15,7 @@ import { Login } from "./Login";
 import { Notes } from "./Notes";
 import { Settings } from "./Settings";
 import { User } from "./User";
+import { UserFF } from "./UserFF";
 import { UserNotes } from "./UserNotes";
 
 export const App: React.VFC = () => {
@@ -45,7 +46,7 @@ export const App: React.VFC = () => {
                             element={
                               <>
                                 <User />
-                                FING
+                                <UserFF type="following" />
                               </>
                             }
                           />
@@ -54,7 +55,7 @@ export const App: React.VFC = () => {
                             element={
                               <>
                                 <User />
-                                FERS
+                                <UserFF type="followers" />
                               </>
                             }
                           />

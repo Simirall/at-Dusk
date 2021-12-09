@@ -17,8 +17,12 @@ import {
   unreacted,
 } from "../features/reactionsSlice";
 import {
+  addFollowers,
+  addFollowings,
   addUserNotes,
+  changeUserNotesType,
   setUserData,
+  updateMoreFF,
   updateMoreUserNote,
   updateUserData,
   userNoteDelete,
@@ -102,6 +106,7 @@ export const useSocketRecv = (): void => {
             dispatch(addUserNotes(data.res)),
             dispatch(addReactions(data.res)),
             dispatch(addPolls(data.res)),
+            dispatch(changeUserNotesType(false)),
             sendSubNotes(socket, data.res),
           ]);
           break;
@@ -134,6 +139,14 @@ export const useSocketRecv = (): void => {
           break;
         case "api:unblock":
           dispatch(updateUserData("unblock"));
+          break;
+        case "api:following":
+          dispatch(addFollowings(data.res));
+          dispatch(updateMoreFF(false));
+          break;
+        case "api:followers":
+          dispatch(addFollowers(data.res));
+          dispatch(updateMoreFF(false));
           break;
       }
     };

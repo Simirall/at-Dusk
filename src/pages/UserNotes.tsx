@@ -11,7 +11,7 @@ import { Loading } from "../components/Loading";
 import { Note } from "../components/Note";
 import { settings } from "../features/settingsSlice";
 import {
-  changeUserNotesType,
+  isChangedUserNoteType,
   clearUserNotes,
   initNoteLoaded,
   moreUserNote,
@@ -20,6 +20,7 @@ import {
   user,
   userNotes,
   UserShow,
+  changeUserNotesType,
 } from "../features/userSlice";
 import { useColors } from "../utils/Colors";
 import { useSocket } from "../utils/SocketContext";
@@ -35,7 +36,7 @@ export const UserNotes: React.VFC = () => {
   const userNotesData = useAppSelector(userNotes);
   const motto = useAppSelector(moreUserNote);
   const initLoaded = useAppSelector(initNoteLoaded);
-  const changeType = useAppSelector(changeUserNotesType);
+  const changeType = useAppSelector(isChangedUserNoteType);
   const autoMotto = useAppSelector(settings).autoMotto;
   const [userNotesType, updateUserNotesType] = useState<
     "note" | "note-reply" | "files"
@@ -115,6 +116,7 @@ export const UserNotes: React.VFC = () => {
                       if (userNotesType !== "note") {
                         updateUserNotesType("note");
                         dispatch(clearUserNotes());
+                        dispatch(changeUserNotesType(true));
                       }
                     }}
                   >
@@ -128,6 +130,7 @@ export const UserNotes: React.VFC = () => {
                       if (userNotesType !== "note-reply") {
                         updateUserNotesType("note-reply");
                         dispatch(clearUserNotes());
+                        dispatch(changeUserNotesType(true));
                       }
                     }}
                   >
@@ -141,6 +144,7 @@ export const UserNotes: React.VFC = () => {
                       if (userNotesType !== "files") {
                         updateUserNotesType("files");
                         dispatch(clearUserNotes());
+                        dispatch(changeUserNotesType(true));
                       }
                     }}
                   >
@@ -161,7 +165,7 @@ export const UserNotes: React.VFC = () => {
                 いるため、投稿を閲覧できません
               </Alert>
             )}
-            {!initLoaded && userNotes.length > 0 && (
+            {initLoaded && userNotes.length > 0 && (
               <>
                 {autoMotto ? (
                   <Center>
