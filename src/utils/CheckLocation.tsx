@@ -25,10 +25,8 @@ export const CheckLocation: React.VFC<{ children: React.ReactNode }> = ({
       );
   }, [userData]);
   useEffect(() => {
-    console.log(userMatch?.params.id, username, location.pathname);
     dispatch(clearNoteDetails());
     if (userMatch && username) {
-      console.log(userMatch.params.id, username);
       if (userMatch.params.id && userMatch.params.id !== username) {
         updateUsername(userMatch.params.id);
         dispatch(clearUserData()); //userpage -> userpage

@@ -14,13 +14,12 @@ import { Loading } from "../components/Loading";
 import { ParseMFM } from "../components/ParseMFM";
 import { settings } from "../features/settingsSlice";
 import {
-  followerLoaded,
   followers,
   followings,
-  followingsLoaded,
+  initLoadeds,
+  lasts,
   moreFF,
-  oldestFollowerId,
-  oldestFollowingId,
+  oldests,
   updateMoreFF,
   user,
   UserShow,
@@ -39,11 +38,15 @@ export const UserFF: React.VFC<{ type: "following" | "followers" }> = ({
   const userData = useAppSelector(user);
   const followersData = useAppSelector(followers);
   const followingsData = useAppSelector(followings);
-  const FGloaded = useAppSelector(followingsLoaded);
-  const FRloaded = useAppSelector(followerLoaded);
+  const loaded = useAppSelector(initLoadeds);
+  const FGloaded = loaded.followings;
+  const FRloaded = loaded.followers;
+  const last = useAppSelector(lasts);
+  const lastFG = last.following;
+  const lastFR = last.follower;
   return (
     <>
-      <Box maxW="95vw" w="6xl" color={colors.textColor}>
+      <Box maxW="95vw" w="6xl" color={colors.textColor} pb="2">
         {!(
           userData.ffVisibility === "private" ||
           (userData.ffVisibility === "followers" && !userData.isFollowing)
@@ -66,7 +69,7 @@ export const UserFF: React.VFC<{ type: "following" | "followers" }> = ({
                         </Box>
                       ))}
                     </HStack>
-                    {FGloaded && (
+                    {FGloaded && !lastFG && (
                       <Motto socket={socket} type={type} id={userData.id} />
                     )}
                   </>
@@ -89,7 +92,7 @@ export const UserFF: React.VFC<{ type: "following" | "followers" }> = ({
                         </Box>
                       ))}
                     </HStack>
-                    {FRloaded && (
+                    {FRloaded && !lastFR && (
                       <Motto socket={socket} type={type} id={userData.id} />
                     )}
                   </>
@@ -113,8 +116,9 @@ const Motto: React.VFC<{
   const motto = useAppSelector(moreFF);
   const autoMotto = useAppSelector(settings).autoMotto;
   const dispatch = useAppDispatch();
-  const OFGID = useAppSelector(oldestFollowingId);
-  const OFRID = useAppSelector(oldestFollowerId);
+  const oldest = useAppSelector(oldests);
+  const OFGID = oldest.following;
+  const OFRID = oldest.follower;
   const { ref, inView } = useInView({
     threshold: 0.5,
   });

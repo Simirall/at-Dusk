@@ -48,6 +48,7 @@ export interface userState {
   notes: Array<Note>;
   initNoteLoaded: boolean;
   moreUserNote: boolean;
+  isLastUserNote: boolean;
   changeUserNotesType: boolean;
   followers: Array<{
     createdAt: string;
@@ -65,6 +66,8 @@ export interface userState {
   }>;
   followerLoaded: boolean;
   followingsLoaded: boolean;
+  isLastFollower: boolean;
+  isLastFollowing: boolean;
   moreFF: boolean;
 }
 
@@ -73,11 +76,14 @@ const initialState: userState = {
   notes: [],
   initNoteLoaded: false,
   moreUserNote: false,
+  isLastUserNote: false,
   changeUserNotesType: false,
   followers: [],
   followings: [],
   followerLoaded: false,
   followingsLoaded: false,
+  isLastFollower: false,
+  isLastFollowing: false,
   moreFF: false,
 };
 
@@ -101,6 +107,7 @@ export const userSlice = createSlice({
       state.notes = state.notes.concat(action.payload);
       state.initNoteLoaded = true;
       state.changeUserNotesType = false;
+      if (action.payload.length < 15) state.isLastUserNote = true;
     },
     updateMoreUserNote: (state, action: PayloadAction<boolean>) => {
       state.moreUserNote = action.payload;
@@ -129,6 +136,7 @@ export const userSlice = createSlice({
     ) => {
       state.followings = state.followings.concat(action.payload);
       state.followingsLoaded = true;
+      if (action.payload.length < 16) state.isLastFollowing = true;
     },
     addFollowers: (
       state,
@@ -144,6 +152,7 @@ export const userSlice = createSlice({
     ) => {
       state.followers = state.followers.concat(action.payload);
       state.followerLoaded = true;
+      if (action.payload.length < 16) state.isLastFollower = true;
     },
     updateMoreFF: (state, action: PayloadAction<boolean>) => {
       state.moreFF = action.payload;
@@ -166,6 +175,9 @@ export const userSlice = createSlice({
       state.initNoteLoaded = false;
       state.followerLoaded = false;
       state.followingsLoaded = false;
+      state.isLastUserNote = false;
+      state.isLastFollower = false;
+      state.isLastFollowing = false;
     },
   },
 });
@@ -187,16 +199,11 @@ export const {
 
 export const user = (state: RootState): User & UserShow => state.user.user;
 export const userNotes = (state: RootState): Array<Note> => state.user.notes;
-export const oldestUserNoteId = (state: RootState): string =>
-  state.user.notes.length > 0
-    ? state.user.notes[state.user.notes.length - 1]?.id
-    : "";
-export const initNoteLoaded = (state: RootState): boolean =>
-  state.user.initNoteLoaded;
 export const isChangedUserNoteType = (state: RootState): boolean =>
   state.user.changeUserNotesType;
 export const moreUserNote = (state: RootState): boolean =>
   state.user.moreUserNote;
+export const moreFF = (state: RootState): boolean => state.user.moreFF;
 export const followers = (
   state: RootState
 ): Array<{
@@ -215,18 +222,39 @@ export const followings = (
   followerId: string;
   id: string;
 }> => state.user.followings;
-export const followingsLoaded = (state: RootState): boolean =>
-  state.user.followingsLoaded;
-export const followerLoaded = (state: RootState): boolean =>
-  state.user.followerLoaded;
-export const moreFF = (state: RootState): boolean => state.user.moreFF;
-export const oldestFollowingId = (state: RootState): string =>
-  state.user.followings.length > 0
-    ? state.user.followings[state.user.followings.length - 1]?.id
-    : "";
-export const oldestFollowerId = (state: RootState): string =>
-  state.user.followers.length > 0
-    ? state.user.followers[state.user.followers.length - 1]?.id
-    : "";
+export const initLoadeds = (
+  state: RootState
+): {
+  userNote: boolean;
+  followers: boolean;
+  followings: boolean;
+} => ({
+  userNote: state.user.initNoteLoaded,
+  followers: state.user.followerLoaded,
+  followings: state.user.followingsLoaded,
+});
+export const oldests = (
+  state: RootState
+): { userNote: string; follower: string; following: string } => ({
+  userNote:
+    state.user.notes.length > 0
+      ? state.user.notes[state.user.notes.length - 1]?.id
+      : "",
+  follower:
+    state.user.followers.length > 0
+      ? state.user.followers[state.user.followers.length - 1]?.id
+      : "",
+  following:
+    state.user.followings.length > 0
+      ? state.user.followings[state.user.followings.length - 1]?.id
+      : "",
+});
+export const lasts = (
+  state: RootState
+): { userNote: boolean; follower: boolean; following: boolean } => ({
+  userNote: state.user.isLastUserNote,
+  follower: state.user.isLastFollower,
+  following: state.user.isLastFollowing,
+});
 
 export default userSlice.reducer;

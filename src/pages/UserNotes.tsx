@@ -13,14 +13,15 @@ import { settings } from "../features/settingsSlice";
 import {
   isChangedUserNoteType,
   clearUserNotes,
-  initNoteLoaded,
   moreUserNote,
-  oldestUserNoteId,
   updateMoreUserNote,
   user,
   userNotes,
   UserShow,
   changeUserNotesType,
+  lasts,
+  oldests,
+  initLoadeds,
 } from "../features/userSlice";
 import { useColors } from "../utils/Colors";
 import { useSocket } from "../utils/SocketContext";
@@ -35,9 +36,10 @@ export const UserNotes: React.VFC = () => {
   const userData = useAppSelector(user);
   const userNotesData = useAppSelector(userNotes);
   const motto = useAppSelector(moreUserNote);
-  const initLoaded = useAppSelector(initNoteLoaded);
+  const initLoaded = useAppSelector(initLoadeds).userNote;
   const changeType = useAppSelector(isChangedUserNoteType);
   const autoMotto = useAppSelector(settings).autoMotto;
+  const isLastNote = useAppSelector(lasts).userNote;
   const [userNotesType, updateUserNotesType] = useState<
     "note" | "note-reply" | "files"
   >("note");
@@ -60,7 +62,7 @@ export const UserNotes: React.VFC = () => {
     data: {
       limit: 15,
       userId: userData.id,
-      untilId: useAppSelector(oldestUserNoteId),
+      untilId: useAppSelector(oldests).userNote,
       includeReplies: userNotesType === "note" ? false : true,
       withFiles: userNotesType === "files" ? true : false,
     },
@@ -99,7 +101,7 @@ export const UserNotes: React.VFC = () => {
   ]);
   return (
     <>
-      <Box maxW="95vw" w="6xl" color={colors.textColor}>
+      <Box maxW="95vw" w="6xl" color={colors.textColor} pb="2">
         {userData.id && (
           <Box>
             {userData.pinnedNoteIds.length > 0 && (
@@ -165,7 +167,7 @@ export const UserNotes: React.VFC = () => {
                 いるため、投稿を閲覧できません
               </Alert>
             )}
-            {initLoaded && userNotes.length > 0 && (
+            {!isLastNote && initLoaded && userNotes.length > 0 && (
               <>
                 {autoMotto ? (
                   <Center>
