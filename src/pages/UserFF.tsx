@@ -41,83 +41,64 @@ export const UserFF: React.VFC<{ type: "following" | "followers" }> = ({
   const followingsData = useAppSelector(followings);
   const FGloaded = useAppSelector(followingsLoaded);
   const FRloaded = useAppSelector(followerLoaded);
-  const FFObjectJson = JSON.stringify(
-    useAPIObject({
-      id: type === "following" ? "following" : "followers",
-      type: "api",
-      endpoint: type === "following" ? "users/following" : "users/followers",
-      data: {
-        limit: 16,
-        userId: userData.id,
-      },
-    })
-  );
-  useEffect(() => {
-    if (
-      userData.id &&
-      ((type === "following" && followingsData.length === 0) ||
-        (type === "followers" && followersData.length === 0))
-    ) {
-      console.log("REQUEST FF");
-      socket.send(FFObjectJson);
-    }
-  }, [
-    socket,
-    FFObjectJson,
-    userData.id,
-    type,
-    followingsData.length,
-    followersData.length,
-  ]);
   return (
     <>
       <Box maxW="95vw" w="6xl" color={colors.textColor}>
-        {type === "following" ? (
+        {!(
+          userData.ffVisibility === "private" ||
+          (userData.ffVisibility === "followers" && !userData.isFollowing)
+        ) ? (
           <>
-            {followingsData.length > 0 && (
+            {type === "following" ? (
               <>
-                <HStack wrap="wrap" justify="center" spacing="0">
-                  {followingsData.map((user) => (
-                    <Box
-                      key={user.id}
-                      w="max(50%, 20rem)"
-                      maxW="full"
-                      h="15em"
-                      p="1"
-                    >
-                      <UserContainer user={user.followee} colors={colors} />
-                    </Box>
-                  ))}
-                </HStack>
-                {FGloaded && (
-                  <Motto socket={socket} type={type} id={userData.id} />
+                {followingsData.length > 0 && (
+                  <>
+                    <HStack wrap="wrap" justify="center" spacing="0">
+                      {followingsData.map((user, i) => (
+                        <Box
+                          key={i}
+                          w="max(50%, 20rem)"
+                          maxW="full"
+                          h="15em"
+                          p="1"
+                        >
+                          <UserContainer user={user.followee} colors={colors} />
+                        </Box>
+                      ))}
+                    </HStack>
+                    {FGloaded && (
+                      <Motto socket={socket} type={type} id={userData.id} />
+                    )}
+                  </>
+                )}
+              </>
+            ) : (
+              <>
+                {followersData.length > 0 && (
+                  <>
+                    <HStack wrap="wrap" justify="center" spacing="0">
+                      {followersData.map((user, i) => (
+                        <Box
+                          key={i}
+                          w="max(50%, 20rem)"
+                          maxW="full"
+                          h="15em"
+                          p="1"
+                        >
+                          <UserContainer user={user.follower} colors={colors} />
+                        </Box>
+                      ))}
+                    </HStack>
+                    {FRloaded && (
+                      <Motto socket={socket} type={type} id={userData.id} />
+                    )}
+                  </>
                 )}
               </>
             )}
           </>
         ) : (
-          <>
-            {followersData.length > 0 && (
-              <>
-                <HStack wrap="wrap" justify="center" spacing="0">
-                  {followersData.map((user) => (
-                    <Box
-                      key={user.id}
-                      w="max(50%, 20rem)"
-                      maxW="full"
-                      h="15em"
-                      p="1"
-                    >
-                      <UserContainer user={user.follower} colors={colors} />
-                    </Box>
-                  ))}
-                </HStack>
-                {FRloaded && (
-                  <Motto socket={socket} type={type} id={userData.id} />
-                )}
-              </>
-            )}
-          </>
+          <Center fontSize="1.2em">非公開です</Center>
         )}
       </Box>
     </>

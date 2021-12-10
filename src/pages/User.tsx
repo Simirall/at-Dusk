@@ -16,6 +16,7 @@ import {
   ModalContent,
   ModalBody,
 } from "@chakra-ui/react";
+import { User as mkUser } from "misskey-js/built/entities";
 import { useEffect } from "react";
 import React, { useState } from "react";
 import {
@@ -35,7 +36,7 @@ import { useAppSelector } from "../app/hooks";
 import { Loading } from "../components/Loading";
 import { ParseMFM } from "../components/ParseMFM";
 import { settings } from "../features/settingsSlice";
-import { user } from "../features/userSlice";
+import { followers, followings, user, UserShow } from "../features/userSlice";
 import { useColors } from "../utils/Colors";
 import { useSocket } from "../utils/SocketContext";
 import { useStyleProps } from "../utils/StyleProps";
@@ -64,25 +65,12 @@ export const User: React.VFC = () => {
     ? document.location.pathname.split("@")[2].split("/")[0]
     : null;
   const userData = useAppSelector(user);
-  const userObject = JSON.stringify(
-    useAPIObject({
-      id: "userData",
-      type: "api",
-      endpoint: "users/show",
-      data: {
-        username: userName,
-        host: userHost,
-      },
-    })
-  );
   const followingObject = useAPIObject({
     id: "",
     type: "api",
     endpoint: "",
   }) as APIObject;
-  useEffect(() => {
-    socket.send(userObject);
-  }, [socket, userObject]);
+  useGetUserData(socket, userData, userName, userHost);
   useEffect(() => {
     updateUserBody(
       location.pathname.includes("following")
@@ -422,6 +410,11 @@ export const User: React.VFC = () => {
                     as={Button}
                     variant="text"
                     size="lg"
+                    disabled={
+                      userData.ffVisibility === "private" ||
+                      (userData.ffVisibility === "followers" &&
+                        !userData.isFollowing)
+                    }
                     onClick={() => {
                       navigate(
                         `/user/@${userName}${
@@ -431,8 +424,21 @@ export const User: React.VFC = () => {
                       updateUserBody("following");
                     }}
                   >
-                    <Box>{userData.followingCount}</Box>
-                    <Box>フォロー</Box>
+                    {!(
+                      userData.ffVisibility === "private" ||
+                      (userData.ffVisibility === "followers" &&
+                        !userData.isFollowing)
+                    ) ? (
+                      <>
+                        <Box>{userData.followingCount}</Box>
+                        <Box>フォロー</Box>
+                      </>
+                    ) : (
+                      <>
+                        <Box>フォロー</Box>
+                        <Box>(非公開)</Box>
+                      </>
+                    )}
                   </VStack>
                   <VStack
                     color={
@@ -444,6 +450,11 @@ export const User: React.VFC = () => {
                     as={Button}
                     variant="text"
                     size="lg"
+                    disabled={
+                      userData.ffVisibility === "private" ||
+                      (userData.ffVisibility === "followers" &&
+                        !userData.isFollowing)
+                    }
                     onClick={() => {
                       navigate(
                         `/user/@${userName}${
@@ -453,8 +464,21 @@ export const User: React.VFC = () => {
                       updateUserBody("followers");
                     }}
                   >
-                    <Box>{userData.followersCount}</Box>
-                    <Box>フォロワー</Box>
+                    {!(
+                      userData.ffVisibility === "private" ||
+                      (userData.ffVisibility === "followers" &&
+                        !userData.isFollowing)
+                    ) ? (
+                      <>
+                        <Box>{userData.followersCount}</Box>
+                        <Box>フォロワー</Box>
+                      </>
+                    ) : (
+                      <>
+                        <Box>フォロワー</Box>
+                        <Box>(非公開)</Box>
+                      </>
+                    )}
                   </VStack>
                 </HStack>
               </Box>
@@ -501,6 +525,68 @@ export const User: React.VFC = () => {
       </Modal>
     </>
   );
+};
+
+const useGetUserData = (
+  socket: WebSocket,
+  userData: mkUser & UserShow,
+  userName: string,
+  userHost: string | null
+): void => {
+  const FG = useAppSelector(followings);
+  const FR = useAppSelector(followers);
+  const userObject = JSON.stringify(
+    useAPIObject({
+      id: "userData",
+      type: "api",
+      endpoint: "users/show",
+      data: {
+        username: userName,
+        host: userHost,
+      },
+    })
+  );
+  const userFollowersObject = useAPIObject({
+    id: "followers",
+    type: "api",
+    endpoint: "users/followers",
+    data: {
+      limit: 16,
+      userId: userData.id,
+    },
+  }) as APIObject;
+  const userFollowingObject = useAPIObject({
+    id: "following",
+    type: "api",
+    endpoint: "users/following",
+    data: {
+      limit: 16,
+      userId: userData.id,
+    },
+  }) as APIObject;
+  useEffect(() => {
+    if (!userData.id) socket.send(userObject);
+  }, [socket, userObject, userData.id]);
+  useEffect(() => {
+    if (
+      userData.id &&
+      !(
+        userData.ffVisibility === "private" ||
+        (userData.ffVisibility === "followers" && !userData.isFollowing)
+      )
+    ) {
+      if (FR.length === 0) socket.send(JSON.stringify(userFollowersObject));
+      else if (FG.length === 0)
+        socket.send(JSON.stringify(userFollowingObject));
+    }
+  }, [
+    socket,
+    userFollowersObject,
+    userFollowingObject,
+    userData,
+    FR.length,
+    FG.length,
+  ]);
 };
 
 const getDate = (d: string) => {
