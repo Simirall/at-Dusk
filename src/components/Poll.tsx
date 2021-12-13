@@ -1,11 +1,10 @@
 import { Button } from "@chakra-ui/button";
 import { CheckIcon } from "@chakra-ui/icons";
 import { Box, Flex, VStack, Text, HStack } from "@chakra-ui/layout";
-import React, { memo, useState } from "react";
+import React, { memo, useState, useEffect } from "react";
 
 import { useAppSelector } from "../app/hooks";
-import { noteDetailsPoll } from "../features/noteDetailsSlice";
-import { allPolls } from "../features/notesSlice";
+import { allPolls } from "../features/pollSlice";
 import { useColors } from "../utils/Colors";
 import { useSocket } from "../utils/SocketContext";
 import { useStyleProps } from "../utils/StyleProps";
@@ -19,14 +18,9 @@ export const Poll: React.VFC<{
     name: string;
     url: string;
   }>;
-  detail?: boolean;
-}> = memo(function Fn({ id, emojis, detail }) {
+}> = memo(function Fn({ id, emojis }) {
   const socket = useSocket();
-  const polls = useAppSelector(allPolls);
-  const detailsPoll = useAppSelector(noteDetailsPoll);
-  const poll = detail
-    ? detailsPoll.find((p) => p.id === id)
-    : polls.find((p) => p.id === id);
+  const poll = useAppSelector(allPolls).find((p) => p.id === id);
   const colors = useColors();
   const props = useStyleProps();
   const sum = poll?.choices.reduce((p, c) => p + c.votes, 0);
@@ -44,6 +38,10 @@ export const Poll: React.VFC<{
     endpoint: "notes/polls/vote",
     data: { noteId: id },
   }) as APIObject;
+
+  useEffect(() => {
+    updateVoted(poll?.choices.some((choice) => choice.isVoted));
+  }, [poll?.choices]);
   return (
     <>
       {poll && (

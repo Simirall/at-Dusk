@@ -15,6 +15,8 @@ import { Login } from "./Login";
 import { Notes } from "./Notes";
 import { Settings } from "./Settings";
 import { User } from "./User";
+import { UserFF } from "./UserFF";
+import { UserNotes } from "./UserNotes";
 
 export const App: React.VFC = () => {
   return (
@@ -39,7 +41,33 @@ export const App: React.VFC = () => {
                     <CheckLocation>
                       <Routes>
                         <Route path="/user">
-                          <Route path=":id" element={<User />} />
+                          <Route
+                            path=":id/following"
+                            element={
+                              <>
+                                <User />
+                                <UserFF type="following" />
+                              </>
+                            }
+                          />
+                          <Route
+                            path=":id/followers"
+                            element={
+                              <>
+                                <User />
+                                <UserFF type="followers" />
+                              </>
+                            }
+                          />
+                          <Route
+                            path=":id"
+                            element={
+                              <>
+                                <User />
+                                <UserNotes />
+                              </>
+                            }
+                          />
                         </Route>
                         <Route path="/notes">
                           <Route path=":id" element={<Notes />} />

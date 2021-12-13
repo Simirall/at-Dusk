@@ -1,22 +1,44 @@
 import { Center } from "@chakra-ui/layout";
-import React, { useEffect } from "react";
-import { useLocation } from "react-router";
+import React, { useEffect, useState } from "react";
+import { useLocation, useMatch } from "react-router";
 
-import { useAppDispatch } from "../app/hooks";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { Loading } from "../components/Loading";
-import { clear } from "../features/noteDetailsSlice";
+import { clearNoteDetails } from "../features/noteDetailsSlice";
+import { clearFF, clearUserData, user } from "../features/userSlice";
 
 import { useSocketOpen } from "./SocketContext";
 
 export const CheckLocation: React.VFC<{ children: React.ReactNode }> = ({
   children,
 }) => {
+  const userData = useAppSelector(user);
+  const [username, updateUsername] = useState("");
   const dispatch = useAppDispatch();
   const location = useLocation();
+  const userMatch = useMatch("/user/:id");
   const { isSocketOpen } = useSocketOpen();
   useEffect(() => {
-    dispatch(clear());
-  }, [location.pathname, dispatch]);
+    if (userData.id)
+      updateUsername(
+        `@${userData.username}${userData.host ? `@${userData.host}` : ""}`
+      );
+  }, [userData]);
+  useEffect(() => {
+    dispatch(clearNoteDetails());
+    if (userMatch && username) {
+      if (userMatch.params.id && userMatch.params.id !== username) {
+        updateUsername(userMatch.params.id);
+        dispatch(clearUserData()); //userpage -> userpage
+      }
+    } else {
+      if (!location.pathname.startsWith(`/user/${username}`)) {
+        dispatch(clearUserData()); //userpage -> otherpage
+      } else if (location.pathname !== `/user/${username}`) {
+        dispatch(clearFF());
+      }
+    }
+  }, [location.pathname, dispatch, userMatch, username]);
   return (
     <>
       {isSocketOpen ? (
