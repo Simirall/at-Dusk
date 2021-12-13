@@ -1,11 +1,11 @@
+import { useMemo } from "react";
+
 import { useLoginContext } from "./LoginContext";
 
 interface APIBody {
   id: string;
   endpoint: string;
-  data: {
-    i: string;
-  };
+  data: Record<string, unknown>;
 }
 
 interface StreamBody {
@@ -42,30 +42,34 @@ export const useAPIObject = (
   props: Props
 ): APIObject | StreamObject | DisconnectObject => {
   const { token } = useLoginContext();
-  return props.type === "api"
-    ? ({
-        type: props.type,
-        body: {
-          id: props.id,
-          endpoint: props.endpoint,
-          data: {
-            i: token,
-            ...props.data,
-          },
-        },
-      } as APIObject)
-    : props.type === "connect"
-    ? ({
-        type: props.type,
-        body: {
-          id: props.id,
-          channel: props.channel,
-        },
-      } as StreamObject)
-    : ({
-        type: props.type,
-        body: {
-          id: props.id,
-        },
-      } as DisconnectObject);
+  return useMemo(
+    () =>
+      props.type === "api"
+        ? ({
+            type: props.type,
+            body: {
+              id: props.id,
+              endpoint: props.endpoint,
+              data: {
+                i: token,
+                ...props.data,
+              },
+            },
+          } as APIObject)
+        : props.type === "connect"
+        ? ({
+            type: props.type,
+            body: {
+              id: props.id,
+              channel: props.channel,
+            },
+          } as StreamObject)
+        : ({
+            type: props.type,
+            body: {
+              id: props.id,
+            },
+          } as DisconnectObject),
+    [props, token]
+  );
 };

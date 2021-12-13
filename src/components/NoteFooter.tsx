@@ -24,7 +24,8 @@ import {
 } from "react-icons/io5";
 
 import { useAppSelector } from "../app/hooks";
-import { allReactions, NoteType } from "../features/notesSlice";
+import { NoteType } from "../features/notesSlice";
+import { allReactions } from "../features/reactionsSlice";
 import { settings } from "../features/settingsSlice";
 import { useModalsContext } from "../utils/ModalsContext";
 import { useSocket } from "../utils/SocketContext";
