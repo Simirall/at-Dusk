@@ -55,18 +55,20 @@ export const UserNotes: React.VFC = () => {
     },
   }) as APIObject;
   const userNotesObjectJson = JSON.stringify(userNotesObject);
-  const moreUserNotesObject = useAPIObject({
-    id: "moreUserNotes",
-    type: "api",
-    endpoint: "users/notes",
-    data: {
-      limit: 15,
-      userId: userData.id,
-      untilId: useAppSelector(oldests).userNote,
-      includeReplies: userNotesType === "note" ? false : true,
-      withFiles: userNotesType === "files" ? true : false,
-    },
-  }) as APIObject;
+  const moreUserNotesObject = JSON.stringify(
+    useAPIObject({
+      id: "moreUserNotes",
+      type: "api",
+      endpoint: "users/notes",
+      data: {
+        limit: 15,
+        userId: userData.id,
+        untilId: useAppSelector(oldests).userNote,
+        includeReplies: userNotesType === "note" ? false : true,
+        withFiles: userNotesType === "files" ? true : false,
+      },
+    })
+  );
   const { ref, inView } = useInView({
     threshold: 0.5,
   });
@@ -87,7 +89,7 @@ export const UserNotes: React.VFC = () => {
   useEffect(() => {
     if (autoMotto && inView && initLoaded && !changeType && !motto) {
       dispatch(updateMoreUserNote(true));
-      socket.send(JSON.stringify(moreUserNotesObject));
+      socket.send(moreUserNotesObject);
     }
   }, [
     inView,
@@ -180,7 +182,7 @@ export const UserNotes: React.VFC = () => {
                       size="lg"
                       onClick={() => {
                         dispatch(updateMoreUserNote(true));
-                        socket.send(JSON.stringify(moreUserNotesObject));
+                        socket.send(moreUserNotesObject);
                       }}
                     >
                       {motto ? <Loading small /> : "もっと"}

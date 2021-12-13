@@ -2,7 +2,7 @@ import { Avatar, AvatarBadge } from "@chakra-ui/avatar";
 import { Button, IconButton } from "@chakra-ui/button";
 import { useDisclosure } from "@chakra-ui/hooks";
 import Icon from "@chakra-ui/icon";
-import { WarningTwoIcon } from "@chakra-ui/icons";
+import { ExternalLinkIcon, WarningTwoIcon } from "@chakra-ui/icons";
 import { Image } from "@chakra-ui/image";
 import { Box, Heading, HStack, Text, Divider, VStack } from "@chakra-ui/layout";
 import {
@@ -15,6 +15,7 @@ import {
   ModalOverlay,
   ModalContent,
   ModalBody,
+  Badge,
 } from "@chakra-ui/react";
 import { User as mkUser } from "misskey-js/built/entities";
 import { useEffect } from "react";
@@ -112,37 +113,38 @@ export const User: React.VFC = () => {
                       bgGradient={`linear(to-b, ${colors.secondaryColor}, #00000000)`}
                     />
                   )}
-                  {userData.isMuted && (
-                    <Box
+                  {(userData.isMuted || userData.isFollowed) && (
+                    <VStack
                       position="absolute"
                       zIndex="2"
                       top="0"
                       left="0"
-                      m="2"
-                      p="0.5"
-                      fontSize="0.8em"
-                      borderRadius="md"
-                      color={colors.headerTextColor}
-                      bgColor={colors.primaryDarkerColor}
+                      spacing="0.5"
+                      m="1"
                     >
-                      ミュートしています
-                    </Box>
-                  )}
-                  {userData.isFollowed && (
-                    <Box
-                      position="absolute"
-                      zIndex="2"
-                      top="0"
-                      left="0"
-                      m="2"
-                      p="0.5"
-                      fontSize="0.8em"
-                      borderRadius="md"
-                      color={colors.headerTextColor}
-                      bgColor={colors.primaryDarkerColor}
-                    >
-                      フォローされています
-                    </Box>
+                      {userData.isFollowed && (
+                        <Box
+                          p="0.5"
+                          fontSize="0.8em"
+                          borderRadius="md"
+                          color={colors.headerTextColor}
+                          bgColor={colors.primaryDarkerColor}
+                        >
+                          フォローされています
+                        </Box>
+                      )}
+                      {userData.isMuted && (
+                        <Box
+                          p="0.5"
+                          fontSize="0.8em"
+                          borderRadius="md"
+                          color={colors.headerTextColor}
+                          bgColor={colors.primaryDarkerColor}
+                        >
+                          ミュートしています
+                        </Box>
+                      )}
+                    </VStack>
                   )}
                   <HStack
                     position="absolute"
@@ -163,6 +165,22 @@ export const User: React.VFC = () => {
                           bgColor={colors.panelColor}
                           borderColor={colors.alpha400}
                         >
+                          {userData.url && (
+                            <MenuItem
+                              _focus={{ bgColor: colors.alpha200 }}
+                              color="blue.500"
+                              onClick={() => {
+                                window.open(
+                                  userData.url as string,
+                                  "_blank",
+                                  "noreferrer"
+                                );
+                              }}
+                            >
+                              <ExternalLinkIcon />
+                              リモートで表示
+                            </MenuItem>
+                          )}
                           {userData.isFollowed && (
                             <MenuItem
                               _focus={{ bgColor: colors.alpha200 }}
@@ -311,6 +329,8 @@ export const User: React.VFC = () => {
                           color={colors.primaryColor}
                           fontSize="1.2em"
                         />
+                      ) : userData.isBot ? (
+                        <Badge colorScheme="teal">Bot</Badge>
                       ) : (
                         ""
                       )}
@@ -546,24 +566,28 @@ const useGetUserData = (
       },
     })
   );
-  const userFollowersObject = useAPIObject({
-    id: "followers",
-    type: "api",
-    endpoint: "users/followers",
-    data: {
-      limit: 16,
-      userId: userData.id,
-    },
-  }) as APIObject;
-  const userFollowingObject = useAPIObject({
-    id: "following",
-    type: "api",
-    endpoint: "users/following",
-    data: {
-      limit: 16,
-      userId: userData.id,
-    },
-  }) as APIObject;
+  const userFollowersObject = JSON.stringify(
+    useAPIObject({
+      id: "followers",
+      type: "api",
+      endpoint: "users/followers",
+      data: {
+        limit: 16,
+        userId: userData.id,
+      },
+    })
+  );
+  const userFollowingObject = JSON.stringify(
+    useAPIObject({
+      id: "following",
+      type: "api",
+      endpoint: "users/following",
+      data: {
+        limit: 16,
+        userId: userData.id,
+      },
+    })
+  );
   useEffect(() => {
     if (!userData.id) socket.send(userObject);
   }, [socket, userObject, userData.id]);
@@ -575,9 +599,8 @@ const useGetUserData = (
         (userData.ffVisibility === "followers" && !userData.isFollowing)
       )
     ) {
-      if (FR.length === 0) socket.send(JSON.stringify(userFollowersObject));
-      else if (FG.length === 0)
-        socket.send(JSON.stringify(userFollowingObject));
+      if (FR.length === 0) socket.send(userFollowersObject);
+      else if (FG.length === 0) socket.send(userFollowingObject);
     }
   }, [
     socket,
