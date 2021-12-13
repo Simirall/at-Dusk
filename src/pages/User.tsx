@@ -18,7 +18,7 @@ import {
   Badge,
 } from "@chakra-ui/react";
 import { User as mkUser } from "misskey-js/built/entities";
-import { useEffect } from "react";
+import { memo, useEffect } from "react";
 import React, { useState } from "react";
 import {
   IoBan,
@@ -43,7 +43,7 @@ import { useSocket } from "../utils/SocketContext";
 import { useStyleProps } from "../utils/StyleProps";
 import { APIObject, useAPIObject } from "../utils/useAPIObject";
 
-export const User: React.VFC = () => {
+export const User: React.VFC = memo(function Fn() {
   const socket = useSocket();
   const navigate = useNavigate();
   const colors = useColors();
@@ -545,7 +545,7 @@ export const User: React.VFC = () => {
       </Modal>
     </>
   );
-};
+});
 
 const useGetUserData = (
   socket: WebSocket,

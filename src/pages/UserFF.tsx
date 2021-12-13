@@ -4,7 +4,7 @@ import Icon from "@chakra-ui/icon";
 import { Image } from "@chakra-ui/image";
 import { Box, HStack, Center, Text, Link } from "@chakra-ui/layout";
 import { User } from "misskey-js/built/entities";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, memo } from "react";
 import { IoBookmark, IoBookmarkOutline } from "react-icons/io5";
 import { useInView } from "react-intersection-observer";
 import { Link as routerLink } from "react-router-dom";
@@ -29,90 +29,96 @@ import { useSocket } from "../utils/SocketContext";
 // import { useStyleProps } from "../utils/StyleProps";
 import { useAPIObject } from "../utils/useAPIObject";
 
-export const UserFF: React.VFC<{ type: "following" | "followers" }> = ({
-  type,
-}) => {
-  const socket = useSocket();
-  const colors = useColors();
-  // const props = useStyleProps();
-  const userData = useAppSelector(user);
-  const followersData = useAppSelector(followers);
-  const followingsData = useAppSelector(followings);
-  const loaded = useAppSelector(initLoadeds);
-  const FGloaded = loaded.followings;
-  const FRloaded = loaded.followers;
-  const last = useAppSelector(lasts);
-  const lastFG = last.following;
-  const lastFR = last.follower;
-  return (
-    <>
-      <Box maxW="95vw" w="6xl" color={colors.textColor} pb="2">
-        {!(
-          userData.ffVisibility === "private" ||
-          (userData.ffVisibility === "followers" && !userData.isFollowing)
-        ) ? (
-          <>
-            {type === "following" ? (
-              <>
-                {followingsData.length > 0 && (
-                  <>
-                    <HStack wrap="wrap" justify="center" spacing="0">
-                      {followingsData.map((user, i) => (
-                        <Box
-                          key={i}
-                          w="max(50%, 20rem)"
-                          maxW="full"
-                          h="15em"
-                          p="1"
-                        >
-                          <UserContainer user={user.followee} colors={colors} />
-                        </Box>
-                      ))}
-                    </HStack>
-                    {FGloaded && !lastFG && (
-                      <Motto socket={socket} type={type} id={userData.id} />
-                    )}
-                  </>
-                )}
-              </>
-            ) : (
-              <>
-                {followersData.length > 0 && (
-                  <>
-                    <HStack wrap="wrap" justify="center" spacing="0">
-                      {followersData.map((user, i) => (
-                        <Box
-                          key={i}
-                          w="max(50%, 20rem)"
-                          maxW="full"
-                          h="15em"
-                          p="1"
-                        >
-                          <UserContainer user={user.follower} colors={colors} />
-                        </Box>
-                      ))}
-                    </HStack>
-                    {FRloaded && !lastFR && (
-                      <Motto socket={socket} type={type} id={userData.id} />
-                    )}
-                  </>
-                )}
-              </>
-            )}
-          </>
-        ) : (
-          <Center fontSize="1.2em">非公開です</Center>
-        )}
-      </Box>
-    </>
-  );
-};
+export const UserFF: React.VFC<{ type: "following" | "followers" }> = memo(
+  function Fn({ type }) {
+    const socket = useSocket();
+    const colors = useColors();
+    // const props = useStyleProps();
+    const userData = useAppSelector(user);
+    const followersData = useAppSelector(followers);
+    const followingsData = useAppSelector(followings);
+    const loaded = useAppSelector(initLoadeds);
+    const FGloaded = loaded.followings;
+    const FRloaded = loaded.followers;
+    const last = useAppSelector(lasts);
+    const lastFG = last.following;
+    const lastFR = last.follower;
+    return (
+      <>
+        <Box maxW="95vw" w="6xl" color={colors.textColor} pb="2">
+          {!(
+            userData.ffVisibility === "private" ||
+            (userData.ffVisibility === "followers" && !userData.isFollowing)
+          ) ? (
+            <>
+              {type === "following" ? (
+                <>
+                  {followingsData.length > 0 && (
+                    <>
+                      <HStack wrap="wrap" justify="center" spacing="0">
+                        {followingsData.map((user, i) => (
+                          <Box
+                            key={i}
+                            w="max(50%, 20rem)"
+                            maxW="full"
+                            h="15em"
+                            p="1"
+                          >
+                            <UserContainer
+                              user={user.followee}
+                              colors={colors}
+                            />
+                          </Box>
+                        ))}
+                      </HStack>
+                      {FGloaded && !lastFG && (
+                        <Motto socket={socket} type={type} id={userData.id} />
+                      )}
+                    </>
+                  )}
+                </>
+              ) : (
+                <>
+                  {followersData.length > 0 && (
+                    <>
+                      <HStack wrap="wrap" justify="center" spacing="0">
+                        {followersData.map((user, i) => (
+                          <Box
+                            key={i}
+                            w="max(50%, 20rem)"
+                            maxW="full"
+                            h="15em"
+                            p="1"
+                          >
+                            <UserContainer
+                              user={user.follower}
+                              colors={colors}
+                            />
+                          </Box>
+                        ))}
+                      </HStack>
+                      {FRloaded && !lastFR && (
+                        <Motto socket={socket} type={type} id={userData.id} />
+                      )}
+                    </>
+                  )}
+                </>
+              )}
+            </>
+          ) : (
+            <Center fontSize="1.2em">非公開です</Center>
+          )}
+        </Box>
+      </>
+    );
+  }
+);
 
 const Motto: React.VFC<{
   socket: WebSocket;
   type: "followers" | "following";
   id: string;
-}> = ({ socket, type, id }) => {
+}> = memo(function Fn({ socket, type, id }) {
   const motto = useAppSelector(moreFF);
   const autoMotto = useAppSelector(settings).autoMotto;
   const dispatch = useAppDispatch();
@@ -160,12 +166,12 @@ const Motto: React.VFC<{
       )}
     </>
   );
-};
+});
 
 const UserContainer: React.VFC<{
   user: User & UserShow;
   colors: Record<string, string>;
-}> = ({ user, colors }) => {
+}> = memo(function Fn({ user, colors }) {
   const [banner404, setBanner404] = useState(false);
   return (
     <>
@@ -273,4 +279,4 @@ const UserContainer: React.VFC<{
       </Box>
     </>
   );
-};
+});

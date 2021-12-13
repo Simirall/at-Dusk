@@ -2,7 +2,7 @@ import { Alert, AlertIcon } from "@chakra-ui/alert";
 import { Button } from "@chakra-ui/button";
 import { Box, HStack, Center } from "@chakra-ui/layout";
 import { Note as mkNote, User } from "misskey-js/built/entities";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, memo } from "react";
 import { IoPin } from "react-icons/io5";
 import { useInView } from "react-intersection-observer";
 
@@ -28,7 +28,7 @@ import { useSocket } from "../utils/SocketContext";
 import { useStyleProps } from "../utils/StyleProps";
 import { APIObject, useAPIObject } from "../utils/useAPIObject";
 
-export const UserNotes: React.VFC = () => {
+export const UserNotes: React.VFC = memo(function Fn() {
   const socket = useSocket();
   const colors = useColors();
   const props = useStyleProps();
@@ -79,28 +79,13 @@ export const UserNotes: React.VFC = () => {
     if (changeType) {
       socket.send(userNotesObjectJson);
     }
-  }, [
-    socket,
-    userNotesObjectJson,
-    initLoaded,
-    changeType,
-    userNotesObject.body.data.userId,
-  ]);
+  }, [socket, userNotesObjectJson, initLoaded, changeType, userNotesObject.body.data.userId]);
   useEffect(() => {
     if (autoMotto && inView && initLoaded && !changeType && !motto) {
       dispatch(updateMoreUserNote(true));
       socket.send(moreUserNotesObject);
     }
-  }, [
-    inView,
-    autoMotto,
-    initLoaded,
-    changeType,
-    motto,
-    socket,
-    dispatch,
-    moreUserNotesObject,
-  ]);
+  }, [inView, autoMotto, initLoaded, changeType, motto, socket, dispatch, moreUserNotesObject]);
   return (
     <>
       <Box maxW="95vw" w="6xl" color={colors.textColor} pb="2">
@@ -196,12 +181,12 @@ export const UserNotes: React.VFC = () => {
       </Box>
     </>
   );
-};
+});
 
 const PinnedNotes: React.VFC<{
   userData: User & UserShow;
   colors: Record<string, string>;
-}> = ({ userData, colors }) => {
+}> = memo(function Fn({ userData, colors }) {
   return (
     <Box
       p="2"
@@ -236,14 +221,14 @@ const PinnedNotes: React.VFC<{
       ))}
     </Box>
   );
-};
+});
 
 const UserNotesData: React.VFC<{
   userNotesData: Array<mkNote>;
   loaded: boolean;
   change: boolean;
   colors: Record<string, string>;
-}> = ({ userNotesData, loaded, change, colors }) => {
+}> = memo(function Fn({ userNotesData, loaded, change, colors }) {
   return (
     <>
       {userNotesData.length > 0 ? (
@@ -276,4 +261,4 @@ const UserNotesData: React.VFC<{
       )}
     </>
   );
-};
+});
