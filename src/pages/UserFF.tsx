@@ -1,6 +1,7 @@
 import { Avatar, AvatarBadge } from "@chakra-ui/avatar";
 import { Button } from "@chakra-ui/button";
 import Icon from "@chakra-ui/icon";
+import { AddIcon, MinusIcon } from "@chakra-ui/icons";
 import { Image } from "@chakra-ui/image";
 import { Box, HStack, Center, Text, Link } from "@chakra-ui/layout";
 import { User } from "misskey-js/built/entities";
@@ -26,14 +27,13 @@ import {
 } from "../features/userSlice";
 import { useColors } from "../utils/Colors";
 import { useSocket } from "../utils/SocketContext";
-// import { useStyleProps } from "../utils/StyleProps";
-import { useAPIObject } from "../utils/useAPIObject";
+import { useStyleProps } from "../utils/StyleProps";
+import { APIObject, useAPIObject } from "../utils/useAPIObject";
 
 export const UserFF: React.VFC<{ type: "following" | "followers" }> = memo(
   function Fn({ type }) {
     const socket = useSocket();
     const colors = useColors();
-    // const props = useStyleProps();
     const userData = useAppSelector(user);
     const followersData = useAppSelector(followers);
     const followingsData = useAppSelector(followings);
@@ -65,7 +65,9 @@ export const UserFF: React.VFC<{ type: "following" | "followers" }> = memo(
                             p="1"
                           >
                             <UserContainer
+                              socket={socket}
                               user={user.followee}
+                              type={type}
                               colors={colors}
                             />
                           </Box>
@@ -91,7 +93,9 @@ export const UserFF: React.VFC<{ type: "following" | "followers" }> = memo(
                             p="1"
                           >
                             <UserContainer
+                              socket={socket}
                               user={user.follower}
+                              type={type}
                               colors={colors}
                             />
                           </Box>
@@ -169,10 +173,18 @@ const Motto: React.VFC<{
 });
 
 const UserContainer: React.VFC<{
+  socket: WebSocket;
   user: User & UserShow;
+  type: "followers" | "following";
   colors: Record<string, string>;
-}> = memo(function Fn({ user, colors }) {
+}> = memo(function Fn({ socket, user, type, colors }) {
   const [banner404, setBanner404] = useState(false);
+  const props = useStyleProps();
+  const followingObject = useAPIObject({
+    id: "",
+    type: "api",
+    endpoint: "",
+  }) as APIObject;
   return (
     <>
       <Box
@@ -184,6 +196,29 @@ const UserContainer: React.VFC<{
         color={colors.textColor}
       >
         <Box w="full" position="relative">
+          <Button
+            position="absolute"
+            size="sm"
+            m="1"
+            {...(user.isFollowing
+              ? { ...props.PrimaryButton }
+              : { ...props.AlphaButton })}
+            onClick={() => {
+              if (!user.isFollowing) {
+                followingObject.body.id =
+                  type === "followers" ? "FRfollow" : "FGfollow";
+                followingObject.body.endpoint = "following/create";
+              } else {
+                followingObject.body.id =
+                  type === "followers" ? "FRunfollow" : "FGunfollow";
+                followingObject.body.endpoint = "following/delete";
+              }
+              followingObject.body.data.userId = user.id;
+              socket.send(JSON.stringify(followingObject));
+            }}
+          >
+            {user.isFollowing ? <MinusIcon /> : <AddIcon />}
+          </Button>
           {!banner404 && user.bannerUrl ? (
             <Image
               src={user.bannerUrl}

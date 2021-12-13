@@ -154,6 +154,28 @@ export const userSlice = createSlice({
       state.followerLoaded = true;
       if (action.payload.length < 16) state.isLastFollower = true;
     },
+    updateFollowings: (
+      state,
+      action: PayloadAction<{ type: "follow" | "unfollow"; id: string }>
+    ) => {
+      const i = state.followings.findIndex(
+        (user) => user.followeeId === action.payload.id
+      );
+      if (i >= 0)
+        state.followings[i].followee.isFollowing =
+          action.payload.type === "follow" ? true : false;
+    },
+    updateFollowers: (
+      state,
+      action: PayloadAction<{ type: "follow" | "unfollow"; id: string }>
+    ) => {
+      const i = state.followers.findIndex(
+        (user) => user.followerId === action.payload.id
+      );
+      if (i >= 0)
+        state.followers[i].follower.isFollowing =
+          action.payload.type === "follow" ? true : false;
+    },
     updateMoreFF: (state, action: PayloadAction<boolean>) => {
       state.moreFF = action.payload;
     },
@@ -190,6 +212,8 @@ export const {
   userNoteDelete,
   addFollowings,
   addFollowers,
+  updateFollowings,
+  updateFollowers,
   updateMoreFF,
   changeUserNotesType,
   clearUserNotes,

@@ -22,6 +22,8 @@ import {
   addUserNotes,
   changeUserNotesType,
   setUserData,
+  updateFollowers,
+  updateFollowings,
   updateMoreFF,
   updateMoreUserNote,
   updateUserData,
@@ -147,6 +149,18 @@ export const useSocketRecv = (): void => {
         case "api:followers":
           dispatch(addFollowers(data.res));
           dispatch(updateMoreFF(false));
+          break;
+        case "api:FRfollow":
+          dispatch(updateFollowers({ type: "follow", id: data.res.id }));
+          break;
+        case "api:FRunfollow":
+          dispatch(updateFollowers({ type: "unfollow", id: data.res.id }));
+          break;
+        case "api:FGfollow":
+          dispatch(updateFollowings({ type: "follow", id: data.res.id }));
+          break;
+        case "api:FGunfollow":
+          dispatch(updateFollowings({ type: "unfollow", id: data.res.id }));
           break;
       }
     };
