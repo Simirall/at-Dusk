@@ -2,7 +2,11 @@ import { Note } from "misskey-js/built/entities";
 import { useEffect } from "react";
 
 import { useAppDispatch } from "../app/hooks";
-import { setNoteDetails } from "../features/noteDetailsSlice";
+import {
+  addNoteChildren,
+  addNoteConversation,
+  setNoteDetails,
+} from "../features/noteDetailsSlice";
 import {
   addUpper,
   addLower,
@@ -93,6 +97,12 @@ export const useSocketRecv = (): void => {
             dispatch(addPoll(data.res)),
             sendSubNote(socket, data.res),
           ]);
+          break;
+        case "api:noteConversation":
+          dispatch(addNoteConversation(data.res.reverse()));
+          break;
+        case "api:noteChildren":
+          dispatch(addNoteChildren(data.res));
           break;
         case "api:userData":
           Promise.all([
