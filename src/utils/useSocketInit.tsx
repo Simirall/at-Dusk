@@ -2,6 +2,7 @@ import { useEffect } from "react";
 
 import { useAppSelector } from "../app/hooks";
 import { allNotes } from "../features/notesSlice";
+import { allNotifications } from "../features/notificationsSlice";
 import { settings } from "../features/settingsSlice";
 
 import { useSocket, useSocketOpen } from "./SocketContext";
@@ -12,6 +13,7 @@ export const useSocketInit = (): void => {
   const socket = useSocket();
   const { updateSocketOpen } = useSocketOpen();
   const notes = useAppSelector(allNotes);
+  const notifications = useAppSelector(allNotifications);
   const initNotesObject = useAPIObject({
     id: "initNotes",
     type: "api",
@@ -28,6 +30,14 @@ export const useSocketInit = (): void => {
       limit: 15,
     },
   });
+  const initNotificationsObject = useAPIObject({
+    id: "initNotifications",
+    type: "api",
+    endpoint: "i/notifications",
+    data: {
+      limit: 15,
+    },
+  });
   const timelineObject = useAPIObject({
     id: "timeline",
     type: "connect",
@@ -39,6 +49,16 @@ export const useSocketInit = (): void => {
       updateSocketOpen(true);
       socket.send(JSON.stringify(timelineObject));
       if (notes.length === 0) socket.send(JSON.stringify(initNotesObject));
+      if (notifications.length === 0)
+        socket.send(JSON.stringify(initNotificationsObject));
     };
-  });
+  }, [
+    initNotesObject,
+    initNotificationsObject,
+    notes.length,
+    notifications.length,
+    socket,
+    timelineObject,
+    updateSocketOpen,
+  ]);
 };

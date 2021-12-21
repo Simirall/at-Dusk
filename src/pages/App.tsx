@@ -13,6 +13,7 @@ import { SocketManager } from "../utils/SocketManager";
 import { Home } from "./Home";
 import { Login } from "./Login";
 import { Notes } from "./Notes";
+import { Notifications } from "./Notifications";
 import { Settings } from "./Settings";
 import { User } from "./User";
 import { UserFF } from "./UserFF";
@@ -72,6 +73,10 @@ export const App: React.VFC = () => {
                         <Route path="/notes">
                           <Route path=":id" element={<Notes />} />
                         </Route>
+                        <Route
+                          path="/notifications"
+                          element={<Notifications />}
+                        />
                         <Route path="/settings" element={<Settings />} />
                         <Route path="/" element={<Home />} />
                       </Routes>

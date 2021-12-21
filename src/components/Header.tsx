@@ -1,7 +1,8 @@
 import { IconButton } from "@chakra-ui/button";
 import { EditIcon, SettingsIcon } from "@chakra-ui/icons";
-import { Flex, Text, Avatar } from "@chakra-ui/react";
+import { Flex, Text, Avatar, HStack } from "@chakra-ui/react";
 import React from "react";
+import { IoNotifications } from "react-icons/io5";
 import { Link as RouterLink } from "react-router-dom";
 
 import { useAppSelector } from "../app/hooks";
@@ -28,15 +29,45 @@ export const Header: React.VFC = () => {
         zIndex="5"
         maxW="6xl"
       >
-        <Text
-          as={RouterLink}
-          to="/"
-          fontSize="xl"
-          color={colors.headerTextColor}
-        >
-          AT DUSK
-        </Text>
-        <Flex alignItems="center">
+        <HStack>
+          <Text
+            as={RouterLink}
+            to="/"
+            fontSize="xl"
+            color={colors.headerTextColor}
+          >
+            AT DUSK
+          </Text>
+          <ColorModeSwitcher
+            color={colors.headerTextColor}
+            _hover={{
+              bgColor: colors.alpha50,
+            }}
+          />
+        </HStack>
+        <HStack alignItems="center">
+          <IconButton
+            aria-label="settings"
+            icon={<SettingsIcon />}
+            as={RouterLink}
+            to={"/settings"}
+            variant="ghost"
+            color={colors.headerTextColor}
+            _hover={{
+              bgColor: colors.alpha50,
+            }}
+          />
+          <IconButton
+            aria-label="notifications"
+            icon={<IoNotifications fontSize="1.2em" />}
+            as={RouterLink}
+            to={"/notifications"}
+            variant="ghost"
+            color={colors.headerTextColor}
+            _hover={{
+              bgColor: colors.alpha50,
+            }}
+          />
           <Text as={RouterLink} to={`/user/@${user.username}`} color="blue.200">
             <Avatar
               key={user.id}
@@ -54,32 +85,13 @@ export const Header: React.VFC = () => {
             />
           </Text>
           <IconButton
-            aria-label="settings"
-            icon={<SettingsIcon />}
-            as={RouterLink}
-            to={"/settings"}
-            marginLeft="2"
-            variant="ghost"
-            color={colors.headerTextColor}
-            _hover={{
-              bgColor: colors.alpha50,
-            }}
-          />
-          <ColorModeSwitcher
-            color={colors.headerTextColor}
-            _hover={{
-              bgColor: colors.alpha50,
-            }}
-          />
-          <IconButton
             aria-label="new note"
-            marginLeft="2"
             icon={<EditIcon />}
             bgColor={colors.panelColor}
             shadow="md"
             onClick={onPostModalOpen}
           />
-        </Flex>
+        </HStack>
       </Flex>
     </>
   );
