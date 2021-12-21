@@ -1,12 +1,13 @@
 import { IconButton } from "@chakra-ui/button";
 import { EditIcon, SettingsIcon } from "@chakra-ui/icons";
-import { Flex, Text, Avatar, HStack } from "@chakra-ui/react";
+import { Box, Flex, Text, Avatar, HStack } from "@chakra-ui/react";
 import React from "react";
 import { IoNotifications } from "react-icons/io5";
 import { Link as RouterLink } from "react-router-dom";
 
 import { useAppSelector } from "../app/hooks";
 import { ColorModeSwitcher } from "../components/ColorModeSwitcher";
+import { readNotification } from "../features/notificationsSlice";
 import { settings } from "../features/settingsSlice";
 import { useColors } from "../utils/Colors";
 import { useModalsContext } from "../utils/ModalsContext";
@@ -14,6 +15,7 @@ import { useModalsContext } from "../utils/ModalsContext";
 export const Header: React.VFC = () => {
   const user = useAppSelector(settings).userInfo.userData;
   const colors = useColors();
+  const notify = useAppSelector(readNotification);
   const { onPostModalOpen } = useModalsContext();
 
   return (
@@ -57,17 +59,47 @@ export const Header: React.VFC = () => {
               bgColor: colors.alpha50,
             }}
           />
-          <IconButton
-            aria-label="notifications"
-            icon={<IoNotifications fontSize="1.2em" />}
-            as={RouterLink}
-            to={"/notifications"}
-            variant="ghost"
-            color={colors.headerTextColor}
-            _hover={{
-              bgColor: colors.alpha50,
-            }}
-          />
+          <Box pos="relative">
+            <IconButton
+              aria-label="notifications"
+              icon={<IoNotifications fontSize="1.2em" />}
+              as={RouterLink}
+              to={"/notifications"}
+              variant="ghost"
+              color={colors.headerTextColor}
+              _hover={{
+                bgColor: colors.alpha50,
+              }}
+            />
+            {!notify && (
+              <>
+                <Box
+                  pos="absolute"
+                  zIndex="2"
+                  top="0"
+                  right="0"
+                  m="2"
+                  p="1"
+                  bgColor={colors.secondaryColor}
+                  borderRadius="full"
+                  sx={{
+                    "@keyframes indicate": {
+                      "0%": {
+                        transform: "scale(1)",
+                      },
+                      "50%": {
+                        transform: "scale(1.2)",
+                      },
+                      "100%": {
+                        transform: "scale(1)",
+                      },
+                    },
+                  }}
+                  animation="2s infinite indicate ease"
+                />
+              </>
+            )}
+          </Box>
           <Text as={RouterLink} to={`/user/@${user.username}`} color="blue.200">
             <Avatar
               key={user.id}

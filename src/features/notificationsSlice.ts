@@ -7,12 +7,14 @@ export interface NotificationsState {
   notifications: Array<Notification>;
   moreNotification: boolean;
   isLastNotification: boolean;
+  readNotification: boolean;
 }
 
 const initialState: NotificationsState = {
   notifications: [],
   moreNotification: true,
   isLastNotification: false,
+  readNotification: true,
 };
 export const notificationsSlice = createSlice({
   name: "notification",
@@ -33,6 +35,9 @@ export const notificationsSlice = createSlice({
     updateMoreNotification: (state, action: PayloadAction<boolean>) => {
       state.moreNotification = action.payload;
     },
+    updateReadNotification: (state, action: PayloadAction<boolean>) => {
+      state.readNotification = action.payload;
+    },
   },
 });
 
@@ -41,6 +46,7 @@ export const {
   addNotifications,
   removeNotification,
   updateMoreNotification,
+  updateReadNotification,
 } = notificationsSlice.actions;
 
 export const allNotifications = (state: RootState): Array<Notification> =>
@@ -55,5 +61,7 @@ export const moreNotification = (state: RootState): boolean =>
   state.notifications.moreNotification;
 export const isLastNotification = (state: RootState): boolean =>
   state.notifications.isLastNotification;
+export const readNotification = (state: RootState): boolean =>
+  state.notifications.readNotification;
 
 export default notificationsSlice.reducer;

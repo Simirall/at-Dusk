@@ -43,11 +43,17 @@ export const useSocketInit = (): void => {
     type: "connect",
     channel: timeline,
   });
+  const notificationObject = useAPIObject({
+    id: "notification",
+    type: "connect",
+    channel: "main",
+  });
   useEffect(() => {
     socket.onopen = () => {
       console.log("SOCKET OPEND");
       updateSocketOpen(true);
       socket.send(JSON.stringify(timelineObject));
+      socket.send(JSON.stringify(notificationObject));
       if (notes.length === 0) socket.send(JSON.stringify(initNotesObject));
       if (notifications.length === 0)
         socket.send(JSON.stringify(initNotificationsObject));
@@ -59,6 +65,7 @@ export const useSocketInit = (): void => {
     notifications.length,
     socket,
     timelineObject,
+    notificationObject,
     updateSocketOpen,
   ]);
 };
