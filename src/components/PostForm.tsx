@@ -610,6 +610,7 @@ export const PostForm: React.VFC<{ isModal?: boolean }> = ({ isModal }) => {
           icon={<IoStatsChart />}
           size="sm"
           color={colors.secondaryColor}
+          transform="rotate(90deg)"
           {...styleProps.AlphaButton}
           onClick={() => {
             updatePoll(!poll);
