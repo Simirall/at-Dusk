@@ -39,6 +39,7 @@ import {
 } from "@chakra-ui/react";
 import { User } from "misskey-js/built/entities";
 import React, { useEffect, useState } from "react";
+import { memo } from "react";
 import { useForm } from "react-hook-form";
 import {
   IoAddCircle,
@@ -62,7 +63,9 @@ import { EmojiForm } from "./EmojiForm";
 import { Note } from "./Note";
 import { ParseMFM } from "./ParseMFM";
 
-export const PostForm: React.VFC<{ isModal?: boolean }> = ({ isModal }) => {
+export const PostForm: React.VFC<{ isModal?: boolean }> = memo(function Fn({
+  isModal,
+}) {
   const socket = useSocket();
   const settingsValue = useAppSelector(settings);
   const userAddDisclosure = useDisclosure();
@@ -757,4 +760,4 @@ export const PostForm: React.VFC<{ isModal?: boolean }> = ({ isModal }) => {
       </Modal>
     </>
   );
-};
+});

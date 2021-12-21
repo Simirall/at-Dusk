@@ -2,6 +2,7 @@ import { IconButton } from "@chakra-ui/button";
 import { EditIcon, SettingsIcon } from "@chakra-ui/icons";
 import { Box, Flex, Text, Avatar, HStack } from "@chakra-ui/react";
 import React from "react";
+import { memo } from "react";
 import { IoNotifications } from "react-icons/io5";
 import { Link as RouterLink } from "react-router-dom";
 
@@ -12,7 +13,7 @@ import { settings } from "../features/settingsSlice";
 import { useColors } from "../utils/Colors";
 import { useModalsContext } from "../utils/ModalsContext";
 
-export const Header: React.VFC = () => {
+export const Header: React.VFC = memo(function Fn() {
   const user = useAppSelector(settings).userInfo.userData;
   const colors = useColors();
   const notify = useAppSelector(readNotification);
@@ -127,4 +128,4 @@ export const Header: React.VFC = () => {
       </Flex>
     </>
   );
-};
+});

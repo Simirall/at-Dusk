@@ -7,13 +7,14 @@ import {
   ModalCloseButton,
 } from "@chakra-ui/react";
 import React from "react";
+import { memo } from "react";
 
 import { useColors } from "../utils/Colors";
 import { useModalsContext } from "../utils/ModalsContext";
 
 import { PostForm } from "./PostForm";
 
-export const PostModal: React.VFC = () => {
+export const PostModal: React.VFC = memo(function Fn() {
   const colors = useColors();
   const { isPostModalOpen, onPostModalClose } = useModalsContext();
 
@@ -32,4 +33,4 @@ export const PostModal: React.VFC = () => {
       </Modal>
     </>
   );
-};
+});
