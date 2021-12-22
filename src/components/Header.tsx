@@ -1,18 +1,22 @@
 import { IconButton } from "@chakra-ui/button";
 import { EditIcon, SettingsIcon } from "@chakra-ui/icons";
-import { Flex, Text, Avatar } from "@chakra-ui/react";
+import { Box, Flex, Text, Avatar, HStack } from "@chakra-ui/react";
 import React from "react";
+import { memo } from "react";
+import { IoNotifications } from "react-icons/io5";
 import { Link as RouterLink } from "react-router-dom";
 
 import { useAppSelector } from "../app/hooks";
 import { ColorModeSwitcher } from "../components/ColorModeSwitcher";
+import { readNotification } from "../features/notificationsSlice";
 import { settings } from "../features/settingsSlice";
 import { useColors } from "../utils/Colors";
 import { useModalsContext } from "../utils/ModalsContext";
 
-export const Header: React.VFC = () => {
+export const Header: React.VFC = memo(function Fn() {
   const user = useAppSelector(settings).userInfo.userData;
   const colors = useColors();
+  const notify = useAppSelector(readNotification);
   const { onPostModalOpen } = useModalsContext();
 
   return (
@@ -28,15 +32,75 @@ export const Header: React.VFC = () => {
         zIndex="5"
         maxW="6xl"
       >
-        <Text
-          as={RouterLink}
-          to="/"
-          fontSize="xl"
-          color={colors.headerTextColor}
-        >
-          AT DUSK
-        </Text>
-        <Flex alignItems="center">
+        <HStack>
+          <Text
+            as={RouterLink}
+            to="/"
+            fontSize="xl"
+            color={colors.headerTextColor}
+          >
+            AT DUSK
+          </Text>
+          <ColorModeSwitcher
+            color={colors.headerTextColor}
+            _hover={{
+              bgColor: colors.alpha50,
+            }}
+          />
+        </HStack>
+        <HStack alignItems="center">
+          <IconButton
+            aria-label="settings"
+            icon={<SettingsIcon />}
+            as={RouterLink}
+            to={"/settings"}
+            variant="ghost"
+            color={colors.headerTextColor}
+            _hover={{
+              bgColor: colors.alpha50,
+            }}
+          />
+          <Box pos="relative">
+            <IconButton
+              aria-label="notifications"
+              icon={<IoNotifications fontSize="1.2em" />}
+              as={RouterLink}
+              to={"/notifications"}
+              variant="ghost"
+              color={colors.headerTextColor}
+              _hover={{
+                bgColor: colors.alpha50,
+              }}
+            />
+            {!notify && (
+              <>
+                <Box
+                  pos="absolute"
+                  zIndex="2"
+                  top="0"
+                  right="0"
+                  m="2"
+                  p="1"
+                  bgColor={colors.secondaryColor}
+                  borderRadius="full"
+                  sx={{
+                    "@keyframes indicate": {
+                      "0%": {
+                        transform: "scale(1)",
+                      },
+                      "50%": {
+                        transform: "scale(1.2)",
+                      },
+                      "100%": {
+                        transform: "scale(1)",
+                      },
+                    },
+                  }}
+                  animation="2s infinite indicate ease"
+                />
+              </>
+            )}
+          </Box>
           <Text as={RouterLink} to={`/user/@${user.username}`} color="blue.200">
             <Avatar
               key={user.id}
@@ -54,33 +118,14 @@ export const Header: React.VFC = () => {
             />
           </Text>
           <IconButton
-            aria-label="settings"
-            icon={<SettingsIcon />}
-            as={RouterLink}
-            to={"/settings"}
-            marginLeft="2"
-            variant="ghost"
-            color={colors.headerTextColor}
-            _hover={{
-              bgColor: colors.alpha50,
-            }}
-          />
-          <ColorModeSwitcher
-            color={colors.headerTextColor}
-            _hover={{
-              bgColor: colors.alpha50,
-            }}
-          />
-          <IconButton
             aria-label="new note"
-            marginLeft="2"
             icon={<EditIcon />}
             bgColor={colors.panelColor}
             shadow="md"
             onClick={onPostModalOpen}
           />
-        </Flex>
+        </HStack>
       </Flex>
     </>
   );
-};
+});

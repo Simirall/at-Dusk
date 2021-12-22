@@ -262,15 +262,15 @@ export const oldests = (
 ): { userNote: string; follower: string; following: string } => ({
   userNote:
     state.user.notes.length > 0
-      ? state.user.notes[state.user.notes.length - 1]?.id
+      ? state.user.notes[state.user.notes.length - 1].id
       : "",
   follower:
     state.user.followers.length > 0
-      ? state.user.followers[state.user.followers.length - 1]?.id
+      ? state.user.followers[state.user.followers.length - 1].id
       : "",
   following:
     state.user.followings.length > 0
-      ? state.user.followings[state.user.followings.length - 1]?.id
+      ? state.user.followings[state.user.followings.length - 1].id
       : "",
 });
 export const lasts = (

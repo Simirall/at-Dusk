@@ -2,6 +2,7 @@ import { Button } from "@chakra-ui/button";
 import { Box, Center } from "@chakra-ui/react";
 import { Note as NoteType } from "misskey-js/built/entities";
 import React, { useEffect, useRef } from "react";
+import { memo } from "react";
 import { useInView } from "react-intersection-observer";
 
 import { useAppSelector, useAppDispatch } from "../app/hooks";
@@ -20,7 +21,7 @@ import { useAPIObject } from "../utils/useAPIObject";
 import { Loading } from "./Loading";
 import { Note } from "./Note";
 
-export const TimeLine: React.VFC = () => {
+export const TimeLine: React.VFC = memo(function Fn() {
   const socket = useSocket();
   const dispatch = useAppDispatch();
   const notes = useAppSelector(allNotes);
@@ -87,4 +88,4 @@ export const TimeLine: React.VFC = () => {
       )}
     </Box>
   );
-};
+});

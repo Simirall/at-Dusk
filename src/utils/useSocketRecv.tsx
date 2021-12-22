@@ -1,5 +1,6 @@
-import { Note } from "misskey-js/built/entities";
+import { Note, Notification } from "misskey-js/built/entities";
 import { useEffect } from "react";
+import { useMatch } from "react-router-dom";
 
 import { useAppDispatch } from "../app/hooks";
 import {
@@ -13,6 +14,12 @@ import {
   updateMoreNote,
   noteDelete,
 } from "../features/notesSlice";
+import {
+  addNotification,
+  addNotifications,
+  updateMoreNotification,
+  updateReadNotification,
+} from "../features/notificationsSlice";
 import { addPoll, addPolls, pollVote } from "../features/pollSlice";
 import {
   addReaction,
@@ -39,6 +46,7 @@ import { useSocket } from "./SocketContext";
 export const useSocketRecv = (): void => {
   const socket = useSocket();
   const dispatch = useAppDispatch();
+  const isNotificationPage = useMatch("/notifications");
   useEffect(() => {
     socket.onmessage = (event) => {
       const res = JSON.parse(event.data);
@@ -54,6 +62,29 @@ export const useSocketRecv = (): void => {
                 sendSubNote(socket, data.body),
               ]);
               break;
+            case "notification":
+              switch (data.type) {
+                case "notification":
+                  dispatch(addNotification(data.body));
+                  if (
+                    data.body.type === "mention" ||
+                    data.body.type === "quote" ||
+                    data.body.type === "reply"
+                  ) {
+                    dispatch(addReaction(data.body.note));
+                    dispatch(addPoll(data.body.note));
+                    sendSubNote(socket, data.body.note);
+                  }
+                  break;
+                case "unreadNotification":
+                  if (!isNotificationPage) {
+                    dispatch(updateReadNotification(false));
+                  }
+                  break;
+                case "readAllNotifications":
+                  dispatch(updateReadNotification(true));
+                  break;
+              }
           }
           break;
         case "noteUpdated":
@@ -80,6 +111,44 @@ export const useSocketRecv = (): void => {
             dispatch(addPolls(data.res)),
             sendSubNotes(socket, data.res),
           ]);
+          break;
+        case "api:initNotifications":
+          (async () => {
+            await dispatch(addNotifications(data.res));
+            await Promise.all(
+              data.res.map(async (notification: Notification) => {
+                if (
+                  notification.type === "mention" ||
+                  notification.type === "quote" ||
+                  notification.type === "reply"
+                ) {
+                  dispatch(addReaction(notification.note));
+                  dispatch(addPoll(notification.note));
+                  sendSubNote(socket, notification.note);
+                }
+              })
+            );
+            dispatch(updateMoreNotification(false));
+          })();
+          break;
+        case "api:moreNotification":
+          (async () => {
+            await dispatch(addNotifications(data.res));
+            await Promise.all(
+              data.res.map(async (notification: Notification) => {
+                if (
+                  notification.type === "mention" ||
+                  notification.type === "quote" ||
+                  notification.type === "reply"
+                ) {
+                  dispatch(addReaction(notification.note));
+                  dispatch(addPoll(notification.note));
+                  sendSubNote(socket, notification.note);
+                }
+              })
+            );
+            dispatch(updateMoreNotification(false));
+          })();
           break;
         case "api:moreNotes":
           Promise.all([

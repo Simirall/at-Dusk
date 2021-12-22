@@ -14,8 +14,10 @@ import { PrismLight as SyntaxHighlighter } from "react-syntax-highlighter";
 import nord from "react-syntax-highlighter/dist/esm/styles/prism/nord";
 import solarizedLight from "react-syntax-highlighter/dist/esm/styles/prism/solarizedlight";
 import { parse } from "twemoji-parser";
+
 import "../style/mfm.scss";
 import "../style/mfm_font.scss"; //will be able to opt-out
+import { useColors } from "../utils/Colors";
 
 export const ParseMFM: React.VFC<{
   text: string | null;
@@ -23,7 +25,7 @@ export const ParseMFM: React.VFC<{
     name: string;
     url: string;
   }[];
-  type: "full" | "plain";
+  type: "full" | "plain" | "plainX";
 }> = memo(function fun({ text, emojis, type }) {
   const v: Array<React.ReactNode> = [];
   if (text) {
@@ -46,6 +48,15 @@ export const ParseMFM: React.VFC<{
           );
         });
         break;
+      case "plainX":
+        mfm.parse(text).forEach((element, i) => {
+          v.push(
+            <React.Fragment key={i}>
+              <JudgePlainX element={element} emojis={emojis} />
+            </React.Fragment>
+          );
+        });
+        break;
     }
   }
   return <>{v}</>;
@@ -60,7 +71,7 @@ const Judge: React.VFC<{
 }> = ({ element, emojis }) => {
   const c: Array<React.ReactNode> = [];
   const codeColor = useColorModeValue(solarizedLight, nord);
-  const secondaryColor = useColorModeValue("light.secondary", "dark.secondary");
+  const { secondaryColor } = useColors();
   switch (element.type) {
     case "text":
       return (
@@ -333,13 +344,201 @@ const Judge: React.VFC<{
   }
 };
 
+const JudgePlainX: React.VFC<{
+  element: MfmNode;
+  emojis: {
+    name: string;
+    url: string;
+  }[];
+}> = ({ element, emojis }) => {
+  const c: Array<React.ReactNode> = [];
+  switch (element.type) {
+    case "text":
+      return (
+        <Box display="inline" verticalAlign="middle">
+          {element.props.text}
+        </Box>
+      );
+    case "fn":
+      element.children.forEach((child, i) => {
+        c.push(
+          <React.Fragment key={i}>
+            <JudgePlainX element={child} emojis={emojis} />
+          </React.Fragment>
+        );
+      });
+      return (
+        <Box display="inline" verticalAlign="middle">
+          {c}
+        </Box>
+      );
+    case "link":
+      element.children.forEach((child, i) => {
+        c.push(
+          <React.Fragment key={i}>
+            <JudgePlainX element={child} emojis={emojis} />
+          </React.Fragment>
+        );
+      });
+      return (
+        <Box display="inline" verticalAlign="middle">
+          {c}
+        </Box>
+      );
+    case "url":
+      return (
+        <Box display="inline" verticalAlign="middle">
+          {decodeURI(element.props.url)}
+        </Box>
+      );
+    case "hashtag":
+      return (
+        <Box display="inline" verticalAlign="middle">
+          {`#${element.props.hashtag}`}
+        </Box>
+      );
+    case "mention":
+      return (
+        <Box display="inline" verticalAlign="middle">
+          {`@${element.props.username}`}
+          {element.props.host && <>{`@${element.props.host}`}</>}
+        </Box>
+      );
+    case "mathInline":
+      return <span>{element.props.formula}</span>;
+    case "inlineCode":
+      return <Code>{element.props.code}</Code>;
+    case "strike":
+      element.children.forEach((child, i) => {
+        c.push(
+          <React.Fragment key={i}>
+            <JudgePlainX element={child} emojis={emojis} />
+          </React.Fragment>
+        );
+      });
+      return <s>{c}</s>;
+    case "italic":
+      element.children.forEach((child, i) => {
+        c.push(
+          <React.Fragment key={i}>
+            <JudgePlainX element={child} emojis={emojis} />
+          </React.Fragment>
+        );
+      });
+      return (
+        <Box display="inline" fontStyle="oblique" verticalAlign="middle">
+          {c}
+        </Box>
+      );
+    case "small":
+      element.children.forEach((child, i) => {
+        c.push(
+          <React.Fragment key={i}>
+            <JudgePlainX element={child} emojis={emojis} />
+          </React.Fragment>
+        );
+      });
+      return (
+        <Box
+          display="inline"
+          opacity="0.7"
+          fontSize="smaller"
+          verticalAlign="middle"
+        >
+          {c}
+        </Box>
+      );
+    case "bold":
+      element.children.forEach((child, i) => {
+        c.push(
+          <React.Fragment key={i}>
+            <JudgePlainX element={child} emojis={emojis} />
+          </React.Fragment>
+        );
+      });
+      return (
+        <Box fontWeight="bold" display="inline" verticalAlign="middle">
+          {c}
+        </Box>
+      );
+    case "unicodeEmoji": {
+      const twemoji = parse(element.props.emoji);
+      return (
+        <Image
+          src={twemoji[0].url}
+          alt={twemoji[0].text}
+          decoding="async"
+          display="inline"
+          h="1em"
+          verticalAlign="middle"
+        />
+      );
+    }
+    case "emojiCode":
+      return emojis &&
+        emojis.length > 0 &&
+        emojis.some((emoji) => emoji.name === element.props.name) ? (
+        <Image
+          src={emojis.find(({ name }) => name === element.props.name)?.url}
+          alt={element.props.name}
+          loading="lazy"
+          display="inline"
+          h="1.2em"
+          verticalAlign="middle"
+        />
+      ) : (
+        <>{`:${element.props.name}:`}</>
+      );
+    case "quote":
+      element.children.forEach((child, i) => {
+        c.push(
+          <React.Fragment key={i}>
+            <JudgePlainX element={child} emojis={emojis} />
+          </React.Fragment>
+        );
+      });
+      return (
+        <Box color="gray.400" display="inline">
+          {c}
+        </Box>
+      );
+    case "search":
+      return (
+        <Box display="inline" verticalAlign="middle">
+          {element.props.query + " 検索"}
+        </Box>
+      );
+    case "blockCode":
+      return (
+        <Box display="inline" verticalAlign="middle">
+          {element.props.code}
+        </Box>
+      );
+    case "mathBlock":
+      return <Box display="inline">{element.props.formula}</Box>;
+    case "center":
+      element.children.forEach((child, i) => {
+        c.push(
+          <React.Fragment key={i}>
+            <JudgePlainX element={child} emojis={emojis} />
+          </React.Fragment>
+        );
+      });
+      return (
+        <Box display="inline" verticalAlign="middle">
+          {c}
+        </Box>
+      );
+  }
+};
+
 const JudgePlain: React.VFC<{
   element: MfmPlainNode;
   emojis: {
     name: string;
     url: string;
   }[];
-}> = ({ element, emojis }) => {
+}> = memo(function Fn({ element, emojis }) {
   switch (element.type) {
     case "text":
       return (
@@ -376,4 +575,4 @@ const JudgePlain: React.VFC<{
         <>{`:${element.props.name}:`}</>
       );
   }
-};
+});

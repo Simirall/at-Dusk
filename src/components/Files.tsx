@@ -11,6 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { DriveFile } from "misskey-js/built/entities";
 import React, { useState } from "react";
+import { memo } from "react";
 import { Blurhash } from "react-blurhash";
 import { IoDownload, IoEyeOff, IoMusicalNote } from "react-icons/io5";
 import { Carousel } from "react-responsive-carousel";
@@ -21,7 +22,7 @@ import { useColors } from "../utils/Colors";
 export const Files: React.VFC<{
   files: Array<DriveFile>;
   colors: Record<string, string>;
-}> = ({ files, colors }) => {
+}> = memo(function Fn({ files, colors }) {
   const images = files.filter((file) => file.type.match(/image.*|video.*/));
   const audios = files.filter((file) => file.type.startsWith("audio"));
   const others = files.filter((file) =>
@@ -91,14 +92,14 @@ export const Files: React.VFC<{
       )}
     </Box>
   );
-};
+});
 
 const ImageFile: React.VFC<{
   image: DriveFile;
   images: Array<DriveFile>;
   index: number;
   size: string;
-}> = ({ image, images, index, size }) => {
+}> = memo(function Fn({ image, images, index, size }) {
   const [nsfw, toggleNSFW] = useState(image.isSensitive);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { panelColor } = useColors();
@@ -245,9 +246,9 @@ const ImageFile: React.VFC<{
       </Box>
     </Box>
   );
-};
+});
 
-const AudioFile: React.VFC<{ audio: DriveFile }> = ({ audio }) => {
+const AudioFile: React.VFC<{ audio: DriveFile }> = memo(function Fn({ audio }) {
   const [nsfw, toggleNSFW] = useState(audio.isSensitive);
   return (
     <Box m="1">
@@ -276,12 +277,12 @@ const AudioFile: React.VFC<{ audio: DriveFile }> = ({ audio }) => {
       )}
     </Box>
   );
-};
+});
 
 const OtherFile: React.VFC<{
   file: DriveFile;
   colors: Record<string, string>;
-}> = ({ file, colors }) => {
+}> = memo(function Fn({ file, colors }) {
   return (
     <Flex
       as={Link}
@@ -300,4 +301,4 @@ const OtherFile: React.VFC<{
       <Text marginInline="1">{file.name}</Text>
     </Flex>
   );
-};
+});

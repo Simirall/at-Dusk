@@ -1,8 +1,11 @@
 import { Box } from "@chakra-ui/layout";
 import { Spinner } from "@chakra-ui/spinner";
 import React from "react";
+import { memo } from "react";
 
-export const Loading: React.VFC<{ small?: boolean }> = ({ small }) => {
+export const Loading: React.VFC<{ small?: boolean }> = memo(function Fn({
+  small,
+}) {
   return (
     <>
       <Box m="4">
@@ -14,4 +17,4 @@ export const Loading: React.VFC<{ small?: boolean }> = ({ small }) => {
       </Box>
     </>
   );
-};
+});
