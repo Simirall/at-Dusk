@@ -51,196 +51,200 @@ export const useSocketRecv = (): void => {
     socket.onmessage = (event) => {
       const res = JSON.parse(event.data);
       const data = res.body;
-      switch (res.type) {
-        case "channel":
-          switch (data.id) {
-            case "timeline":
-              Promise.all([
-                dispatch(addUpper(data.body)),
-                dispatch(addReaction(data.body)),
-                dispatch(addPoll(data.body)),
-                sendSubNote(socket, data.body),
-              ]);
-              break;
-            case "notification":
-              switch (data.type) {
-                case "notification":
-                  dispatch(addNotification(data.body));
+      if (!data.error) {
+        switch (res.type) {
+          case "channel":
+            switch (data.id) {
+              case "timeline":
+                Promise.all([
+                  dispatch(addUpper(data.body)),
+                  dispatch(addReaction(data.body)),
+                  dispatch(addPoll(data.body)),
+                  sendSubNote(socket, data.body),
+                ]);
+                break;
+              case "notification":
+                switch (data.type) {
+                  case "notification":
+                    dispatch(addNotification(data.body));
+                    if (
+                      data.body.type === "mention" ||
+                      data.body.type === "quote" ||
+                      data.body.type === "reply"
+                    ) {
+                      dispatch(addReaction(data.body.note));
+                      dispatch(addPoll(data.body.note));
+                      sendSubNote(socket, data.body.note);
+                    }
+                    break;
+                  case "unreadNotification":
+                    if (!isNotificationPage) {
+                      dispatch(updateReadNotification(false));
+                    }
+                    break;
+                  case "readAllNotifications":
+                    dispatch(updateReadNotification(true));
+                    break;
+                }
+            }
+            break;
+          case "noteUpdated":
+            switch (data.type) {
+              case "reacted":
+                dispatch(reacted(data));
+                break;
+              case "unreacted":
+                dispatch(unreacted(data));
+                break;
+              case "deleted":
+                dispatch(noteDelete(data));
+                dispatch(userNoteDelete(data));
+                break;
+              case "pollVoted":
+                dispatch(pollVote(data));
+                break;
+            }
+            break;
+          case "api:initNotes":
+            Promise.all([
+              dispatch(addLower(data.res)),
+              dispatch(addReactions(data.res)),
+              dispatch(addPolls(data.res)),
+              sendSubNotes(socket, data.res),
+            ]);
+            break;
+          case "api:initNotifications":
+            (async () => {
+              await dispatch(addNotifications(data.res));
+              await Promise.all(
+                data.res.map(async (notification: Notification) => {
                   if (
-                    data.body.type === "mention" ||
-                    data.body.type === "quote" ||
-                    data.body.type === "reply"
+                    notification.type === "mention" ||
+                    notification.type === "quote" ||
+                    notification.type === "reply"
                   ) {
-                    dispatch(addReaction(data.body.note));
-                    dispatch(addPoll(data.body.note));
-                    sendSubNote(socket, data.body.note);
+                    dispatch(addReaction(notification.note));
+                    dispatch(addPoll(notification.note));
+                    sendSubNote(socket, notification.note);
                   }
-                  break;
-                case "unreadNotification":
-                  if (!isNotificationPage) {
-                    dispatch(updateReadNotification(false));
+                })
+              );
+              dispatch(updateMoreNotification(false));
+            })();
+            break;
+          case "api:moreNotification":
+            (async () => {
+              await dispatch(addNotifications(data.res));
+              await Promise.all(
+                data.res.map(async (notification: Notification) => {
+                  if (
+                    notification.type === "mention" ||
+                    notification.type === "quote" ||
+                    notification.type === "reply"
+                  ) {
+                    dispatch(addReaction(notification.note));
+                    dispatch(addPoll(notification.note));
+                    sendSubNote(socket, notification.note);
                   }
-                  break;
-                case "readAllNotifications":
-                  dispatch(updateReadNotification(true));
-                  break;
-              }
-          }
-          break;
-        case "noteUpdated":
-          switch (data.type) {
-            case "reacted":
-              dispatch(reacted(data));
-              break;
-            case "unreacted":
-              dispatch(unreacted(data));
-              break;
-            case "deleted":
-              dispatch(noteDelete(data));
-              dispatch(userNoteDelete(data));
-              break;
-            case "pollVoted":
-              dispatch(pollVote(data));
-              break;
-          }
-          break;
-        case "api:initNotes":
-          Promise.all([
-            dispatch(addLower(data.res)),
-            dispatch(addReactions(data.res)),
-            dispatch(addPolls(data.res)),
-            sendSubNotes(socket, data.res),
-          ]);
-          break;
-        case "api:initNotifications":
-          (async () => {
-            await dispatch(addNotifications(data.res));
-            await Promise.all(
-              data.res.map(async (notification: Notification) => {
-                if (
-                  notification.type === "mention" ||
-                  notification.type === "quote" ||
-                  notification.type === "reply"
-                ) {
-                  dispatch(addReaction(notification.note));
-                  dispatch(addPoll(notification.note));
-                  sendSubNote(socket, notification.note);
-                }
-              })
-            );
-            dispatch(updateMoreNotification(false));
-          })();
-          break;
-        case "api:moreNotification":
-          (async () => {
-            await dispatch(addNotifications(data.res));
-            await Promise.all(
-              data.res.map(async (notification: Notification) => {
-                if (
-                  notification.type === "mention" ||
-                  notification.type === "quote" ||
-                  notification.type === "reply"
-                ) {
-                  dispatch(addReaction(notification.note));
-                  dispatch(addPoll(notification.note));
-                  sendSubNote(socket, notification.note);
-                }
-              })
-            );
-            dispatch(updateMoreNotification(false));
-          })();
-          break;
-        case "api:moreNotes":
-          Promise.all([
-            dispatch(addLower(data.res)),
-            dispatch(addReactions(data.res)),
-            dispatch(addPolls(data.res)),
-            dispatch(updateMoreNote(false)),
-            sendSubNotes(socket, data.res),
-          ]);
-          break;
-        case "api:noteDetails":
-          Promise.all([
-            dispatch(setNoteDetails(data.res)),
-            dispatch(addReaction(data.res)),
-            dispatch(addPoll(data.res)),
-            sendSubNote(socket, data.res),
-          ]);
-          break;
-        case "api:noteConversation":
-          dispatch(addNoteConversation(data.res.reverse()));
-          break;
-        case "api:noteChildren":
-          dispatch(addNoteChildren(data.res));
-          break;
-        case "api:userData":
-          Promise.all([
-            dispatch(setUserData(data.res)),
-            dispatch(addReactions(data.res.pinnedNotes)),
-            dispatch(addReactions(data.res.pinnedNotes)),
-            dispatch(addPolls(data.res.pinnedNotes)),
-            sendSubNotes(socket, data.res.pinnedNotes),
-          ]);
-          break;
-        case "api:userNotes":
-          Promise.all([
-            dispatch(addUserNotes(data.res)),
-            dispatch(addReactions(data.res)),
-            dispatch(addPolls(data.res)),
-            dispatch(changeUserNotesType(false)),
-            sendSubNotes(socket, data.res),
-          ]);
-          break;
-        case "api:moreUserNotes":
-          Promise.all([
-            dispatch(addUserNotes(data.res)),
-            dispatch(addReactions(data.res)),
-            dispatch(addPolls(data.res)),
-            dispatch(updateMoreUserNote(false)),
-            sendSubNotes(socket, data.res),
-          ]);
-          break;
-        case "api:follow":
-          dispatch(updateUserData("follow"));
-          break;
-        case "api:unfollow":
-          dispatch(updateUserData("unfollow"));
-          break;
-        case "api:invalidate":
-          dispatch(updateUserData("invalidate"));
-          break;
-        case "api:mute":
-          dispatch(updateUserData("mute"));
-          break;
-        case "api:unmute":
-          dispatch(updateUserData("unmute"));
-          break;
-        case "api:block":
-          dispatch(updateUserData("block"));
-          break;
-        case "api:unblock":
-          dispatch(updateUserData("unblock"));
-          break;
-        case "api:following":
-          dispatch(addFollowings(data.res));
-          dispatch(updateMoreFF(false));
-          break;
-        case "api:followers":
-          dispatch(addFollowers(data.res));
-          dispatch(updateMoreFF(false));
-          break;
-        case "api:FRfollow":
-          dispatch(updateFollowers({ type: "follow", id: data.res.id }));
-          break;
-        case "api:FRunfollow":
-          dispatch(updateFollowers({ type: "unfollow", id: data.res.id }));
-          break;
-        case "api:FGfollow":
-          dispatch(updateFollowings({ type: "follow", id: data.res.id }));
-          break;
-        case "api:FGunfollow":
-          dispatch(updateFollowings({ type: "unfollow", id: data.res.id }));
-          break;
+                })
+              );
+              dispatch(updateMoreNotification(false));
+            })();
+            break;
+          case "api:moreNotes":
+            Promise.all([
+              dispatch(addLower(data.res)),
+              dispatch(addReactions(data.res)),
+              dispatch(addPolls(data.res)),
+              dispatch(updateMoreNote(false)),
+              sendSubNotes(socket, data.res),
+            ]);
+            break;
+          case "api:noteDetails":
+            Promise.all([
+              dispatch(setNoteDetails(data.res)),
+              dispatch(addReaction(data.res)),
+              dispatch(addPoll(data.res)),
+              sendSubNote(socket, data.res),
+            ]);
+            break;
+          case "api:noteConversation":
+            dispatch(addNoteConversation(data.res.reverse()));
+            break;
+          case "api:noteChildren":
+            dispatch(addNoteChildren(data.res));
+            break;
+          case "api:userData":
+            Promise.all([
+              dispatch(setUserData(data.res)),
+              dispatch(addReactions(data.res.pinnedNotes)),
+              dispatch(addReactions(data.res.pinnedNotes)),
+              dispatch(addPolls(data.res.pinnedNotes)),
+              sendSubNotes(socket, data.res.pinnedNotes),
+            ]);
+            break;
+          case "api:userNotes":
+            Promise.all([
+              dispatch(addUserNotes(data.res)),
+              dispatch(addReactions(data.res)),
+              dispatch(addPolls(data.res)),
+              dispatch(changeUserNotesType(false)),
+              sendSubNotes(socket, data.res),
+            ]);
+            break;
+          case "api:moreUserNotes":
+            Promise.all([
+              dispatch(addUserNotes(data.res)),
+              dispatch(addReactions(data.res)),
+              dispatch(addPolls(data.res)),
+              dispatch(updateMoreUserNote(false)),
+              sendSubNotes(socket, data.res),
+            ]);
+            break;
+          case "api:follow":
+            dispatch(updateUserData("follow"));
+            break;
+          case "api:unfollow":
+            dispatch(updateUserData("unfollow"));
+            break;
+          case "api:invalidate":
+            dispatch(updateUserData("invalidate"));
+            break;
+          case "api:mute":
+            dispatch(updateUserData("mute"));
+            break;
+          case "api:unmute":
+            dispatch(updateUserData("unmute"));
+            break;
+          case "api:block":
+            dispatch(updateUserData("block"));
+            break;
+          case "api:unblock":
+            dispatch(updateUserData("unblock"));
+            break;
+          case "api:following":
+            dispatch(addFollowings(data.res));
+            dispatch(updateMoreFF(false));
+            break;
+          case "api:followers":
+            dispatch(addFollowers(data.res));
+            dispatch(updateMoreFF(false));
+            break;
+          case "api:FRfollow":
+            dispatch(updateFollowers({ type: "follow", id: data.res.id }));
+            break;
+          case "api:FRunfollow":
+            dispatch(updateFollowers({ type: "unfollow", id: data.res.id }));
+            break;
+          case "api:FGfollow":
+            dispatch(updateFollowings({ type: "follow", id: data.res.id }));
+            break;
+          case "api:FGunfollow":
+            dispatch(updateFollowings({ type: "unfollow", id: data.res.id }));
+            break;
+        }
+      } else {
+        console.log(data.error);
       }
     };
   });
