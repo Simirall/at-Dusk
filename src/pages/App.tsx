@@ -39,48 +39,56 @@ export const App: React.VFC = () => {
                 <SocketProvider>
                   <SocketManager>
                     <Header />
-                    <CheckLocation>
-                      <Routes>
-                        <Route path="/user">
-                          <Route
-                            path=":id/following"
-                            element={
-                              <>
-                                <User />
-                                <UserFF type="following" />
-                              </>
-                            }
-                          />
-                          <Route
-                            path=":id/followers"
-                            element={
-                              <>
-                                <User />
-                                <UserFF type="followers" />
-                              </>
-                            }
-                          />
-                          <Route
-                            path=":id"
-                            element={
-                              <>
-                                <User />
-                                <UserNotes />
-                              </>
-                            }
-                          />
-                        </Route>
-                        <Route path="/notes">
-                          <Route path=":id" element={<Notes />} />
-                        </Route>
-                        <Route
-                          path="/notifications"
-                          element={<Notifications />}
-                        />
-                        <Route path="/settings" element={<Settings />} />
-                        <Route path="/" element={<Home />} />
-                      </Routes>
-                    </CheckLocation>
+                    <Routes>
+                      <Route path="/settings" element={<Settings />} />
+                      <Route
+                        path="*"
+                        element={
+                          <CheckLocation>
+                            <Routes>
+                              <Route path="/user">
+                                <Route
+                                  path=":id/following"
+                                  element={
+                                    <>
+                                      <User />
+                                      <UserFF type="following" />
+                                    </>
+                                  }
+                                />
+                                <Route
+                                  path=":id/followers"
+                                  element={
+                                    <>
+                                      <User />
+                                      <UserFF type="followers" />
+                                    </>
+                                  }
+                                />
+                                <Route
+                                  path=":id"
+                                  element={
+                                    <>
+                                      <User />
+                                      <UserNotes />
+                                    </>
+                                  }
+                                />
+                              </Route>
+                              <Route path="/notes">
+                                <Route path=":id" element={<Notes />} />
+                              </Route>
+                              <Route
+                                path="/notifications"
+                                element={<Notifications />}
+                              />
+                              <Route path="/settings" element={<Settings />} />
+                              <Route path="/" element={<Home />} />
+                            </Routes>
+                          </CheckLocation>
+                        }
+                      />
+                    </Routes>
                     <PostModal />
                   </SocketManager>
                 </SocketProvider>
