@@ -25,7 +25,7 @@ import {
   user,
   UserShow,
 } from "../features/userSlice";
-import { useColors } from "../utils/Colors";
+import { useColorContext } from "../utils/ColorContext";
 import { useSocket } from "../utils/SocketContext";
 import { useStyleProps } from "../utils/StyleProps";
 import { APIObject, useAPIObject } from "../utils/useAPIObject";
@@ -33,7 +33,6 @@ import { APIObject, useAPIObject } from "../utils/useAPIObject";
 export const UserFF: React.VFC<{ type: "following" | "followers" }> = memo(
   function Fn({ type }) {
     const socket = useSocket();
-    const colors = useColors();
     const userData = useAppSelector(user);
     const followersData = useAppSelector(followers);
     const followingsData = useAppSelector(followings);
@@ -43,6 +42,7 @@ export const UserFF: React.VFC<{ type: "following" | "followers" }> = memo(
     const last = useAppSelector(lasts);
     const lastFG = last.following;
     const lastFR = last.follower;
+    const { colors } = useColorContext();
     return (
       <>
         <Box maxW="95vw" w="6xl" color={colors.textColor} pb="2">

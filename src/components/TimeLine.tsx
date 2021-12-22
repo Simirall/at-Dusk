@@ -14,7 +14,7 @@ import {
   updateMoreNote,
 } from "../features/notesSlice";
 import { settings } from "../features/settingsSlice";
-import { useColors } from "../utils/Colors";
+import { useColorContext } from "../utils/ColorContext";
 import { useSocket } from "../utils/SocketContext";
 import { useAPIObject } from "../utils/useAPIObject";
 
@@ -28,7 +28,7 @@ export const TimeLine: React.VFC = memo(function Fn() {
   const noteTypes = useAppSelector(allNoteTypes);
   const motto = useAppSelector(moreNote);
   const autoMotto = useAppSelector(settings).autoMotto;
-  const colors = useColors();
+  const { colors } = useColorContext();
   const dontEffect = useRef(true);
   const moreNotesObject = useAPIObject({
     id: "moreNotes",

@@ -53,10 +53,9 @@ import {
 
 import { useAppSelector } from "../app/hooks";
 import { settings } from "../features/settingsSlice";
-import { useColors } from "../utils/Colors";
+import { useColorContext } from "../utils/ColorContext";
 import { useModalsContext } from "../utils/ModalsContext";
 import { useSocket } from "../utils/SocketContext";
-import { useStyleProps } from "../utils/StyleProps";
 import { APIObject, useAPIObject } from "../utils/useAPIObject";
 
 import { EmojiForm } from "./EmojiForm";
@@ -69,8 +68,7 @@ export const PostForm: React.VFC<{ isModal?: boolean }> = memo(function Fn({
   const socket = useSocket();
   const settingsValue = useAppSelector(settings);
   const userAddDisclosure = useDisclosure();
-  const colors = useColors();
-  const styleProps = useStyleProps();
+  const { colors, props } = useColorContext();
   const { register, handleSubmit, reset, getValues, setValue } = useForm();
   const {
     onPostModalClose,
@@ -261,7 +259,7 @@ export const PostForm: React.VFC<{ isModal?: boolean }> = memo(function Fn({
               color={colors.secondaryColor}
               onClick={visibilityOpen.onOpen}
               value={visibility}
-              {...styleProps.AlphaButton}
+              {...props.AlphaButton}
               {...register("visibility")}
             >
               <HStack spacing="0.5">
@@ -401,7 +399,7 @@ export const PostForm: React.VFC<{ isModal?: boolean }> = memo(function Fn({
                   aria-label="add dm user"
                   icon={<AddIcon />}
                   size="xs"
-                  {...styleProps.PrimaryButton}
+                  {...props.PrimaryButton}
                   onClick={() => {
                     userAddDisclosure.onOpen();
                   }}
@@ -428,7 +426,7 @@ export const PostForm: React.VFC<{ isModal?: boolean }> = memo(function Fn({
                       aria-label="delete choice"
                       icon={<DeleteIcon />}
                       size="sm"
-                      {...styleProps.AlphaButton}
+                      {...props.AlphaButton}
                       onClick={() => {
                         updatePollNum(
                           pollNum.filter((p) => p < pollNum.length - 1)
@@ -441,7 +439,7 @@ export const PostForm: React.VFC<{ isModal?: boolean }> = memo(function Fn({
             ))}
             <HStack>
               <Button
-                {...styleProps.AlphaButton}
+                {...props.AlphaButton}
                 color={colors.secondaryColor}
                 size="sm"
                 onClick={() => {
@@ -461,7 +459,7 @@ export const PostForm: React.VFC<{ isModal?: boolean }> = memo(function Fn({
                     m="1"
                     color={colors.secondaryColor}
                     onClick={pollOpen.onOpen}
-                    {...styleProps.AlphaButton}
+                    {...props.AlphaButton}
                   >
                     <HStack spacing="0.5">
                       {pollTime === "inf" ? (
@@ -557,7 +555,7 @@ export const PostForm: React.VFC<{ isModal?: boolean }> = memo(function Fn({
                         size="sm"
                         fontWeight="normal"
                         onClick={pollTimeUnitOpen.onOpen}
-                        {...styleProps.AlphaButton}
+                        {...props.AlphaButton}
                       >
                         <Box>{pollTimeUnit}</Box>
                       </MenuButton>
@@ -614,7 +612,7 @@ export const PostForm: React.VFC<{ isModal?: boolean }> = memo(function Fn({
           size="sm"
           color={colors.secondaryColor}
           transform="rotate(90deg)"
-          {...styleProps.AlphaButton}
+          {...props.AlphaButton}
           onClick={() => {
             updatePoll(!poll);
           }}
@@ -624,7 +622,7 @@ export const PostForm: React.VFC<{ isModal?: boolean }> = memo(function Fn({
           icon={<ViewOffIcon />}
           size="sm"
           color={colors.secondaryColor}
-          {...styleProps.AlphaButton}
+          {...props.AlphaButton}
           onClick={() => {
             updateCw(!cw);
           }}
@@ -639,7 +637,7 @@ export const PostForm: React.VFC<{ isModal?: boolean }> = memo(function Fn({
                     size="sm"
                     icon={<IoAddCircle size="1.4em" />}
                     color={colors.secondaryColor}
-                    {...styleProps.AlphaButton}
+                    {...props.AlphaButton}
                     onClick={() => {
                       setEmojiModalType("picker");
                     }}
@@ -661,7 +659,7 @@ export const PostForm: React.VFC<{ isModal?: boolean }> = memo(function Fn({
           </Popover>
         </Box>
         <Button
-          {...styleProps.PrimaryButton}
+          {...props.PrimaryButton}
           fontWeight="md"
           onClick={() => handleSubmit(onSubmit)()}
         >
@@ -723,7 +721,7 @@ export const PostForm: React.VFC<{ isModal?: boolean }> = memo(function Fn({
                   type="submit"
                   icon={<AddIcon />}
                   size="xs"
-                  {...styleProps.PrimaryButton}
+                  {...props.PrimaryButton}
                 />
               </HStack>
               {users.length > 0 &&
@@ -733,7 +731,7 @@ export const PostForm: React.VFC<{ isModal?: boolean }> = memo(function Fn({
                       aria-label="add dm user"
                       icon={<CloseIcon />}
                       size="xs"
-                      {...styleProps.PrimaryButton}
+                      {...props.PrimaryButton}
                       onClick={() => {
                         updateUsers(users.filter((u) => u.id !== user.id));
                       }}

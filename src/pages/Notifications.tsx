@@ -4,12 +4,12 @@ import React, { useEffect } from "react";
 import { useAppSelector } from "../app/hooks";
 import { Notification } from "../components/Notification";
 import { readNotification } from "../features/notificationsSlice";
-import { useColors } from "../utils/Colors";
+import { useColorContext } from "../utils/ColorContext";
 import { useSocket } from "../utils/SocketContext";
 import { useAPIObject } from "../utils/useAPIObject";
 
 export const Notifications: React.VFC = () => {
-  const colors = useColors();
+  const { colors } = useColorContext();
   const socket = useSocket();
   const ReadAllNotificationObject = JSON.stringify(
     useAPIObject({

@@ -10,12 +10,12 @@ import { useAppSelector } from "../app/hooks";
 import { ColorModeSwitcher } from "../components/ColorModeSwitcher";
 import { readNotification } from "../features/notificationsSlice";
 import { settings } from "../features/settingsSlice";
-import { useColors } from "../utils/Colors";
+import { useColorContext } from "../utils/ColorContext";
 import { useModalsContext } from "../utils/ModalsContext";
 
 export const Header: React.VFC = memo(function Fn() {
   const user = useAppSelector(settings).userInfo.userData;
-  const colors = useColors();
+  const { colors } = useColorContext();
   const notify = useAppSelector(readNotification);
   const { onPostModalOpen } = useModalsContext();
 

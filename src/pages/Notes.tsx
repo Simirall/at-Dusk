@@ -12,7 +12,7 @@ import {
   noteDetalisChildren,
   noteDetalisChildrenType,
 } from "../features/noteDetailsSlice";
-import { useColors } from "../utils/Colors";
+import { useColorContext } from "../utils/ColorContext";
 import { useSocket } from "../utils/SocketContext";
 import { useAPIObject } from "../utils/useAPIObject";
 
@@ -25,7 +25,7 @@ export const Notes: React.VFC = () => {
   const conversationTypes = useAppSelector(noteDetailsConversationType);
   const children = useAppSelector(noteDetalisChildren);
   const childrenTypes = useAppSelector(noteDetalisChildrenType);
-  const colors = useColors();
+  const { colors } = useColorContext();
   const noteDetailsObject = JSON.stringify(
     useAPIObject({
       id: "noteDetails",

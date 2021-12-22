@@ -9,6 +9,7 @@ import { store } from "./app/store";
 import "focus-visible";
 import { ThemeSelector } from "./components/ThemeSelector";
 import { App } from "./pages/App";
+import { ColorProvider } from "./utils/ColorContext";
 import { FocusVisible } from "./utils/FocusVisible";
 import { LoginProvider } from "./utils/LoginContext";
 import { ModalsProvider } from "./utils/ModalsContext";
@@ -26,7 +27,9 @@ ReactDOM.render(
         <LoginProvider>
           <ModalsProvider>
             <ThemeSelector>
-              <App />
+              <ColorProvider>
+                <App />
+              </ColorProvider>
             </ThemeSelector>
           </ModalsProvider>
         </LoginProvider>

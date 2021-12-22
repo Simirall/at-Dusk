@@ -8,17 +8,15 @@ import { PostForm } from "../components/PostForm";
 import { TimeLine } from "../components/TimeLine";
 import { clear } from "../features/notesSlice";
 import { setTimeline, settings } from "../features/settingsSlice";
-import { useColors } from "../utils/Colors";
+import { useColorContext } from "../utils/ColorContext";
 import { useSocket } from "../utils/SocketContext";
-import { useStyleProps } from "../utils/StyleProps";
 import { APIObject, StreamObject, useAPIObject } from "../utils/useAPIObject";
 
 export const Home: React.VFC = () => {
   const socket = useSocket();
   const settingsValue = useAppSelector(settings);
   const dispatch = useAppDispatch();
-  const colors = useColors();
-  const props = useStyleProps();
+  const { colors, props } = useColorContext();
   const disconnectObject = useAPIObject({
     id: "timeline",
     type: "disconnect",

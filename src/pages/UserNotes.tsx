@@ -23,15 +23,12 @@ import {
   oldests,
   initLoadeds,
 } from "../features/userSlice";
-import { useColors } from "../utils/Colors";
+import { useColorContext } from "../utils/ColorContext";
 import { useSocket } from "../utils/SocketContext";
-import { useStyleProps } from "../utils/StyleProps";
 import { APIObject, useAPIObject } from "../utils/useAPIObject";
 
 export const UserNotes: React.VFC = memo(function Fn() {
   const socket = useSocket();
-  const colors = useColors();
-  const props = useStyleProps();
   const dispatch = useAppDispatch();
   const userData = useAppSelector(user);
   const userNotesData = useAppSelector(userNotes);
@@ -40,6 +37,7 @@ export const UserNotes: React.VFC = memo(function Fn() {
   const changeType = useAppSelector(isChangedUserNoteType);
   const autoMotto = useAppSelector(settings).autoMotto;
   const isLastNote = useAppSelector(lasts).userNote;
+  const { colors, props } = useColorContext();
   const [userNotesType, updateUserNotesType] = useState<
     "note" | "note-reply" | "files"
   >("note");

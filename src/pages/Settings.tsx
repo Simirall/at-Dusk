@@ -11,13 +11,12 @@ import { IoColorPalette } from "react-icons/io5";
 
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { setTheme, setSettings, settings } from "../features/settingsSlice";
-import { useColors } from "../utils/Colors";
+import { useColorContext } from "../utils/ColorContext";
 
 export const Settings: React.VFC = () => {
-  const colors = useColors();
+  const { colors } = useColorContext();
   const dispatch = useAppDispatch();
   const { register, handleSubmit } = useForm();
-  const { headerTextColor } = useColors();
   const settingsValue = useAppSelector(settings);
 
   const onSubmitTheme = (data: { lightTheme: string; darkTheme: string }) => {
@@ -41,7 +40,7 @@ export const Settings: React.VFC = () => {
               <Icon as={IoColorPalette} fontSize="2xl" />
               <Box>テーマ</Box>
             </HStack>
-            <HStack color={headerTextColor} justify="center">
+            <HStack color={colors.headerTextColor} justify="center">
               <Box>
                 <FormLabel color={colors.textColor}>Light Mode</FormLabel>
                 <Select

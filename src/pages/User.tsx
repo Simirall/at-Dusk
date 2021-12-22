@@ -38,16 +38,14 @@ import { Loading } from "../components/Loading";
 import { ParseMFM } from "../components/ParseMFM";
 import { settings } from "../features/settingsSlice";
 import { followers, followings, user, UserShow } from "../features/userSlice";
-import { useColors } from "../utils/Colors";
+import { useColorContext } from "../utils/ColorContext";
 import { useSocket } from "../utils/SocketContext";
-import { useStyleProps } from "../utils/StyleProps";
 import { APIObject, useAPIObject } from "../utils/useAPIObject";
 
 export const User: React.VFC = memo(function Fn() {
   const socket = useSocket();
   const navigate = useNavigate();
-  const colors = useColors();
-  const props = useStyleProps();
+  const { colors, props } = useColorContext();
   const location = useLocation();
   const me = useAppSelector(settings).userInfo.userData;
   const { isOpen, onOpen, onClose } = useDisclosure();
