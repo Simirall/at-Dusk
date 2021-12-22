@@ -6,6 +6,7 @@ import thunk from "redux-thunk";
 
 import noteDetailsReducer from "../features/noteDetailsSlice";
 import notesReducer from "../features/notesSlice";
+import notificationsReducer from "../features/notificationsSlice";
 import pollReducer from "../features/pollSlice";
 import reactionsReducer from "../features/reactionsSlice";
 import settingsReducer from "../features/settingsSlice";
@@ -18,6 +19,7 @@ const reducers = combineReducers({
   poll: pollReducer,
   settings: settingsReducer,
   user: userReducer,
+  notifications: notificationsReducer,
 });
 
 const persistConfig = {
