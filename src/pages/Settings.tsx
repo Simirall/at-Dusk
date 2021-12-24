@@ -5,19 +5,18 @@ import { SettingsIcon } from "@chakra-ui/icons";
 import { Box, Divider, Flex, HStack, VStack } from "@chakra-ui/layout";
 import { Select } from "@chakra-ui/select";
 import { Switch } from "@chakra-ui/switch";
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { IoColorPalette } from "react-icons/io5";
 
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { setTheme, setSettings, settings } from "../features/settingsSlice";
-import { useColors } from "../utils/Colors";
+import { useColorContext } from "../utils/ColorContext";
 
 export const Settings: React.VFC = () => {
-  const colors = useColors();
+  const { colors } = useColorContext();
   const dispatch = useAppDispatch();
   const { register, handleSubmit } = useForm();
-  const { headerTextColor } = useColors();
   const settingsValue = useAppSelector(settings);
 
   const onSubmitTheme = (data: { lightTheme: string; darkTheme: string }) => {
@@ -31,7 +30,9 @@ export const Settings: React.VFC = () => {
   }) => {
     dispatch(setSettings(data));
   };
-
+  useEffect(() => {
+    document.title = "設定 | at Dusk.";
+  }, []);
   return (
     <>
       <Flex p="2" flexDir="column" color={colors.textColor}>
@@ -41,7 +42,7 @@ export const Settings: React.VFC = () => {
               <Icon as={IoColorPalette} fontSize="2xl" />
               <Box>テーマ</Box>
             </HStack>
-            <HStack color={headerTextColor} justify="center">
+            <HStack color={colors.headerTextColor} justify="center">
               <Box>
                 <FormLabel color={colors.textColor}>Light Mode</FormLabel>
                 <Select

@@ -5,9 +5,8 @@ import React, { memo, useState, useEffect } from "react";
 
 import { useAppSelector } from "../app/hooks";
 import { allPolls } from "../features/pollSlice";
-import { useColors } from "../utils/Colors";
+import { useColorContext } from "../utils/ColorContext";
 import { useSocket } from "../utils/SocketContext";
-import { useStyleProps } from "../utils/StyleProps";
 import { APIObject, useAPIObject } from "../utils/useAPIObject";
 
 import { ParseMFM } from "./ParseMFM";
@@ -21,8 +20,7 @@ export const Poll: React.VFC<{
 }> = memo(function Fn({ id, emojis }) {
   const socket = useSocket();
   const poll = useAppSelector(allPolls).find((p) => p.id === id);
-  const colors = useColors();
-  const props = useStyleProps();
+  const { colors, props } = useColorContext();
   const sum = poll?.choices.reduce((p, c) => p + c.votes, 0);
   const [voted, updateVoted] = useState(
     poll?.choices.some((choice) => choice.isVoted)

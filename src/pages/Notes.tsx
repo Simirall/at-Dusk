@@ -12,7 +12,7 @@ import {
   noteDetalisChildren,
   noteDetalisChildrenType,
 } from "../features/noteDetailsSlice";
-import { useColors } from "../utils/Colors";
+import { useColorContext } from "../utils/ColorContext";
 import { useSocket } from "../utils/SocketContext";
 import { useAPIObject } from "../utils/useAPIObject";
 
@@ -25,7 +25,7 @@ export const Notes: React.VFC = () => {
   const conversationTypes = useAppSelector(noteDetailsConversationType);
   const children = useAppSelector(noteDetalisChildren);
   const childrenTypes = useAppSelector(noteDetalisChildrenType);
-  const colors = useColors();
+  const { colors } = useColorContext();
   const noteDetailsObject = JSON.stringify(
     useAPIObject({
       id: "noteDetails",
@@ -62,6 +62,9 @@ export const Notes: React.VFC = () => {
     socket.send(noteConversationObject);
     socket.send(noteChildrenObject);
   }, [socket, noteDetailsObject, noteConversationObject, noteChildrenObject]);
+  useEffect(() => {
+    document.title = "ノート | at Dusk.";
+  }, []);
   return (
     <Box maxW="95vw" w="6xl">
       {details.id ? (
@@ -80,13 +83,12 @@ export const Notes: React.VFC = () => {
                   note={note}
                   depth={1}
                   type={conversationTypes[i]}
-                  colors={colors}
                   onlyBody
                 />
               </Box>
             ))}
           <Box marginBlock="2">
-            <Note note={details} depth={0} type={detailsType} colors={colors} />
+            <Note note={details} depth={0} type={detailsType} />
           </Box>
           {children.length > 0 &&
             children.map((note, i) => (
@@ -98,13 +100,7 @@ export const Notes: React.VFC = () => {
                 borderLeft="1px solid"
                 borderColor={colors.secondaryColor}
               >
-                <Note
-                  note={note}
-                  depth={1}
-                  type={childrenTypes[i]}
-                  colors={colors}
-                  onlyBody
-                />
+                <Note note={note} depth={1} type={childrenTypes[i]} onlyBody />
               </Box>
             ))}
         </>

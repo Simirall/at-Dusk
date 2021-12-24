@@ -4,20 +4,21 @@ import { Box, Flex, Text, Avatar, HStack } from "@chakra-ui/react";
 import React from "react";
 import { memo } from "react";
 import { IoNotifications } from "react-icons/io5";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useMatch } from "react-router-dom";
 
 import { useAppSelector } from "../app/hooks";
 import { ColorModeSwitcher } from "../components/ColorModeSwitcher";
 import { readNotification } from "../features/notificationsSlice";
 import { settings } from "../features/settingsSlice";
-import { useColors } from "../utils/Colors";
+import { useColorContext } from "../utils/ColorContext";
 import { useModalsContext } from "../utils/ModalsContext";
 
 export const Header: React.VFC = memo(function Fn() {
   const user = useAppSelector(settings).userInfo.userData;
-  const colors = useColors();
+  const { colors } = useColorContext();
   const notify = useAppSelector(readNotification);
   const { onPostModalOpen } = useModalsContext();
+  const isTop = useMatch("/");
 
   return (
     <>
@@ -38,6 +39,11 @@ export const Header: React.VFC = memo(function Fn() {
             to="/"
             fontSize="xl"
             color={colors.headerTextColor}
+            onClick={() => {
+              if (isTop) {
+                window.scrollTo(0, 0);
+              }
+            }}
           >
             AT DUSK
           </Text>
@@ -70,6 +76,9 @@ export const Header: React.VFC = memo(function Fn() {
               color={colors.headerTextColor}
               _hover={{
                 bgColor: colors.alpha50,
+              }}
+              onClick={() => {
+                window.scrollTo(0, 0);
               }}
             />
             {!notify && (

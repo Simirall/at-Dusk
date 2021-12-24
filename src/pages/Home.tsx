@@ -1,6 +1,6 @@
 import { IconButton } from "@chakra-ui/button";
 import { Box, HStack } from "@chakra-ui/react";
-import React from "react";
+import React, { useEffect } from "react";
 import { IoCafe, IoFastFood, IoGlobe, IoHome } from "react-icons/io5";
 
 import { useAppDispatch, useAppSelector } from "../app/hooks";
@@ -8,17 +8,15 @@ import { PostForm } from "../components/PostForm";
 import { TimeLine } from "../components/TimeLine";
 import { clear } from "../features/notesSlice";
 import { setTimeline, settings } from "../features/settingsSlice";
-import { useColors } from "../utils/Colors";
+import { useColorContext } from "../utils/ColorContext";
 import { useSocket } from "../utils/SocketContext";
-import { useStyleProps } from "../utils/StyleProps";
 import { APIObject, StreamObject, useAPIObject } from "../utils/useAPIObject";
 
 export const Home: React.VFC = () => {
   const socket = useSocket();
   const settingsValue = useAppSelector(settings);
   const dispatch = useAppDispatch();
-  const colors = useColors();
-  const props = useStyleProps();
+  const { colors, props } = useColorContext();
   const disconnectObject = useAPIObject({
     id: "timeline",
     type: "disconnect",
@@ -41,9 +39,12 @@ export const Home: React.VFC = () => {
       limit: 15,
     },
   }) as APIObject;
+  useEffect(() => {
+    document.title = "タイムライン | at Dusk.";
+  }, []);
   return (
     <Box h="full">
-      <HStack bgColor={colors.panelColor} p="1" mt="2" borderRadius="md">
+      <HStack bgColor={colors.panelColor} p="1" mt="2" mb="1" borderRadius="md">
         <HStack>
           <IconButton
             aria-label="home"
@@ -129,7 +130,7 @@ export const Home: React.VFC = () => {
       </HStack>
       {settingsValue.TLPostForm && (
         <Box
-          mt="2"
+          mt="1.5"
           mb="1"
           p="2"
           pb="1"

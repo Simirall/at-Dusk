@@ -19,10 +19,9 @@ import emojis from "unicode-emoji-json/data-by-group.json";
 
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { addRUEmoji, settings } from "../features/settingsSlice";
-import { useColors } from "../utils/Colors";
+import { useColorContext } from "../utils/ColorContext";
 import { useModalsContext } from "../utils/ModalsContext";
 import { useSocket } from "../utils/SocketContext";
-import { useStyleProps } from "../utils/StyleProps";
 import { APIObject, useAPIObject } from "../utils/useAPIObject";
 
 type EmojiCategory =
@@ -43,8 +42,7 @@ export const EmojiForm: React.VFC<{
   const socket = useSocket();
   const dispatch = useAppDispatch();
   const RUEmoji = useAppSelector(settings).RUEmoji;
-  const colors = useColors();
-  const styleProps = useStyleProps();
+  const { colors, props } = useColorContext();
   const { register, watch, handleSubmit, setValue, reset } = useForm();
   const { emojiModalType, modalNoteData } = useModalsContext();
   const [selectedEmoji, setEmoji] = useState<string | CustomEmoji>("");
@@ -82,6 +80,16 @@ export const EmojiForm: React.VFC<{
   return (
     <>
       <Box h="10em" overflowY="scroll" p="1">
+        <Input
+          size="sm"
+          mb="2"
+          placeholder="検索"
+          borderColor={colors.alpha200}
+          _hover={{ borderColor: colors.alpha400 }}
+          _focus={{ borderColor: colors.secondaryColor }}
+          onSubmit={(e) => e.preventDefault()}
+          {...register("searchEmoji")}
+        />
         {watch("searchEmoji") && (
           <HStack spacing="0.5" wrap="wrap" justify="center">
             {customEmojis
@@ -96,7 +104,7 @@ export const EmojiForm: React.VFC<{
                   <Button
                     p="1"
                     mb="1"
-                    {...styleProps.AlphaButton}
+                    {...props.AlphaButton}
                     title={data.name}
                     onClick={() => {
                       setEmoji(data);
@@ -120,7 +128,7 @@ export const EmojiForm: React.VFC<{
                   <Button
                     p="1"
                     mb="1"
-                    {...styleProps.AlphaButton}
+                    {...props.AlphaButton}
                     title={data.name}
                     onClick={() => {
                       setEmoji(data.emoji);
@@ -145,7 +153,7 @@ export const EmojiForm: React.VFC<{
                     <Button
                       p="1"
                       mb="1"
-                      {...styleProps.AlphaButton}
+                      {...props.AlphaButton}
                       onClick={() => {
                         setEmoji(emoji);
                       }}
@@ -156,7 +164,7 @@ export const EmojiForm: React.VFC<{
                     <Button
                       p="1"
                       mb="1"
-                      {...styleProps.AlphaButton}
+                      {...props.AlphaButton}
                       title={emoji.name}
                       onClick={() => {
                         setEmoji(emoji);
@@ -175,29 +183,10 @@ export const EmojiForm: React.VFC<{
             </HStack>
           </Box>
         )}
-        <CustomEmojis
-          emojis={customEmojis}
-          setEmoji={setEmoji}
-          colors={colors}
-          styleProps={styleProps}
-        />
+        <CustomEmojis emojis={customEmojis} setEmoji={setEmoji} />
         <Box pb="2" />
-        <UnicodeEmojis
-          setEmoji={setEmoji}
-          colors={colors}
-          styleProps={styleProps}
-        />
+        <UnicodeEmojis setEmoji={setEmoji} />
       </Box>
-      <Input
-        size="sm"
-        mt="2"
-        placeholder="検索"
-        borderColor={colors.alpha200}
-        _hover={{ borderColor: colors.alpha400 }}
-        _focus={{ borderColor: colors.secondaryColor }}
-        onSubmit={(e) => e.preventDefault()}
-        {...register("searchEmoji")}
-      />
     </>
   );
 });
@@ -205,9 +194,8 @@ export const EmojiForm: React.VFC<{
 const CustomEmojis: React.VFC<{
   emojis: Array<CustomEmoji>;
   setEmoji: React.Dispatch<React.SetStateAction<string | CustomEmoji>>;
-  colors: Record<string, string>;
-  styleProps: Record<string, Record<string, string | Record<string, string>>>;
-}> = memo(function Fn({ emojis, setEmoji, colors, styleProps }) {
+}> = memo(function Fn({ emojis, setEmoji }) {
+  const { colors, props } = useColorContext();
   const emojiCategory = [...new Set(emojis.map((item) => item.category))];
   return (
     <>
@@ -231,7 +219,7 @@ const CustomEmojis: React.VFC<{
                               <Button
                                 p="1"
                                 mb="1"
-                                {...styleProps.AlphaButton}
+                                {...props.AlphaButton}
                                 title={data.name}
                                 onClick={() => {
                                   setEmoji(data);
@@ -261,9 +249,8 @@ const CustomEmojis: React.VFC<{
 
 const UnicodeEmojis: React.VFC<{
   setEmoji: React.Dispatch<React.SetStateAction<string | CustomEmoji>>;
-  colors: Record<string, string>;
-  styleProps: Record<string, Record<string, string | Record<string, string>>>;
-}> = memo(function Fn({ setEmoji, colors, styleProps }) {
+}> = memo(function Fn({ setEmoji }) {
+  const { colors } = useColorContext();
   return (
     <>
       <Accordion allowMultiple reduceMotion>
@@ -281,7 +268,6 @@ const UnicodeEmojis: React.VFC<{
                       <EmojiList
                         setEmoji={setEmoji}
                         category={category as EmojiCategory}
-                        styleProps={styleProps}
                       />
                     )}
                   </HStack>
@@ -298,8 +284,8 @@ const UnicodeEmojis: React.VFC<{
 const EmojiList: React.VFC<{
   setEmoji: React.Dispatch<React.SetStateAction<string | CustomEmoji>>;
   category: EmojiCategory;
-  styleProps: Record<string, Record<string, string | Record<string, string>>>;
-}> = memo(function Fn({ setEmoji, category, styleProps }) {
+}> = memo(function Fn({ setEmoji, category }) {
+  const { props } = useColorContext();
   return (
     <>
       {emojis[category as EmojiCategory].map((emoji) => (
@@ -307,7 +293,7 @@ const EmojiList: React.VFC<{
           <Button
             p="1"
             mb="1"
-            {...styleProps.AlphaButton}
+            {...props.AlphaButton}
             title={emoji.name}
             onClick={() => {
               setEmoji(emoji.emoji);

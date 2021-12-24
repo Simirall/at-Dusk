@@ -9,13 +9,13 @@ import {
 import React from "react";
 import { memo } from "react";
 
-import { useColors } from "../utils/Colors";
+import { useColorContext } from "../utils/ColorContext";
 import { useModalsContext } from "../utils/ModalsContext";
 
 import { PostForm } from "./PostForm";
 
 export const PostModal: React.VFC = memo(function Fn() {
-  const colors = useColors();
+  const { colors } = useColorContext();
   const { isPostModalOpen, onPostModalClose } = useModalsContext();
 
   return (
