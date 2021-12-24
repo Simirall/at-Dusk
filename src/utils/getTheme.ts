@@ -12,6 +12,16 @@ export const getTheme = (
     },
     styles: {
       global: (props: Record<"colorMode", string>) => ({
+        "::selection": {
+          color:
+            props.colorMode === "dark"
+              ? "var(--chakra-colors-dark-headerText)"
+              : "var(--chakra-colors-light-headerText)",
+          backgroundColor:
+            props.colorMode === "dark"
+              ? "var(--chakra-colors-dark-primary)"
+              : "var(--chakra-colors-light-primary)",
+        },
         "*": {
           scrollbarWidth: "thin",
           scrollbarColor: `${
