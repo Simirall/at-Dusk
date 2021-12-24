@@ -1,5 +1,2 @@
-# at Dusk.
-
-## Misskey Client Application
-
-### made with React
+# mysskeyNext
+Next-gen Misskey Clinet for Web
