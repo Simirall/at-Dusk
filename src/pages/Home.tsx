@@ -44,7 +44,7 @@ export const Home: React.VFC = () => {
   }, []);
   return (
     <Box h="full">
-      <HStack bgColor={colors.panelColor} p="1" mt="2" borderRadius="md">
+      <HStack bgColor={colors.panelColor} p="1" mt="2" mb="1" borderRadius="md">
         <HStack>
           <IconButton
             aria-label="home"
@@ -130,7 +130,7 @@ export const Home: React.VFC = () => {
       </HStack>
       {settingsValue.TLPostForm && (
         <Box
-          mt="2"
+          mt="1.5"
           mb="1"
           p="2"
           pb="1"
