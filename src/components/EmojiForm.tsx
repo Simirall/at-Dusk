@@ -80,6 +80,16 @@ export const EmojiForm: React.VFC<{
   return (
     <>
       <Box h="10em" overflowY="scroll" p="1">
+        <Input
+          size="sm"
+          mb="2"
+          placeholder="検索"
+          borderColor={colors.alpha200}
+          _hover={{ borderColor: colors.alpha400 }}
+          _focus={{ borderColor: colors.secondaryColor }}
+          onSubmit={(e) => e.preventDefault()}
+          {...register("searchEmoji")}
+        />
         {watch("searchEmoji") && (
           <HStack spacing="0.5" wrap="wrap" justify="center">
             {customEmojis
@@ -177,16 +187,6 @@ export const EmojiForm: React.VFC<{
         <Box pb="2" />
         <UnicodeEmojis setEmoji={setEmoji} />
       </Box>
-      <Input
-        size="sm"
-        mt="2"
-        placeholder="検索"
-        borderColor={colors.alpha200}
-        _hover={{ borderColor: colors.alpha400 }}
-        _focus={{ borderColor: colors.secondaryColor }}
-        onSubmit={(e) => e.preventDefault()}
-        {...register("searchEmoji")}
-      />
     </>
   );
 });
