@@ -17,7 +17,7 @@ import { parse } from "twemoji-parser";
 
 import "../style/mfm.scss";
 import "../style/mfm_font.scss"; //will be able to opt-out
-import { useColors } from "../utils/Colors";
+import { useColorContext } from "../utils/ColorContext";
 
 export const ParseMFM: React.VFC<{
   text: string | null;
@@ -71,7 +71,7 @@ const Judge: React.VFC<{
 }> = ({ element, emojis }) => {
   const c: Array<React.ReactNode> = [];
   const codeColor = useColorModeValue(solarizedLight, nord);
-  const { secondaryColor } = useColors();
+  const { colors } = useColorContext();
   switch (element.type) {
     case "text":
       return (
@@ -136,7 +136,7 @@ const Judge: React.VFC<{
       return (
         <Link
           href={element.props.url}
-          color={secondaryColor}
+          color={colors.secondaryColor}
           verticalAlign="middle"
           isExternal
         >
@@ -148,7 +148,7 @@ const Judge: React.VFC<{
       return (
         <Link
           href={element.props.url}
-          color={secondaryColor}
+          color={colors.secondaryColor}
           verticalAlign="middle"
           isExternal
         >
@@ -161,7 +161,7 @@ const Judge: React.VFC<{
         <Link
           as={routerLink}
           to={`/tags/${element.props.hashtag}`}
-          color={secondaryColor}
+          color={colors.secondaryColor}
           verticalAlign="middle"
         >
           {`#${element.props.hashtag}`}
@@ -172,7 +172,7 @@ const Judge: React.VFC<{
         return (
           <Link
             href={`https://twitter.com/${element.props.username}`}
-            color={secondaryColor}
+            color={colors.secondaryColor}
             verticalAlign="middle"
             isExternal
           >
@@ -186,7 +186,7 @@ const Judge: React.VFC<{
           <Link
             as={routerLink}
             to={`/user/${element.props.acct}`}
-            color={secondaryColor}
+            color={colors.secondaryColor}
             verticalAlign="middle"
           >
             {`@${element.props.username}`}

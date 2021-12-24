@@ -35,6 +35,7 @@ import {
   updateMoreNotification,
 } from "../features/notificationsSlice";
 import { settings } from "../features/settingsSlice";
+import { useColorContext } from "../utils/ColorContext";
 import { useSocket } from "../utils/SocketContext";
 import { getRelativeTime } from "../utils/getRelativeTime";
 import { useAPIObject, APIObject } from "../utils/useAPIObject";
@@ -44,120 +45,106 @@ import { Note } from "./Note";
 import { ParseMFM } from "./ParseMFM";
 import { ParseReaction } from "./ParseReaction";
 
-export const Notification: React.VFC<{ colors: Record<string, string> }> = memo(
-  function Fn({ colors }) {
-    const socket = useSocket();
-    const notifications = useAppSelector(allNotifications);
-    const autoMotto = useAppSelector(settings).autoMotto;
-    const motto = useAppSelector(moreNotification);
-    const dispatch = useAppDispatch();
-    const dontEffect = useRef(true);
-    const moreNotificationObject = useAPIObject({
-      id: "moreNotification",
-      type: "api",
-      endpoint: "i/notifications",
-      data: {
-        limit: 15,
-        untilId: useAppSelector(oldestNotificationId),
-      },
-    });
-    const { ref, inView } = useInView({
-      threshold: 0.5,
-    });
-    useEffect(() => {
-      if (autoMotto) {
-        if (dontEffect.current) {
-          dontEffect.current = false;
-        } else if (inView && !motto) {
-          dispatch(updateMoreNotification(true));
-          socket.send(JSON.stringify(moreNotificationObject));
-        }
+export const Notification: React.VFC = memo(function Fn() {
+  const { colors } = useColorContext();
+  const socket = useSocket();
+  const notifications = useAppSelector(allNotifications);
+  const autoMotto = useAppSelector(settings).autoMotto;
+  const motto = useAppSelector(moreNotification);
+  const dispatch = useAppDispatch();
+  const dontEffect = useRef(true);
+  const moreNotificationObject = useAPIObject({
+    id: "moreNotification",
+    type: "api",
+    endpoint: "i/notifications",
+    data: {
+      limit: 15,
+      untilId: useAppSelector(oldestNotificationId),
+    },
+  });
+  const { ref, inView } = useInView({
+    threshold: 0.5,
+  });
+  useEffect(() => {
+    if (autoMotto) {
+      if (dontEffect.current) {
+        dontEffect.current = false;
+      } else if (inView && !motto) {
+        dispatch(updateMoreNotification(true));
+        socket.send(JSON.stringify(moreNotificationObject));
       }
-    }, [socket, dispatch, moreNotificationObject, autoMotto, motto, inView]);
-    return (
-      <>
-        {notifications.map((n) => (
-          <Box
-            key={n.id}
-            bgColor={colors.panelColor}
-            p="1"
-            marginBlock="1"
-            borderRadius="md"
-          >
-            {n.type === "reaction" ? (
-              <Reaction n={n} colors={colors} />
-            ) : n.type === "renote" ? (
-              <Renote n={n} />
-            ) : n.type === "quote" ? (
-              <Note
-                note={n.note}
-                type={{ id: n.id, type: "quote" }}
-                depth={0}
-                colors={colors}
-              />
-            ) : n.type === "reply" ? (
-              <Note
-                note={n.note}
-                type={{ id: n.id, type: "reply" }}
-                depth={0}
-                colors={colors}
-              />
-            ) : n.type === "mention" ? (
-              <Note
-                note={n.note}
-                type={{
-                  id: n.id,
-                  type:
-                    n.note.renoteId && !n.note.text
-                      ? "renote"
-                      : n.note.replyId
-                      ? "reply"
-                      : n.note.renoteId
-                      ? "quote"
-                      : "note",
-                }}
-                depth={0}
-                colors={colors}
-              />
-            ) : n.type === "follow" ? (
-              <Followed n={n} colors={colors} />
-            ) : n.type === "receiveFollowRequest" ? (
-              <FollowRequest socket={socket} n={n} colors={colors} />
-            ) : n.type === "followRequestAccepted" ? (
-              <FollowAccepted n={n} colors={colors} />
-            ) : n.type === "pollVote" ? (
-              <Voted n={n} colors={colors} />
-            ) : n.type === "groupInvited" ? (
-              <GroupInvited n={n} colors={colors} />
-            ) : n.type === "app" ? (
-              <AppNotification n={n} />
-            ) : (
-              <></>
-            )}
-          </Box>
-        ))}
-        {autoMotto ? (
-          <Center>
-            {!motto ? <Box ref={ref} p="9" /> : <Loading small />}
-          </Center>
-        ) : (
-          <Center marginBottom="2">
-            <Button
-              aria-label="more notes"
-              size="lg"
-              onClick={() => {
-                dispatch(updateMoreNotification(true));
-                socket.send(JSON.stringify(moreNotificationObject));
+    }
+  }, [socket, dispatch, moreNotificationObject, autoMotto, motto, inView]);
+  return (
+    <>
+      {notifications.map((n) => (
+        <Box
+          key={n.id}
+          bgColor={colors.panelColor}
+          p="1"
+          marginBlock="1"
+          borderRadius="md"
+        >
+          {n.type === "reaction" ? (
+            <Reaction n={n} colors={colors} />
+          ) : n.type === "renote" ? (
+            <Renote n={n} />
+          ) : n.type === "quote" ? (
+            <Note note={n.note} type={{ id: n.id, type: "quote" }} depth={0} />
+          ) : n.type === "reply" ? (
+            <Note note={n.note} type={{ id: n.id, type: "reply" }} depth={0} />
+          ) : n.type === "mention" ? (
+            <Note
+              note={n.note}
+              type={{
+                id: n.id,
+                type:
+                  n.note.renoteId && !n.note.text
+                    ? "renote"
+                    : n.note.replyId
+                    ? "reply"
+                    : n.note.renoteId
+                    ? "quote"
+                    : "note",
               }}
-            >
-              {motto ? <Loading small /> : "もっと"}
-            </Button>
-          </Center>
-        )}
-      </>
-    );
-  }
-);
+              depth={0}
+            />
+          ) : n.type === "follow" ? (
+            <Followed n={n} colors={colors} />
+          ) : n.type === "receiveFollowRequest" ? (
+            <FollowRequest socket={socket} n={n} colors={colors} />
+          ) : n.type === "followRequestAccepted" ? (
+            <FollowAccepted n={n} colors={colors} />
+          ) : n.type === "pollVote" ? (
+            <Voted n={n} colors={colors} />
+          ) : n.type === "groupInvited" ? (
+            <GroupInvited n={n} colors={colors} />
+          ) : n.type === "app" ? (
+            <AppNotification n={n} />
+          ) : (
+            <></>
+          )}
+        </Box>
+      ))}
+      {autoMotto ? (
+        <Center>{!motto ? <Box ref={ref} p="9" /> : <Loading small />}</Center>
+      ) : (
+        <Center marginBottom="2">
+          <Button
+            aria-label="more notes"
+            size="lg"
+            onClick={() => {
+              dispatch(updateMoreNotification(true));
+              socket.send(JSON.stringify(moreNotificationObject));
+            }}
+          >
+            {motto ? <Loading small /> : "もっと"}
+          </Button>
+        </Center>
+      )}
+    </>
+  );
+});
 
 const NotificationAvatar: React.VFC<{
   user: User;

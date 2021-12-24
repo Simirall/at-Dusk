@@ -4,6 +4,7 @@ import React, { memo } from "react";
 
 import { useAppSelector } from "../app/hooks";
 import { allReactions, ReactionDetails } from "../features/reactionsSlice";
+import { useColorContext } from "../utils/ColorContext";
 import { useSocket } from "../utils/SocketContext";
 import { APIObject, useAPIObject } from "../utils/useAPIObject";
 
@@ -11,8 +12,7 @@ import { ParseReaction } from "./ParseReaction";
 
 export const Reactions: React.VFC<{
   id: string;
-  colors: Record<string, string>;
-}> = memo(function Fn({ id, colors }) {
+}> = memo(function Fn({ id }) {
   const reaction = useAppSelector(allReactions).find(
     (reaction) => reaction.id === id
   );
@@ -22,13 +22,7 @@ export const Reactions: React.VFC<{
         <Flex p="1" overflow="hidden" flexWrap="wrap">
           {Object.keys(reaction?.reactions).map((key, i) => {
             return (
-              <ReactionButton
-                id={id}
-                reaction={reaction}
-                text={key}
-                colors={colors}
-                key={i}
-              />
+              <ReactionButton id={id} reaction={reaction} text={key} key={i} />
             );
           })}
         </Flex>
@@ -41,8 +35,8 @@ const ReactionButton: React.VFC<{
   id: string;
   reaction: ReactionDetails;
   text: string;
-  colors: Record<string, string>;
-}> = ({ id, reaction, text, colors }) => {
+}> = ({ id, reaction, text }) => {
+  const { colors } = useColorContext();
   const socket = useSocket();
   const props =
     text === reaction?.myReaction

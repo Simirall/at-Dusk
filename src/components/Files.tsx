@@ -17,12 +17,13 @@ import { IoDownload, IoEyeOff, IoMusicalNote } from "react-icons/io5";
 import { Carousel } from "react-responsive-carousel";
 
 import "react-responsive-carousel/lib/styles/carousel.min.css";
+import { useColorContext } from "../utils/ColorContext";
 import { useColors } from "../utils/Colors";
 
 export const Files: React.VFC<{
   files: Array<DriveFile>;
-  colors: Record<string, string>;
-}> = memo(function Fn({ files, colors }) {
+}> = memo(function Fn({ files }) {
+  const { colors } = useColorContext();
   const images = files.filter((file) => file.type.match(/image.*|video.*/));
   const audios = files.filter((file) => file.type.startsWith("audio"));
   const others = files.filter((file) =>
@@ -86,7 +87,7 @@ export const Files: React.VFC<{
       {others.length > 0 && (
         <Flex m="1" flexWrap="wrap">
           {others.map((file) => (
-            <OtherFile file={file} key={file.id} colors={colors} />
+            <OtherFile file={file} key={file.id} />
           ))}
         </Flex>
       )}
@@ -281,8 +282,8 @@ const AudioFile: React.VFC<{ audio: DriveFile }> = memo(function Fn({ audio }) {
 
 const OtherFile: React.VFC<{
   file: DriveFile;
-  colors: Record<string, string>;
-}> = memo(function Fn({ file, colors }) {
+}> = memo(function Fn({ file }) {
+  const { colors } = useColorContext();
   return (
     <Flex
       as={Link}

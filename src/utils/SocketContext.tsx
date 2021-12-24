@@ -1,3 +1,4 @@
+import { useToast } from "@chakra-ui/react";
 import React, { useRef, createContext, useContext, useState } from "react";
 
 import { store } from "../app/store";
@@ -18,17 +19,30 @@ const SocketProvider: React.VFC<{
   children: React.ReactChild;
 }> = ({ children }) => {
   const [isSocketOpen, updateSocketOpen] = useState<boolean>(false);
+  const toast = useToast();
   const info = store.getState().settings.userInfo;
   const socketRef = useRef<WebSocket>(
     new WebSocket("wss://" + info.instance + "/streaming?i=" + info.userToken)
   );
 
-  socketRef.current.onerror = (e) => {
-    console.error(e);
+  socketRef.current.onerror = (err) => {
+    console.error(err);
+    toast({
+      title: "Socket Error.",
+      status: "error",
+      duration: 3000,
+    });
   };
 
   socketRef.current.onclose = () => {
     console.log("SOCKET CLOSED");
+    toast({
+      title: "Socket Closed.",
+      description: "再接続するにはリロードしてください",
+      status: "info",
+      duration: 3000,
+      isClosable: true,
+    });
   };
 
   return (
