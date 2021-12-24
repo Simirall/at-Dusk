@@ -35,6 +35,7 @@ export const getTheme = (
           }`,
           transitionDuration: "normal",
           transitionProperty: "color, background-color, border-color",
+          scrollBehavior: "smooth",
         },
         "*::-webkit-scrollbar": {
           width: "0.5rem",

@@ -29,7 +29,6 @@ const SocketProvider: React.VFC<{
     console.error(err);
     toast({
       title: "Socket Error.",
-      description: err.type,
       status: "error",
       duration: 3000,
     });
