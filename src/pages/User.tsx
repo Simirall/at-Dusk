@@ -79,6 +79,14 @@ export const User: React.VFC = memo(function Fn() {
         : "note"
     );
   }, [location.pathname]);
+  useEffect(() => {
+    if (userData.id) {
+      document.title =
+        (userData.name ? userData.name : userData.username) + " | at Dusk.";
+    } else {
+      document.title = "Loading... | at Dusk.";
+    }
+  }, [userData]);
   return (
     <>
       {userData.id ? (

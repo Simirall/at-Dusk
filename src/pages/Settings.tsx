@@ -5,7 +5,7 @@ import { SettingsIcon } from "@chakra-ui/icons";
 import { Box, Divider, Flex, HStack, VStack } from "@chakra-ui/layout";
 import { Select } from "@chakra-ui/select";
 import { Switch } from "@chakra-ui/switch";
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { IoColorPalette } from "react-icons/io5";
 
@@ -30,7 +30,9 @@ export const Settings: React.VFC = () => {
   }) => {
     dispatch(setSettings(data));
   };
-
+  useEffect(() => {
+    document.title = "設定 | at Dusk.";
+  }, []);
   return (
     <>
       <Flex p="2" flexDir="column" color={colors.textColor}>

@@ -1,6 +1,6 @@
 import { IconButton } from "@chakra-ui/button";
 import { Box, HStack } from "@chakra-ui/react";
-import React from "react";
+import React, { useEffect } from "react";
 import { IoCafe, IoFastFood, IoGlobe, IoHome } from "react-icons/io5";
 
 import { useAppDispatch, useAppSelector } from "../app/hooks";
@@ -39,6 +39,9 @@ export const Home: React.VFC = () => {
       limit: 15,
     },
   }) as APIObject;
+  useEffect(() => {
+    document.title = "タイムライン | at Dusk.";
+  }, []);
   return (
     <Box h="full">
       <HStack bgColor={colors.panelColor} p="1" mt="2" borderRadius="md">

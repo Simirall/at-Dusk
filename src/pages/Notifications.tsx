@@ -24,6 +24,9 @@ export const Notifications: React.VFC = () => {
       socket.send(ReadAllNotificationObject);
     }
   }, [isRead, socket, ReadAllNotificationObject]);
+  useEffect(() => {
+    document.title = "通知 | at Dusk.";
+  }, []);
   return (
     <>
       <Box maxW="95vw" w="6xl" color={colors.textColor}>

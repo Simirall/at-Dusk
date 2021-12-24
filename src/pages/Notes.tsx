@@ -62,6 +62,9 @@ export const Notes: React.VFC = () => {
     socket.send(noteConversationObject);
     socket.send(noteChildrenObject);
   }, [socket, noteDetailsObject, noteConversationObject, noteChildrenObject]);
+  useEffect(() => {
+    document.title = "ノート | at Dusk.";
+  }, []);
   return (
     <Box maxW="95vw" w="6xl">
       {details.id ? (
