@@ -68,7 +68,6 @@ export const UserFF: React.VFC<{ type: "following" | "followers" }> = memo(
                               socket={socket}
                               user={user.followee}
                               type={type}
-                              colors={colors}
                             />
                           </Box>
                         ))}
@@ -96,7 +95,6 @@ export const UserFF: React.VFC<{ type: "following" | "followers" }> = memo(
                               socket={socket}
                               user={user.follower}
                               type={type}
-                              colors={colors}
                             />
                           </Box>
                         ))}
@@ -176,8 +174,8 @@ const UserContainer: React.VFC<{
   socket: WebSocket;
   user: User & UserShow;
   type: "followers" | "following";
-  colors: Record<string, string>;
-}> = memo(function Fn({ socket, user, type, colors }) {
+}> = memo(function Fn({ socket, user, type }) {
+  const { colors } = useColorContext();
   const [banner404, setBanner404] = useState(false);
   const props = useStyleProps();
   const followingObject = useAPIObject({

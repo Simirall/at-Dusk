@@ -80,13 +80,12 @@ export const Notes: React.VFC = () => {
                   note={note}
                   depth={1}
                   type={conversationTypes[i]}
-                  colors={colors}
                   onlyBody
                 />
               </Box>
             ))}
           <Box marginBlock="2">
-            <Note note={details} depth={0} type={detailsType} colors={colors} />
+            <Note note={details} depth={0} type={detailsType} />
           </Box>
           {children.length > 0 &&
             children.map((note, i) => (
@@ -98,13 +97,7 @@ export const Notes: React.VFC = () => {
                 borderLeft="1px solid"
                 borderColor={colors.secondaryColor}
               >
-                <Note
-                  note={note}
-                  depth={1}
-                  type={childrenTypes[i]}
-                  colors={colors}
-                  onlyBody
-                />
+                <Note note={note} depth={1} type={childrenTypes[i]} onlyBody />
               </Box>
             ))}
         </>

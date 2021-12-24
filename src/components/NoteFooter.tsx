@@ -27,6 +27,7 @@ import { useAppSelector } from "../app/hooks";
 import { NoteType } from "../features/notesSlice";
 import { allReactions } from "../features/reactionsSlice";
 import { settings } from "../features/settingsSlice";
+import { useColorContext } from "../utils/ColorContext";
 import { useModalsContext } from "../utils/ModalsContext";
 import { useSocket } from "../utils/SocketContext";
 import { useStyleProps } from "../utils/StyleProps";
@@ -37,8 +38,8 @@ import { EmojiForm } from "./EmojiForm";
 export const NoteFooter: React.VFC<{
   note: mkNote;
   type: NoteType;
-  colors: Record<string, string>;
-}> = memo(function Fn({ note, type, colors }) {
+}> = memo(function Fn({ note, type }) {
+  const { colors } = useColorContext();
   const socket = useSocket();
   const {
     onPostModalOpen,

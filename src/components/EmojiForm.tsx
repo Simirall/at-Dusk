@@ -173,14 +173,9 @@ export const EmojiForm: React.VFC<{
             </HStack>
           </Box>
         )}
-        <CustomEmojis
-          emojis={customEmojis}
-          setEmoji={setEmoji}
-          colors={colors}
-          props={props}
-        />
+        <CustomEmojis emojis={customEmojis} setEmoji={setEmoji} />
         <Box pb="2" />
-        <UnicodeEmojis setEmoji={setEmoji} colors={colors} props={props} />
+        <UnicodeEmojis setEmoji={setEmoji} />
       </Box>
       <Input
         size="sm"
@@ -199,9 +194,8 @@ export const EmojiForm: React.VFC<{
 const CustomEmojis: React.VFC<{
   emojis: Array<CustomEmoji>;
   setEmoji: React.Dispatch<React.SetStateAction<string | CustomEmoji>>;
-  colors: Record<string, string>;
-  props: Record<string, Record<string, string | Record<string, string>>>;
-}> = memo(function Fn({ emojis, setEmoji, colors, props }) {
+}> = memo(function Fn({ emojis, setEmoji }) {
+  const { colors, props } = useColorContext();
   const emojiCategory = [...new Set(emojis.map((item) => item.category))];
   return (
     <>
@@ -255,9 +249,8 @@ const CustomEmojis: React.VFC<{
 
 const UnicodeEmojis: React.VFC<{
   setEmoji: React.Dispatch<React.SetStateAction<string | CustomEmoji>>;
-  colors: Record<string, string>;
-  props: Record<string, Record<string, string | Record<string, string>>>;
-}> = memo(function Fn({ setEmoji, colors, props }) {
+}> = memo(function Fn({ setEmoji }) {
+  const { colors } = useColorContext();
   return (
     <>
       <Accordion allowMultiple reduceMotion>
@@ -275,7 +268,6 @@ const UnicodeEmojis: React.VFC<{
                       <EmojiList
                         setEmoji={setEmoji}
                         category={category as EmojiCategory}
-                        props={props}
                       />
                     )}
                   </HStack>
@@ -292,8 +284,8 @@ const UnicodeEmojis: React.VFC<{
 const EmojiList: React.VFC<{
   setEmoji: React.Dispatch<React.SetStateAction<string | CustomEmoji>>;
   category: EmojiCategory;
-  props: Record<string, Record<string, string | Record<string, string>>>;
-}> = memo(function Fn({ setEmoji, category, props }) {
+}> = memo(function Fn({ setEmoji, category }) {
+  const { props } = useColorContext();
   return (
     <>
       {emojis[category as EmojiCategory].map((emoji) => (

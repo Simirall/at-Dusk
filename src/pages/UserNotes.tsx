@@ -90,7 +90,7 @@ export const UserNotes: React.VFC = memo(function Fn() {
         {userData.id && (
           <Box>
             {userData.pinnedNoteIds.length > 0 && (
-              <PinnedNotes userData={userData} colors={colors} />
+              <PinnedNotes userData={userData} />
             )}
             {!userData.isBlocking && !userData.isBlocked ? (
               <>
@@ -142,7 +142,6 @@ export const UserNotes: React.VFC = memo(function Fn() {
                   userNotesData={userNotesData}
                   loaded={initLoaded}
                   change={changeType}
-                  colors={colors}
                 />
               </>
             ) : (
@@ -183,8 +182,8 @@ export const UserNotes: React.VFC = memo(function Fn() {
 
 const PinnedNotes: React.VFC<{
   userData: User & UserShow;
-  colors: Record<string, string>;
-}> = memo(function Fn({ userData, colors }) {
+}> = memo(function Fn({ userData }) {
+  const { colors } = useColorContext();
   return (
     <Box
       p="2"
@@ -213,7 +212,6 @@ const PinnedNotes: React.VFC<{
                   : "note",
             }}
             depth={0}
-            colors={colors}
           />
         </Box>
       ))}
@@ -225,8 +223,7 @@ const UserNotesData: React.VFC<{
   userNotesData: Array<mkNote>;
   loaded: boolean;
   change: boolean;
-  colors: Record<string, string>;
-}> = memo(function Fn({ userNotesData, loaded, change, colors }) {
+}> = memo(function Fn({ userNotesData, loaded, change }) {
   return (
     <>
       {userNotesData.length > 0 ? (
@@ -246,7 +243,6 @@ const UserNotesData: React.VFC<{
                     : "note",
               }}
               depth={0}
-              colors={colors}
             />
           </Box>
         ))

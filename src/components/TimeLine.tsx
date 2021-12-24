@@ -14,7 +14,6 @@ import {
   updateMoreNote,
 } from "../features/notesSlice";
 import { settings } from "../features/settingsSlice";
-import { useColorContext } from "../utils/ColorContext";
 import { useSocket } from "../utils/SocketContext";
 import { useAPIObject } from "../utils/useAPIObject";
 
@@ -28,7 +27,6 @@ export const TimeLine: React.VFC = memo(function Fn() {
   const noteTypes = useAppSelector(allNoteTypes);
   const motto = useAppSelector(moreNote);
   const autoMotto = useAppSelector(settings).autoMotto;
-  const { colors } = useColorContext();
   const dontEffect = useRef(true);
   const moreNotesObject = useAPIObject({
     id: "moreNotes",
@@ -54,12 +52,11 @@ export const TimeLine: React.VFC = memo(function Fn() {
   }, [socket, dispatch, moreNotesObject, autoMotto, motto, inView]);
   return (
     <Box maxW="95vw" w="6xl">
-      <Box></Box>
       {notes.length ? (
         <>
           {notes.map((note: NoteType, i) => (
             <Box paddingBlock="1" key={note.id}>
-              <Note note={note} type={noteTypes[i]} depth={0} colors={colors} />
+              <Note note={note} type={noteTypes[i]} depth={0} />
             </Box>
           ))}
           {autoMotto ? (

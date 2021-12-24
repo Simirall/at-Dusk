@@ -27,7 +27,7 @@ export const Notifications: React.VFC = () => {
   return (
     <>
       <Box maxW="95vw" w="6xl" color={colors.textColor}>
-        <Notification colors={colors} />
+        <Notification />
       </Box>
     </>
   );

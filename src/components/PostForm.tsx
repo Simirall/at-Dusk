@@ -207,7 +207,6 @@ export const PostForm: React.VFC<{ isModal?: boolean }> = memo(function Fn({
               note={modalNoteData}
               type={modalNoteType}
               depth={1}
-              colors={colors}
               onlyBody
             />
           </Box>

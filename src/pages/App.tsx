@@ -1,6 +1,6 @@
 import { useColorModeValue } from "@chakra-ui/color-mode";
 import { Flex } from "@chakra-ui/react";
-import React from "react";
+import React, { memo } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import { Auth } from "../components/Auth";
@@ -19,7 +19,7 @@ import { User } from "./User";
 import { UserFF } from "./UserFF";
 import { UserNotes } from "./UserNotes";
 
-export const App: React.VFC = () => {
+export const App: React.VFC = memo(function Fn() {
   return (
     <Router>
       <Flex
@@ -99,4 +99,4 @@ export const App: React.VFC = () => {
       </Flex>
     </Router>
   );
-};
+});
