@@ -60,6 +60,9 @@ const getLightTheme = (lightTheme: string | undefined) => {
   const theme = lightTheme ? lightTheme : localStorage.getItem("light-theme");
   switch (theme) {
     case "moss":
+      document.head.children
+        .namedItem("theme-color")
+        ?.setAttribute("content", "#5f736a");
       return {
         base: "#5f736a",
         base_darker: "#85a798",
@@ -71,6 +74,9 @@ const getLightTheme = (lightTheme: string | undefined) => {
         headerText: "#1a1117",
       };
     default:
+      document.head.children
+        .namedItem("theme-color")
+        ?.setAttribute("content", "#f2f8f3");
       return {
         base: "#f2f8f3",
         base_darker: "#182521",
@@ -88,6 +94,9 @@ const getDarkTheme = (darkTheme: string | undefined) => {
   const theme = darkTheme ? darkTheme : localStorage.getItem("dark-theme");
   switch (theme) {
     case "Ginkgo":
+      document.head.children
+        .namedItem("theme-color")
+        ?.setAttribute("content", "#1a1117");
       return {
         base: "#1a1117",
         base_lighter: "#5f3c47",
@@ -99,6 +108,9 @@ const getDarkTheme = (darkTheme: string | undefined) => {
         headerText: "#fefde2",
       };
     default:
+      document.head.children
+        .namedItem("theme-color")
+        ?.setAttribute("content", "#001520");
       return {
         base: "#001520",
         base_lighter: "#0f2f59",
