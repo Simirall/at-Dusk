@@ -96,9 +96,9 @@ export const User: React.VFC = memo(function Fn() {
               <Box
                 w="full"
                 borderRadius="lg"
-                overflow="hidden"
                 bgColor={colors.panelColor}
                 shadow="md"
+                pb="0.5"
               >
                 <Box w="full" h="2xs" position="relative">
                   {!banner404 && userData.bannerUrl ? (
