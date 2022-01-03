@@ -1,5 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { CustomEmoji, InstanceMetadata, User } from "misskey-js/built/entities";
+import {
+  CustomEmoji,
+  InstanceMetadata,
+  MeDetailed,
+} from "misskey-js/built/entities";
 
 import { RootState } from "../app/store";
 
@@ -23,7 +27,7 @@ export interface SettingsState {
     userToken: string;
     instance: string;
     appname: string;
-    userData: User;
+    userData: MeDetailed;
     instanceMeta: InstanceMetadata;
   };
 }
@@ -44,7 +48,7 @@ const initialState: SettingsState = {
     userToken: "",
     instance: "",
     appname: "",
-    userData: {} as User,
+    userData: {} as MeDetailed,
     instanceMeta: {} as InstanceMetadata,
   },
 };
@@ -68,7 +72,7 @@ export const settingsSlice = createSlice({
         userToken: string;
         instance: string;
         appname: string;
-        userData: User;
+        userData: MeDetailed;
         instanceMeta: InstanceMetadata;
       }>
     ) => {

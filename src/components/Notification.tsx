@@ -12,7 +12,7 @@ import {
 } from "@chakra-ui/react";
 import {
   Notification as mkNotification,
-  User,
+  UserLite,
 } from "misskey-js/built/entities";
 import React, { memo, useEffect, useRef } from "react";
 import {
@@ -147,7 +147,7 @@ export const Notification: React.VFC = memo(function Fn() {
 });
 
 const NotificationAvatar: React.VFC<{
-  user: User;
+  user: UserLite;
   icon: React.ReactNode;
   bgColor: string;
 }> = memo(function Fn({ user, icon, bgColor }) {

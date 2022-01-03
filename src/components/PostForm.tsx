@@ -37,7 +37,7 @@ import {
   PopoverContent,
   PopoverBody,
 } from "@chakra-ui/react";
-import { User } from "misskey-js/built/entities";
+import { UserLite } from "misskey-js/built/entities";
 import React, { useEffect, useState } from "react";
 import { memo } from "react";
 import { useForm } from "react-hook-form";
@@ -82,7 +82,7 @@ export const PostForm: React.VFC<{ isModal?: boolean }> = memo(function Fn({
   const pollTimeUnitOpen = useDisclosure();
   const [visibility, setVisibility] = useState(settingsValue.defaultVisibility);
   const [localOnly, setLocalOnly] = useState(settingsValue.defaultLocalOnly);
-  const [users, updateUsers] = useState<Array<User>>([]);
+  const [users, updateUsers] = useState<Array<UserLite>>([]);
   const [cw, updateCw] = useState(false);
   const [poll, updatePoll] = useState(false);
   const [pollNum, updatePollNum] = useState([0, 1]);
@@ -181,11 +181,11 @@ export const PostForm: React.VFC<{ isModal?: boolean }> = memo(function Fn({
       .then((res) => {
         if (!res.ok) {
           // throw new Error(`${res.status} ${res.statusText}`);
-          return {} as User;
+          return {} as UserLite;
         }
         return res.json();
       })
-      .then((text: User) => {
+      .then((text: UserLite) => {
         if (text.id && !users.some((user) => user.id === text.id)) {
           updateUsers([...users, text]);
         }

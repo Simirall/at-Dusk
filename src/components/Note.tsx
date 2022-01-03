@@ -10,7 +10,7 @@ import { Button } from "@chakra-ui/button";
 import { Icon } from "@chakra-ui/icon";
 import { Image } from "@chakra-ui/image";
 import { Box, Flex, HStack, Link, Text } from "@chakra-ui/layout";
-import { Note as mkNote, User } from "misskey-js/built/entities";
+import { Note as mkNote, UserLite } from "misskey-js/built/entities";
 import React, { memo } from "react";
 import {
   IoArrowUndo,
@@ -512,7 +512,7 @@ const Quote: React.VFC<{
 });
 
 const Instance: React.VFC<{
-  user: User;
+  user: UserLite;
 }> = memo(function Fn({ user }) {
   const alpha = useColors("alpha");
   return (

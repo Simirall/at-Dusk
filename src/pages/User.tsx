@@ -17,7 +17,7 @@ import {
   ModalBody,
   Badge,
 } from "@chakra-ui/react";
-import { User as mkUser } from "misskey-js/built/entities";
+import { UserDetailed } from "misskey-js/built/entities";
 import { memo, useEffect } from "react";
 import React, { useState } from "react";
 import {
@@ -37,7 +37,7 @@ import { useAppSelector } from "../app/hooks";
 import { Loading } from "../components/Loading";
 import { ParseMFM } from "../components/ParseMFM";
 import { settings } from "../features/settingsSlice";
-import { followers, followings, user, UserShow } from "../features/userSlice";
+import { followers, followings, user } from "../features/userSlice";
 import { useColorContext } from "../utils/ColorContext";
 import { useSocket } from "../utils/SocketContext";
 import { APIObject, useAPIObject } from "../utils/useAPIObject";
@@ -555,7 +555,7 @@ export const User: React.VFC = memo(function Fn() {
 
 const useGetUserData = (
   socket: WebSocket,
-  userData: mkUser & UserShow,
+  userData: UserDetailed,
   userName: string,
   userHost: string | null
 ): void => {
