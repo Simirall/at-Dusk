@@ -9,11 +9,11 @@ import { store } from "./app/store";
 import "focus-visible";
 import { ThemeSelector } from "./components/ThemeSelector";
 import { App } from "./pages/App";
+import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import { ColorProvider } from "./utils/ColorContext";
 import { FocusVisible } from "./utils/FocusVisible";
 import { LoginProvider } from "./utils/LoginContext";
 import { ModalsProvider } from "./utils/ModalsContext";
-import * as serviceWorkerRegistration from "./utils/serviceWorkerRegistration";
 
 const persistor = persistStore(store);
 
