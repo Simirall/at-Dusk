@@ -20,7 +20,6 @@ export const Settings: React.VFC = () => {
   const dispatch = useAppDispatch();
   const settingsValue = useAppSelector(settings);
   const toast = useToast();
-  console.log(settingsValue);
 
   const onSubmitTheme = (data: { lightTheme: string; darkTheme: string }) => {
     dispatch(setTheme({ theme: data }));

@@ -48,12 +48,27 @@ export const useSocketInit = (): void => {
     type: "connect",
     channel: "main",
   });
+  const updateMetaObject = useAPIObject({
+    id: "updateMeta",
+    type: "api",
+    endpoint: "meta",
+  });
+  const updateMeObject = useAPIObject({
+    id: "updateMe",
+    type: "api",
+    endpoint: "users/show",
+    data: {
+      userId: localStorage.getItem("userId"),
+    },
+  });
   useEffect(() => {
     socket.onopen = () => {
       console.log("SOCKET OPEND");
       updateSocketOpen(true);
       socket.send(JSON.stringify(timelineObject));
       socket.send(JSON.stringify(notificationObject));
+      socket.send(JSON.stringify(updateMetaObject));
+      socket.send(JSON.stringify(updateMeObject));
       if (notes.length === 0) socket.send(JSON.stringify(initNotesObject));
       if (notifications.length === 0)
         socket.send(JSON.stringify(initNotificationsObject));
@@ -66,6 +81,8 @@ export const useSocketInit = (): void => {
     socket,
     timelineObject,
     notificationObject,
+    updateMetaObject,
+    updateMeObject,
     updateSocketOpen,
   ]);
 };

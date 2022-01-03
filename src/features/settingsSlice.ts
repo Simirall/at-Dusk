@@ -83,6 +83,12 @@ export const settingsSlice = createSlice({
       state.userInfo.userData = action.payload.userData;
       state.userInfo.instanceMeta = action.payload.instanceMeta;
     },
+    updateMeta: (state, action: PayloadAction<InstanceMetadata>) => {
+      state.userInfo.instanceMeta = action.payload;
+    },
+    updateMe: (state, action: PayloadAction<MeDetailed>) => {
+      state.userInfo.userData = action.payload;
+    },
     setTimeline: (
       state,
       action: PayloadAction<{
@@ -137,6 +143,8 @@ export const settingsSlice = createSlice({
 export const {
   setTheme,
   setUserInfo,
+  updateMeta,
+  updateMe,
   setTimeline,
   setSettings,
   addRUEmoji,
