@@ -12,7 +12,7 @@ import {
 import { DriveFile } from "misskey-js/built/entities";
 import React, { useState } from "react";
 import { memo } from "react";
-import { Blurhash } from "react-blurhash";
+import { BlurhashCanvas } from "react-blurhash";
 import { IoDownload, IoEyeOff, IoMusicalNote } from "react-icons/io5";
 import { Carousel } from "react-responsive-carousel";
 
@@ -186,7 +186,7 @@ const ImageFile: React.VFC<{
               minW="10rem"
               p="0.5"
               cursor="pointer"
-              objectFit="cover"
+              objectFit="contain"
               sx={{
                 filter: nsfw
                   ? "blur(30px) saturate(150%) brightness(60%)"
@@ -196,11 +196,18 @@ const ImageFile: React.VFC<{
               onLoad={() => updateLoaded(true)}
             />
             {!loaded && image.blurhash && (
-              <Box maxH={size} minH="5rem" minW="10rem" p="0.5">
-                <Blurhash
+              <Box p="0.5">
+                <BlurhashCanvas
                   hash={image.blurhash}
-                  height={image.properties.height}
-                  width={image.properties.width}
+                  height={32}
+                  width={32}
+                  style={{
+                    maxHeight: size,
+                    minHeight: "5rem",
+                    minWidth: "10rem",
+                    height: image.properties.height,
+                    aspectRatio: `${image.properties.width}/${image.properties.height}`,
+                  }}
                 />
               </Box>
             )}
