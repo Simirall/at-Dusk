@@ -188,6 +188,7 @@ const Reaction: React.VFC<{
                     : n.reaction.substring(0, n.reaction.length - 1) + "@.:"
                 }
                 emojis={n.note.emojis}
+                limW
               />
             }
             bgColor={colors.secondaryColor}
