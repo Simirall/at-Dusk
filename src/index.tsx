@@ -13,7 +13,7 @@ import { ColorProvider } from "./utils/ColorContext";
 import { FocusVisible } from "./utils/FocusVisible";
 import { LoginProvider } from "./utils/LoginContext";
 import { ModalsProvider } from "./utils/ModalsContext";
-import * as serviceWorker from "./utils/serviceWorker";
+import * as serviceWorkerRegistration from "./utils/serviceWorkerRegistration";
 
 const persistor = persistStore(store);
 
@@ -42,4 +42,4 @@ ReactDOM.render(
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://cra.link/PWA
-serviceWorker.register();
+serviceWorkerRegistration.register();
