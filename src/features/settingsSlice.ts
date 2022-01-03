@@ -22,6 +22,7 @@ export interface SettingsState {
     login: boolean;
     userToken: string;
     instance: string;
+    appname: string;
     userData: User;
     instanceMeta: InstanceMetadata;
   };
@@ -42,6 +43,7 @@ const initialState: SettingsState = {
     login: false,
     userToken: "",
     instance: "",
+    appname: "",
     userData: {} as User,
     instanceMeta: {} as InstanceMetadata,
   },
@@ -65,6 +67,7 @@ export const settingsSlice = createSlice({
         login: boolean;
         userToken: string;
         instance: string;
+        appname: string;
         userData: User;
         instanceMeta: InstanceMetadata;
       }>
@@ -72,6 +75,7 @@ export const settingsSlice = createSlice({
       state.userInfo.login = action.payload.login;
       state.userInfo.userToken = action.payload.userToken;
       state.userInfo.instance = action.payload.instance;
+      state.userInfo.appname = action.payload.appname;
       state.userInfo.userData = action.payload.userData;
       state.userInfo.instanceMeta = action.payload.instanceMeta;
     },
