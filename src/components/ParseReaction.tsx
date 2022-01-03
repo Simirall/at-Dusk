@@ -10,7 +10,8 @@ export const ParseReaction: React.VFC<{
     name: string;
     url: string;
   }[];
-}> = memo(function fun({ reaction, emojis }) {
+  limW?: boolean;
+}> = memo(function fun({ reaction, emojis, limW }) {
   return (
     <>
       {reaction && (
@@ -23,6 +24,10 @@ export const ParseReaction: React.VFC<{
                 loading="lazy"
                 display="inline"
                 h="1.4em"
+                {...(limW && {
+                  width: "1.4em",
+                  objectFit: "contain",
+                })}
                 onError={(e) => {
                   if (e.currentTarget.parentElement?.parentElement) {
                     e.currentTarget.parentElement.parentElement.style.display =

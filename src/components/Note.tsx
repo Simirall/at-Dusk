@@ -10,7 +10,7 @@ import { Button } from "@chakra-ui/button";
 import { Icon } from "@chakra-ui/icon";
 import { Image } from "@chakra-ui/image";
 import { Box, Flex, HStack, Link, Text } from "@chakra-ui/layout";
-import { Note as mkNote, User } from "misskey-js/built/entities";
+import { Note as mkNote, UserLite } from "misskey-js/built/entities";
 import React, { memo } from "react";
 import {
   IoArrowUndo,
@@ -406,17 +406,18 @@ const Renote: React.VFC<{
             marginRight="1"
             bg="none"
           />
-          <Box color="green.400" isTruncated>
+          <HStack color="green.400" spacing="0" overflow="hidden">
             <Link
               as={RouterLink}
               to={`/user/@${note.user.username}${
                 note.user.host ? `@${note.user.host}` : ""
               }`}
+              isTruncated
             >
               <ParseMFM text={name} emojis={note.user.emojis} type="plain" />
             </Link>
-            がRenote
-          </Box>
+            <Box isTruncated>がRenote</Box>
+          </HStack>
         </Flex>
         <HStack spacing="1" flexShrink={0}>
           <Link as={RouterLink} to={`/notes/${note.id}`} color="green.400">
@@ -511,7 +512,7 @@ const Quote: React.VFC<{
 });
 
 const Instance: React.VFC<{
-  user: User;
+  user: UserLite;
 }> = memo(function Fn({ user }) {
   const alpha = useColors("alpha");
   return (
