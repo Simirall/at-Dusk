@@ -38,16 +38,6 @@ const ReactionButton: React.VFC<{
 }> = ({ id, reaction, text }) => {
   const { colors } = useColorContext();
   const socket = useSocket();
-  const props =
-    text === reaction?.myReaction
-      ? {
-          color: colors.headerTextColor,
-          bgColor: colors.primaryColor,
-          _hover: {
-            bgColor: colors.primaryDarkerColor,
-          },
-        }
-      : {};
   const reactionCreateObject = useAPIObject({
     id: "reactionCreate",
     type: "api",
@@ -81,7 +71,13 @@ const ReactionButton: React.VFC<{
           bgColor: "#00000000",
         },
       }}
-      {...props}
+      {...(text === reaction?.myReaction && {
+        color: colors.headerTextColor,
+        bgColor: colors.primaryColor,
+        _hover: {
+          bgColor: colors.primaryDarkerColor,
+        },
+      })}
       onClick={() => {
         if (reaction.myReaction && reaction.myReaction === text) {
           socket.send(JSON.stringify(reactionDeleteObject));

@@ -13,6 +13,6 @@ export const Auth: React.VFC<{
   const { updateToken } = useLoginContext();
   useEffect(() => {
     if (info?.login) updateToken(info?.userToken as string);
-  });
+  }, [info, updateToken]);
   return info?.login ? <>{children}</> : <Navigate to="/login" />;
 });

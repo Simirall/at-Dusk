@@ -46,8 +46,7 @@ export const LoginForm: React.VFC = () => {
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     const id = uuid();
     const appURL = document.location.href;
-    const instance = data.instance;
-    const checkMiAuthURL = `https://${instance}/api/endpoints`;
+    const checkMiAuthURL = `https://${data.instance}/api/endpoints`;
     fetch(checkMiAuthURL, {
       method: "POST",
     })
@@ -60,10 +59,17 @@ export const LoginForm: React.VFC = () => {
       .then((text) => {
         if (text.includes("miauth/gen-token")) {
           const settings = store.getState().settings.userInfo;
-          store.dispatch(setUserInfo({ ...settings, instance: instance }));
+          store.dispatch(
+            setUserInfo({
+              ...settings,
+              instance: data.instance,
+              appname: data.appname,
+            })
+          );
           const authURL =
-            `https://${instance}/miauth/${id}?name=${data.appname}&callback=${appURL}` +
-            "&permission=read:account,write:account,read:blocks,write:blocks,read:drive,write:drive,read:favorites,write:favorites,read:following,write:following,read:messaging,write:messaging,read:mutes,write:mutes,write:notes,read:notifications,write:notifications,read:reactions,write:reactions,write:votes,read:pages,write:pages,write:page-likes,read:page-likes,read:user-groups,write:user-groups,read:channels,write:channels,read:gallery,write:gallery,read:gallery-likes,write:gallery-likes";
+            `https://${data.instance}/miauth/${id}?name=${data.appname}&callback=${appURL}` +
+            // "&permission=read:account,write:account,read:blocks,write:blocks,read:drive,write:drive,read:favorites,write:favorites,read:following,write:following,read:messaging,write:messaging,read:mutes,write:mutes,write:notes,read:notifications,write:notifications,read:reactions,write:reactions,write:votes,read:pages,write:pages,write:page-likes,read:page-likes,read:user-groups,write:user-groups,read:channels,write:channels,read:gallery,write:gallery,read:gallery-likes,write:gallery-likes";
+            "&permission=read:account,write:account,read:blocks,write:blocks,read:drive,write:drive,read:favorites,write:favorites,read:following,write:following,read:messaging,write:messaging,read:mutes,write:mutes,write:notes,read:notifications,write:notifications,read:reactions,write:reactions,write:votes,read:channels,write:channels";
           window.location.href = authURL;
         } else {
           updateFetchState({

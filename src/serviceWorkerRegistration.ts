@@ -25,7 +25,7 @@ type Config = {
   onUpdate?: (registration: ServiceWorkerRegistration) => void;
 };
 
-export function register(config?: Config): void {
+export function register(config?: Config) {
   if (process.env.NODE_ENV === "production" && "serviceWorker" in navigator) {
     // The URL constructor is available in all browsers that support SW.
     const publicUrl = new URL(process.env.PUBLIC_URL, window.location.href);
@@ -85,7 +85,7 @@ function registerValidSW(swUrl: string, config?: Config) {
               }
             } else {
               // At this point, everything has been precached.
-              // It is the perfect time to display a
+              // It's the perfect time to display a
               // "Content is cached for offline use." message.
               console.log("Content is cached for offline use.");
 
@@ -133,7 +133,7 @@ function checkValidServiceWorker(swUrl: string, config?: Config) {
     });
 }
 
-export function unregister(): void {
+export function unregister() {
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker.ready
       .then((registration) => {

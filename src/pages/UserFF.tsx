@@ -4,7 +4,7 @@ import Icon from "@chakra-ui/icon";
 import { AddIcon, MinusIcon } from "@chakra-ui/icons";
 import { Image } from "@chakra-ui/image";
 import { Box, HStack, Center, Text, Link } from "@chakra-ui/layout";
-import { User } from "misskey-js/built/entities";
+import { UserDetailed } from "misskey-js/built/entities";
 import React, { useState, useEffect, memo } from "react";
 import { IoBookmark, IoBookmarkOutline } from "react-icons/io5";
 import { useInView } from "react-intersection-observer";
@@ -23,7 +23,6 @@ import {
   oldests,
   updateMoreFF,
   user,
-  UserShow,
 } from "../features/userSlice";
 import { useColorContext } from "../utils/ColorContext";
 import { useSocket } from "../utils/SocketContext";
@@ -172,7 +171,7 @@ const Motto: React.VFC<{
 
 const UserContainer: React.VFC<{
   socket: WebSocket;
-  user: User & UserShow;
+  user: UserDetailed;
   type: "followers" | "following";
 }> = memo(function Fn({ socket, user, type }) {
   const { colors } = useColorContext();

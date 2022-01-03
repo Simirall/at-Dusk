@@ -1,7 +1,7 @@
 import { Alert, AlertIcon } from "@chakra-ui/alert";
 import { Button } from "@chakra-ui/button";
 import { Box, HStack, Center } from "@chakra-ui/layout";
-import { Note as mkNote, User } from "misskey-js/built/entities";
+import { Note as mkNote, UserDetailed } from "misskey-js/built/entities";
 import React, { useState, useEffect, memo } from "react";
 import { IoPin } from "react-icons/io5";
 import { useInView } from "react-intersection-observer";
@@ -17,7 +17,6 @@ import {
   updateMoreUserNote,
   user,
   userNotes,
-  UserShow,
   changeUserNotesType,
   lasts,
   oldests,
@@ -181,7 +180,7 @@ export const UserNotes: React.VFC = memo(function Fn() {
 });
 
 const PinnedNotes: React.VFC<{
-  userData: User & UserShow;
+  userData: UserDetailed;
 }> = memo(function Fn({ userData }) {
   const { colors } = useColorContext();
   return (
