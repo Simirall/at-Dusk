@@ -406,17 +406,18 @@ const Renote: React.VFC<{
             marginRight="1"
             bg="none"
           />
-          <Box color="green.400" isTruncated>
+          <HStack color="green.400" spacing="0" overflow="hidden">
             <Link
               as={RouterLink}
               to={`/user/@${note.user.username}${
                 note.user.host ? `@${note.user.host}` : ""
               }`}
+              isTruncated
             >
               <ParseMFM text={name} emojis={note.user.emojis} type="plain" />
             </Link>
-            がRenote
-          </Box>
+            <Box isTruncated>がRenote</Box>
+          </HStack>
         </Flex>
         <HStack spacing="1" flexShrink={0}>
           <Link as={RouterLink} to={`/notes/${note.id}`} color="green.400">
