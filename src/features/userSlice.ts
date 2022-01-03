@@ -1,50 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { DateString, ID, Note, Page, User } from "misskey-js/built/entities";
+import { Note, UserDetailed } from "misskey-js/built/entities";
 
 import { RootState } from "../app/store";
 
-export interface UserShow {
-  bannerBlurhash: string | null;
-  bannerColor: string | null;
-  bannerUrl: string | null;
-  birthday: string | null;
-  createdAt: DateString;
-  description: string | null;
-  ffVisibility: "public" | "followers" | "private";
-  fields: { name: string; value: string }[];
-  followersCount: number;
-  followingCount: number;
-  hasPendingFollowRequestFromYou: boolean;
-  hasPendingFollowRequestToYou: boolean;
-  isAdmin: boolean;
-  isBlocked: boolean;
-  isBlocking: boolean;
-  isBot: boolean;
-  isCat: boolean;
-  isFollowed: boolean;
-  isFollowing: boolean;
-  isLocked: boolean;
-  isModerator: boolean;
-  isMuted: boolean;
-  isSilenced: boolean;
-  isSuspended: boolean;
-  lang: string | null;
-  location: string | null;
-  notesCount: number;
-  pinnedNoteIds: ID[];
-  pinnedNotes: Note[];
-  pinnedPage: Page | null;
-  pinnedPageId: string | null;
-  publicReactions: boolean;
-  securityKeys: boolean;
-  twoFactorEnabled: boolean;
-  updatedAt: DateString | null;
-  uri: string | null;
-  url: string | null;
-}
-
 export interface userState {
-  user: User & UserShow;
+  user: UserDetailed;
   notes: Array<Note>;
   initNoteLoaded: boolean;
   moreUserNote: boolean;
@@ -52,14 +12,14 @@ export interface userState {
   changeUserNotesType: boolean;
   followers: Array<{
     createdAt: string;
-    follower: User & UserShow;
+    follower: UserDetailed;
     followeeId: string;
     followerId: string;
     id: string;
   }>;
   followings: Array<{
     createdAt: string;
-    followee: User & UserShow;
+    followee: UserDetailed;
     followeeId: string;
     followerId: string;
     id: string;
@@ -72,7 +32,7 @@ export interface userState {
 }
 
 const initialState: userState = {
-  user: {} as User & UserShow,
+  user: {} as UserDetailed,
   notes: [],
   initNoteLoaded: false,
   moreUserNote: false,
@@ -91,7 +51,7 @@ export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    setUserData: (state, action: PayloadAction<User & UserShow>) => {
+    setUserData: (state, action: PayloadAction<UserDetailed>) => {
       state.user = action.payload;
     },
     updateUserData: (state, action: PayloadAction<string>) => {
@@ -127,7 +87,7 @@ export const userSlice = createSlice({
       action: PayloadAction<
         Array<{
           createdAt: string;
-          followee: User & UserShow;
+          followee: UserDetailed;
           followeeId: string;
           followerId: string;
           id: string;
@@ -143,7 +103,7 @@ export const userSlice = createSlice({
       action: PayloadAction<
         Array<{
           createdAt: string;
-          follower: User & UserShow;
+          follower: UserDetailed;
           followeeId: string;
           followerId: string;
           id: string;
@@ -221,7 +181,7 @@ export const {
   clearUserData,
 } = userSlice.actions;
 
-export const user = (state: RootState): User & UserShow => state.user.user;
+export const user = (state: RootState): UserDetailed => state.user.user;
 export const userNotes = (state: RootState): Array<Note> => state.user.notes;
 export const isChangedUserNoteType = (state: RootState): boolean =>
   state.user.changeUserNotesType;
@@ -232,7 +192,7 @@ export const followers = (
   state: RootState
 ): Array<{
   createdAt: string;
-  follower: User & UserShow;
+  follower: UserDetailed;
   followeeId: string;
   followerId: string;
   id: string;
@@ -241,7 +201,7 @@ export const followings = (
   state: RootState
 ): Array<{
   createdAt: string;
-  followee: User & UserShow;
+  followee: UserDetailed;
   followeeId: string;
   followerId: string;
   id: string;

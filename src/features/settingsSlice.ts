@@ -1,5 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { CustomEmoji, InstanceMetadata, User } from "misskey-js/built/entities";
+import {
+  CustomEmoji,
+  InstanceMetadata,
+  MeDetailed,
+} from "misskey-js/built/entities";
 
 import { RootState } from "../app/store";
 
@@ -22,7 +26,8 @@ export interface SettingsState {
     login: boolean;
     userToken: string;
     instance: string;
-    userData: User;
+    appname: string;
+    userData: MeDetailed;
     instanceMeta: InstanceMetadata;
   };
 }
@@ -42,7 +47,8 @@ const initialState: SettingsState = {
     login: false,
     userToken: "",
     instance: "",
-    userData: {} as User,
+    appname: "",
+    userData: {} as MeDetailed,
     instanceMeta: {} as InstanceMetadata,
   },
 };
@@ -65,15 +71,23 @@ export const settingsSlice = createSlice({
         login: boolean;
         userToken: string;
         instance: string;
-        userData: User;
+        appname: string;
+        userData: MeDetailed;
         instanceMeta: InstanceMetadata;
       }>
     ) => {
       state.userInfo.login = action.payload.login;
       state.userInfo.userToken = action.payload.userToken;
       state.userInfo.instance = action.payload.instance;
+      state.userInfo.appname = action.payload.appname;
       state.userInfo.userData = action.payload.userData;
       state.userInfo.instanceMeta = action.payload.instanceMeta;
+    },
+    updateMeta: (state, action: PayloadAction<InstanceMetadata>) => {
+      state.userInfo.instanceMeta = action.payload;
+    },
+    updateMe: (state, action: PayloadAction<MeDetailed>) => {
+      state.userInfo.userData = action.payload;
     },
     setTimeline: (
       state,
@@ -129,6 +143,8 @@ export const settingsSlice = createSlice({
 export const {
   setTheme,
   setUserInfo,
+  updateMeta,
+  updateMe,
   setTimeline,
   setSettings,
   addRUEmoji,

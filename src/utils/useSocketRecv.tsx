@@ -27,6 +27,7 @@ import {
   reacted,
   unreacted,
 } from "../features/reactionsSlice";
+import { updateMe, updateMeta } from "../features/settingsSlice";
 import {
   addFollowers,
   addFollowings,
@@ -104,6 +105,12 @@ export const useSocketRecv = (): void => {
                 dispatch(pollVote(data));
                 break;
             }
+            break;
+          case "api:updateMeta":
+            dispatch(updateMeta(data.res));
+            break;
+          case "api:updateMe":
+            dispatch(updateMe(data.res));
             break;
           case "api:initNotes":
             Promise.all([
