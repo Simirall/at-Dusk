@@ -160,7 +160,7 @@ export const User: React.VFC = memo(function Fn() {
                     p="2"
                   >
                     <Box>
-                      <Menu>
+                      <Menu computePositionOnMount>
                         <MenuButton
                           as={IconButton}
                           aria-label="user menu"

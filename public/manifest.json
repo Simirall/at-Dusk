@@ -1,6 +1,7 @@
 {
   "short_name": "at Dusk.",
   "name": "at Dusk - Misskey Client Application.",
+  "lang": "ja-JP",
   "icons": [
     {
       "src": "favicon.ico",
@@ -16,9 +17,15 @@
       "src": "/android-chrome-512x512.png",
       "sizes": "512x512",
       "type": "image/png"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ],
-  "start_url": ".",
+  "start_url": "/",
   "display": "standalone",
   "theme_color": "#075f73",
   "background_color": "#001520"
