@@ -39,7 +39,7 @@ export const Settings: React.VFC = () => {
     dispatch(setSettings(data));
     toast({
       title: "Successfully Saved!",
-      duration: 100,
+      duration: 1000,
       status: "success",
       position: "top",
     });
