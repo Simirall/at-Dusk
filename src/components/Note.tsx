@@ -529,6 +529,7 @@ const Instance: React.VFC<{
           src={user.instance?.faviconUrl as string}
           h="5"
           marginRight="1"
+          alt="favicon"
         />
         <Text color="white">{user.instance?.name}</Text>
       </Flex>
