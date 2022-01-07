@@ -12,6 +12,7 @@ import {
   oldestNoteId,
   moreNote,
   updateMoreNote,
+  isLastInstanceNote,
 } from "../features/notesSlice";
 import { settings } from "../features/settingsSlice";
 import { useSocket } from "../utils/SocketContext";
@@ -26,6 +27,7 @@ export const TimeLine: React.VFC = memo(function Fn() {
   const notes = useAppSelector(allNotes);
   const noteTypes = useAppSelector(allNoteTypes);
   const motto = useAppSelector(moreNote);
+  const last = useAppSelector(isLastInstanceNote);
   const autoMotto = useAppSelector(settings).autoMotto;
   const dontEffect = useRef(true);
   const moreNotesObject = useAPIObject({
@@ -59,11 +61,11 @@ export const TimeLine: React.VFC = memo(function Fn() {
               <Note note={note} type={noteTypes[i]} depth={0} />
             </Box>
           ))}
-          {autoMotto ? (
+          {autoMotto && !last ? (
             <Center>
               {!motto ? <Box ref={ref} p="9" /> : <Loading small />}
             </Center>
-          ) : (
+          ) : !last ? (
             <Center marginBottom="2">
               <Button
                 aria-label="more notes"
@@ -76,6 +78,8 @@ export const TimeLine: React.VFC = memo(function Fn() {
                 {motto ? <Loading small /> : "もっと"}
               </Button>
             </Center>
+          ) : (
+            <></>
           )}
         </>
       ) : (

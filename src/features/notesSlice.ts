@@ -12,12 +12,14 @@ export interface NotesState {
   notes: Array<Note>;
   noteTypes: Array<NoteType>;
   moreNote: boolean;
+  isLastInstanceNote: boolean;
 }
 
 const initialState: NotesState = {
   notes: [],
   noteTypes: [],
   moreNote: false,
+  isLastInstanceNote: false,
 };
 
 export const notesSlice = createSlice({
@@ -40,6 +42,7 @@ export const notesSlice = createSlice({
     },
     addLower: (state, action: PayloadAction<Array<Note>>) => {
       state.notes = state.notes.concat(action.payload);
+      if (action.payload.length < 15) state.isLastInstanceNote = true;
       (async () => {
         action.payload.forEach((note) => {
           state.noteTypes.push({
@@ -75,6 +78,7 @@ export const notesSlice = createSlice({
     clear: (state) => {
       state.notes = [];
       state.noteTypes = [];
+      state.isLastInstanceNote = false;
     },
   },
 });
@@ -90,5 +94,7 @@ export const oldestNoteId = (state: RootState): string =>
   state.notes.notes.length > 0
     ? state.notes.notes[state.notes.notes.length - 1].id
     : "";
+export const isLastInstanceNote = (state: RootState): boolean =>
+  state.notes.isLastInstanceNote;
 
 export default notesSlice.reducer;
