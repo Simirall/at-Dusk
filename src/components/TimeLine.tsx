@@ -65,21 +65,21 @@ export const TimeLine: React.VFC = memo(function Fn() {
             <Center>
               {!motto ? <Box ref={ref} p="9" /> : <Loading small />}
             </Center>
-          ) : !last ? (
-            <Center marginBottom="2">
-              <Button
-                aria-label="more notes"
-                size="lg"
-                onClick={() => {
-                  dispatch(updateMoreNote(true));
-                  socket.send(JSON.stringify(moreNotesObject));
-                }}
-              >
-                {motto ? <Loading small /> : "もっと"}
-              </Button>
-            </Center>
           ) : (
-            <></>
+            !last && (
+              <Center marginBottom="2">
+                <Button
+                  aria-label="more notes"
+                  size="lg"
+                  onClick={() => {
+                    dispatch(updateMoreNote(true));
+                    socket.send(JSON.stringify(moreNotesObject));
+                  }}
+                >
+                  {motto ? <Loading small /> : "もっと"}
+                </Button>
+              </Center>
+            )
           )}
         </>
       ) : (

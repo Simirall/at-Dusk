@@ -29,6 +29,7 @@ import { Link as routerLink } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import {
   allNotifications,
+  isLastNotification,
   moreNotification,
   oldestNotificationId,
   removeNotification,
@@ -51,6 +52,7 @@ export const Notification: React.VFC = memo(function Fn() {
   const notifications = useAppSelector(allNotifications);
   const autoMotto = useAppSelector(settings).autoMotto;
   const motto = useAppSelector(moreNotification);
+  const last = useAppSelector(isLastNotification);
   const dispatch = useAppDispatch();
   const dontEffect = useRef(true);
   const moreNotificationObject = useAPIObject({
@@ -126,21 +128,23 @@ export const Notification: React.VFC = memo(function Fn() {
           )}
         </Box>
       ))}
-      {autoMotto ? (
+      {autoMotto && !last ? (
         <Center>{!motto ? <Box ref={ref} p="9" /> : <Loading small />}</Center>
       ) : (
-        <Center marginBottom="2">
-          <Button
-            aria-label="more notes"
-            size="lg"
-            onClick={() => {
-              dispatch(updateMoreNotification(true));
-              socket.send(JSON.stringify(moreNotificationObject));
-            }}
-          >
-            {motto ? <Loading small /> : "もっと"}
-          </Button>
-        </Center>
+        !last && (
+          <Center marginBottom="2">
+            <Button
+              aria-label="more notes"
+              size="lg"
+              onClick={() => {
+                dispatch(updateMoreNotification(true));
+                socket.send(JSON.stringify(moreNotificationObject));
+              }}
+            >
+              {motto ? <Loading small /> : "もっと"}
+            </Button>
+          </Center>
+        )
       )}
     </>
   );
