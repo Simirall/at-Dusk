@@ -352,6 +352,7 @@ const JudgePlainX: React.VFC<{
   }[];
 }> = ({ element, emojis }) => {
   const c: Array<React.ReactNode> = [];
+  const { colors } = useColorContext();
   switch (element.type) {
     case "text":
       return (
@@ -381,29 +382,69 @@ const JudgePlainX: React.VFC<{
         );
       });
       return (
-        <Box display="inline" verticalAlign="middle">
+        <Link
+          href={element.props.url}
+          color={colors.secondaryColor}
+          verticalAlign="middle"
+          isExternal
+          display="inline"
+        >
           {c}
-        </Box>
+          <ExternalLinkIcon marginLeft="0.5" />
+        </Link>
       );
     case "url":
       return (
-        <Box display="inline" verticalAlign="middle">
+        <Link
+          href={element.props.url}
+          color={colors.secondaryColor}
+          verticalAlign="middle"
+          isExternal
+          display="inline"
+        >
           {decodeURI(element.props.url)}
-        </Box>
+          <ExternalLinkIcon marginLeft="0.5" />
+        </Link>
       );
     case "hashtag":
       return (
-        <Box display="inline" verticalAlign="middle">
+        <Link
+          as={routerLink}
+          to={`/tags/${element.props.hashtag}`}
+          color={colors.secondaryColor}
+          display="inline"
+          verticalAlign="middle"
+        >
           {`#${element.props.hashtag}`}
-        </Box>
+        </Link>
       );
     case "mention":
-      return (
-        <Box display="inline" verticalAlign="middle">
-          {`@${element.props.username}`}
-          {element.props.host && <>{`@${element.props.host}`}</>}
-        </Box>
-      );
+      if (element.props.host === "twitter.com") {
+        return (
+          <Link
+            href={`https://twitter.com/${element.props.username}`}
+            color={colors.secondaryColor}
+            verticalAlign="middle"
+            isExternal
+          >
+            {`@${element.props.username}`}
+            {element.props.host && <>{`@${element.props.host}`}</>}
+            <ExternalLinkIcon marginLeft="0.5" />
+          </Link>
+        );
+      } else {
+        return (
+          <Link
+            as={routerLink}
+            to={`/user/${element.props.acct}`}
+            color={colors.secondaryColor}
+            verticalAlign="middle"
+          >
+            {`@${element.props.username}`}
+            {element.props.host && <>{`@${element.props.host}`}</>}
+          </Link>
+        );
+      }
     case "mathInline":
       return <span>{element.props.formula}</span>;
     case "inlineCode":
