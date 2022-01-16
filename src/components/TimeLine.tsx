@@ -29,11 +29,19 @@ export const TimeLine: React.VFC = memo(function Fn() {
   const motto = useAppSelector(moreNote);
   const last = useAppSelector(isLastInstanceNote);
   const autoMotto = useAppSelector(settings).autoMotto;
+  const TLType = useAppSelector(settings).timeline;
   const dontEffect = useRef(true);
   const moreNotesObject = useAPIObject({
     id: "moreNotes",
     type: "api",
-    endpoint: "notes/timeline",
+    endpoint:
+      TLType === "homeTimeline"
+        ? "notes/timeline"
+        : TLType === "localTimeline"
+        ? "notes/local-timeline"
+        : TLType === "hybridTimeline"
+        ? "notes/hybrid-timeline"
+        : "notes/global-timeline",
     data: {
       limit: 15,
       untilId: useAppSelector(oldestNoteId),
