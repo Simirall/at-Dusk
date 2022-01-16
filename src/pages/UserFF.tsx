@@ -60,7 +60,7 @@ export const UserFF: React.VFC<{ type: "following" | "followers" }> = memo(
                             key={i}
                             w="max(50%, 20rem)"
                             maxW="full"
-                            h="15em"
+                            h="16.2em"
                             p="1"
                           >
                             <UserContainer
@@ -87,7 +87,7 @@ export const UserFF: React.VFC<{ type: "following" | "followers" }> = memo(
                             key={i}
                             w="max(50%, 20rem)"
                             maxW="full"
-                            h="15em"
+                            h="16.2em"
                             p="1"
                           >
                             <UserContainer
@@ -305,8 +305,12 @@ const UserContainer: React.VFC<{
             </HStack>
           </Box>
         </HStack>
-        <Box p="2" w="full" isTruncated>
-          <ParseMFM type="full" text={user.description} emojis={user.emojis} />
+        <Box p="2" w="full" noOfLines={2}>
+          <ParseMFM
+            type="plainX"
+            text={user.description}
+            emojis={user.emojis}
+          />
         </Box>
       </Box>
     </>
