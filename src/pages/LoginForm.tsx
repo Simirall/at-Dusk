@@ -8,21 +8,30 @@ import {
   Button,
   Stack,
   Heading,
+  useColorMode,
 } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { v4 as uuid } from "uuid";
 
 import { store } from "../app/store";
-import { ColorModeSwitcher } from "../components/ColorModeSwitcher";
 import { setUserInfo } from "../features/settingsSlice";
+import { useColorContext } from "../utils/ColorContext";
 
 export const LoginForm: React.VFC = () => {
   const {
     handleSubmit,
     register,
     formState: { errors, isSubmitting },
-  } = useForm();
+  } = useForm<{
+    appname: string;
+    instance: string;
+  }>();
+  const { colors } = useColorContext();
+  const { setColorMode } = useColorMode();
+  const theme = window.matchMedia("(prefers-color-scheme: dark)").matches
+    ? "dark"
+    : "light";
 
   useEffect(() => {
     if (document.location.href.includes("localhost")) {
@@ -31,19 +40,19 @@ export const LoginForm: React.VFC = () => {
         "127.0.0.1"
       );
     }
-  }, []);
-
-  type Inputs = {
-    appname: string;
-    instance: string;
-  };
+    setColorMode(theme);
+    document.querySelector(":root")?.setAttribute("mode", theme);
+    document
+      .querySelector(":root")
+      ?.setAttribute("theme", theme === "dark" ? "chillout" : "illuminating");
+  }, [theme, setColorMode]);
 
   const [fetchState, updateFetchState] = useState<{
     ok: boolean;
     message: string;
   }>({ ok: true, message: "" });
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
+  const onSubmit = (data: { appname: string; instance: string }) => {
     const id = uuid();
     const appURL = document.location.href;
     const checkMiAuthURL = `https://${data.instance}/api/endpoints`;
@@ -64,6 +73,7 @@ export const LoginForm: React.VFC = () => {
               ...settings,
               instance: data.instance,
               appname: data.appname,
+              themeMode: theme,
             })
           );
           const authURL =
@@ -88,26 +98,28 @@ export const LoginForm: React.VFC = () => {
 
   return (
     <>
-      <ColorModeSwitcher
-        alignSelf="flex-end"
-        boxShadow="base"
-        marginBottom={2}
-      />
-      <Box minW="full">
-        <Container boxShadow="base" p={4}>
+      <Box minW="full" color={colors.textColor}>
+        <Container
+          boxShadow="base"
+          mt="6"
+          p={4}
+          borderRadius="md"
+          {...(theme === "dark" && { bgColor: colors.alpha50 })}
+        >
           <Heading
             as="h3"
             size="2xl"
-            marginBottom={6}
+            mb="4"
             fontWeight="normal"
             bgGradient="linear(to top, #ffa17f, #00223e)"
             bgClip="text"
+            isTruncated
           >
             at Dusk.
           </Heading>
           <form onSubmit={handleSubmit(onSubmit)}>
             <Stack spacing={2}>
-              <FormControl isInvalid={errors.appname}>
+              <FormControl isInvalid={errors.appname ? true : false}>
                 <FormLabel htmlFor="appname">アプリ名</FormLabel>
                 <Input
                   id="appname"
@@ -119,7 +131,7 @@ export const LoginForm: React.VFC = () => {
                   {errors.appname && errors.appname.message}
                 </FormErrorMessage>
               </FormControl>
-              <FormControl isInvalid={errors.instance}>
+              <FormControl isInvalid={errors.instance ? true : false}>
                 <FormLabel htmlFor="instance">インスタンス名</FormLabel>
                 <Input
                   id="instance"

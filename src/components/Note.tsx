@@ -23,7 +23,6 @@ import { Link as RouterLink } from "react-router-dom";
 
 import { NoteType } from "../features/notesSlice";
 import { useColorContext } from "../utils/ColorContext";
-import { useColors } from "../utils/Colors";
 import { getRelativeTime } from "../utils/getRelativeTime";
 
 import { Files } from "./Files";
@@ -96,7 +95,6 @@ const GeneralNote: React.VFC<{
   updateCw: React.Dispatch<React.SetStateAction<boolean>>;
 }> = memo(function Fn({ note, name, depth, cw, updateCw }) {
   const { colors } = useColorContext();
-  const alpha = useColors("alpha");
   return (
     <>
       <Flex>
@@ -162,7 +160,9 @@ const GeneralNote: React.VFC<{
                       marginLeft="1"
                       size="xs"
                       color={colors.headerTextColor}
-                      colorScheme="whiteAlpha"
+                      bgColor={colors.alpha200}
+                      _hover={{ bgColor: colors.alpha400 }}
+                      _active={{ bgColor: colors.alpha50 }}
                       onClick={() => {
                         updateCw(!cw);
                       }}
@@ -259,7 +259,7 @@ const GeneralNote: React.VFC<{
                   <AccordionItem border="none">
                     <AccordionButton
                       w="fit-content"
-                      bgColor={alpha.alpha200}
+                      bgColor={colors.alpha200}
                       paddingBlock="0"
                     >
                       <AccordionIcon />
@@ -276,7 +276,7 @@ const GeneralNote: React.VFC<{
                   <AccordionItem border="none">
                     <AccordionButton
                       w="fit-content"
-                      bgColor={alpha.alpha200}
+                      bgColor={colors.alpha200}
                       paddingBlock="0"
                     >
                       <AccordionIcon />
@@ -474,7 +474,7 @@ const Quote: React.VFC<{
 }> = memo(function Fn({ note, name, depth, cw, updateCw }) {
   const { colors } = useColorContext();
   const [quoteCw, updateQuoteCw] = React.useState(
-    note.cw || note.cw === "" ? true : false
+    note.renote?.cw || note.renote?.cw === "" ? true : false
   );
   return (
     <Box>
@@ -514,12 +514,12 @@ const Quote: React.VFC<{
 const Instance: React.VFC<{
   user: UserLite;
 }> = memo(function Fn({ user }) {
-  const alpha = useColors("alpha");
+  const { colors } = useColorContext();
   return (
     <>
       <Flex
         bgGradient={`linear(to-r, ${
-          user.instance?.themeColor ? user.instance.themeColor : alpha.alpha600
+          user.instance?.themeColor ? user.instance.themeColor : colors.alhpa600
         }, #00000000)`}
         paddingLeft="1"
         borderRadius="md"
