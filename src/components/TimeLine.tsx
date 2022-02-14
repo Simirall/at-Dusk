@@ -29,11 +29,19 @@ export const TimeLine: React.VFC = memo(function Fn() {
   const motto = useAppSelector(moreNote);
   const last = useAppSelector(isLastInstanceNote);
   const autoMotto = useAppSelector(settings).autoMotto;
+  const TLType = useAppSelector(settings).timeline;
   const dontEffect = useRef(true);
   const moreNotesObject = useAPIObject({
     id: "moreNotes",
     type: "api",
-    endpoint: "notes/timeline",
+    endpoint:
+      TLType === "homeTimeline"
+        ? "notes/timeline"
+        : TLType === "localTimeline"
+        ? "notes/local-timeline"
+        : TLType === "hybridTimeline"
+        ? "notes/hybrid-timeline"
+        : "notes/global-timeline",
     data: {
       limit: 15,
       untilId: useAppSelector(oldestNoteId),
@@ -65,21 +73,21 @@ export const TimeLine: React.VFC = memo(function Fn() {
             <Center>
               {!motto ? <Box ref={ref} p="9" /> : <Loading small />}
             </Center>
-          ) : !last ? (
-            <Center marginBottom="2">
-              <Button
-                aria-label="more notes"
-                size="lg"
-                onClick={() => {
-                  dispatch(updateMoreNote(true));
-                  socket.send(JSON.stringify(moreNotesObject));
-                }}
-              >
-                {motto ? <Loading small /> : "もっと"}
-              </Button>
-            </Center>
           ) : (
-            <></>
+            !last && (
+              <Center marginBottom="2">
+                <Button
+                  aria-label="more notes"
+                  size="lg"
+                  onClick={() => {
+                    dispatch(updateMoreNote(true));
+                    socket.send(JSON.stringify(moreNotesObject));
+                  }}
+                >
+                  {motto ? <Loading small /> : "もっと"}
+                </Button>
+              </Center>
+            )
           )}
         </>
       ) : (
