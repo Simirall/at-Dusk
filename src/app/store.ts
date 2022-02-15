@@ -4,22 +4,10 @@ import { persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import thunk from "redux-thunk";
 
-import noteDetailsReducer from "../features/noteDetailsSlice";
-import notesReducer from "../features/notesSlice";
-import notificationsReducer from "../features/notificationsSlice";
-import pollReducer from "../features/pollSlice";
-import reactionsReducer from "../features/reactionsSlice";
 import settingsReducer from "../features/settingsSlice";
-import userReducer from "../features/userSlice";
 
 const reducers = combineReducers({
-  notes: notesReducer,
-  noteDetails: noteDetailsReducer,
-  reactions: reactionsReducer,
-  poll: pollReducer,
   settings: settingsReducer,
-  user: userReducer,
-  notifications: notificationsReducer,
 });
 
 const persistConfig = {

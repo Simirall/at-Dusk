@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 
-import { useLoginContext } from "./LoginContext";
+import { useGetLogin } from "../features/loginState";
 
 interface APIBody {
   id: string;
@@ -41,7 +41,7 @@ interface Props {
 export const useAPIObject = (
   props: Props
 ): APIObject | StreamObject | DisconnectObject => {
-  const { token } = useLoginContext();
+  const { token } = useGetLogin();
   return useMemo(
     () =>
       props.type === "api"

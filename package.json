@@ -24,6 +24,7 @@
     "react-router-dom": "^6.2.1",
     "react-scripts": "^5.0.0",
     "react-syntax-highlighter": "^15.4.5",
+    "recoil": "^0.6.1",
     "redux-persist": "^6.0.0",
     "sass": "^1.49.7",
     "twemoji-parser": "^13.1.0",
