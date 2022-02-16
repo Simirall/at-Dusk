@@ -4,7 +4,9 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import { Auth } from "../components/Auth";
 import { useColorContext } from "../utils/ColorContext";
+import { SocketManager } from "../utils/SocketManager";
 
+import { Home } from "./Home";
 import { Login } from "./Login";
 
 import "../style/theme.scss";
@@ -20,7 +22,9 @@ export const App: React.VFC = memo(function Fn() {
             path="*"
             element={
               <Auth>
-                <>LOGINED</>
+                <SocketManager>
+                  <Home />
+                </SocketManager>
               </Auth>
             }
           />
