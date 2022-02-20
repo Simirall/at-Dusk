@@ -1,13 +1,15 @@
 import React, { memo } from "react";
+import { Link } from "react-router-dom";
 
-import { Button } from "../components/ui/Button";
+import { ColorMode } from "../components/ColorMode";
+import { TimeLine } from "../components/TimeLine";
 
 export const Home = memo(function Fn() {
   return (
     <>
-      <Button model="primary" width="fit-content">
-        REQ
-      </Button>
+      <Link to="/user/@Simirall">USER</Link>
+      <ColorMode />
+      <TimeLine />
     </>
   );
 });

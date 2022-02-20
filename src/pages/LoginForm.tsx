@@ -76,14 +76,6 @@ export const LoginForm: React.VFC = memo(function Fn() {
   };
 
   useEffect(() => {
-    if (document.location.href.includes("localhost")) {
-      document.location = document.location.href.replace(
-        "localhost",
-        "127.0.0.1"
-      );
-    }
-  }, []);
-  useEffect(() => {
     document.querySelector(":root")?.setAttribute("mode", theme);
     document
       .querySelector(":root")
@@ -95,7 +87,6 @@ export const LoginForm: React.VFC = memo(function Fn() {
     <Container
       mt="6"
       p="4"
-      color={colors.textColor}
       maxW="container.sm"
       borderRadius="md"
       shadow="md"
