@@ -4,10 +4,12 @@ import { persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import thunk from "redux-thunk";
 
+import notesReducer from "../features/notesSlice";
 import settingsReducer from "../features/settingsSlice";
 
 const reducers = combineReducers({
   settings: settingsReducer,
+  notes: notesReducer,
 });
 
 const persistConfig = {

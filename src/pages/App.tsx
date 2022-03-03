@@ -28,6 +28,7 @@ export const App: React.VFC = memo(function Fn() {
       direction="column"
       color={colors.text}
       bgColor={colors.base}
+      transition="0.3s ease-in"
     >
       <Router>
         <Routes>
