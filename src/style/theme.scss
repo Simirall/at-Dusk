@@ -4,12 +4,14 @@
     --alpha200: #00000014;
     --alpha400: #0000003d;
     --alpha600: #0000007a;
+    --blend: overlay;
   }
   &[mode="dark"] {
     --alpha50: #ffffff0a;
     --alpha200: #ffffff14;
     --alpha400: #ffffff3d;
     --alpha600: #ffffff7a;
+    --blend: screen;
   }
   &[theme="illuminating"] {
     --base: #f2f8f3;
@@ -77,16 +79,18 @@
   }
   * {
     scrollbar-width: thin;
-    scrollbar-color: var(--primary) var(--base_thick);
+    scrollbar-color: var(--primary_thick) var(--base_thick);
+    transition: 0.3s ease-in;
+    transition-property: color, background-color, fill;
     &::selection {
       color: var(--text_primary);
-      background-color: var(--primary);
+      background-color: var(--primary_thick);
     }
     &::-webkit-scrollbar {
       width: 0.5rem;
     }
     &::-webkit-scrollbar-thumb {
-      background-color: var(--primary);
+      background-color: var(--primary_thick);
       border-radius: 5px;
     }
     &::-webkit-scrollbar-track {

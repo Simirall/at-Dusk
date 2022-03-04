@@ -1,8 +1,11 @@
-import { Flex } from "@chakra-ui/react";
+import { Box, HStack } from "@chakra-ui/react";
 import React, { memo, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import { Auth } from "../components/Auth";
+import { LeftBar } from "../components/LeftBar";
+import { MainHeader } from "../components/MainHeader";
+import { RightBar } from "../components/RightBar";
 import { useColorContext } from "../utils/ColorContext";
 import { SocketManager } from "../utils/SocketManager";
 
@@ -22,13 +25,19 @@ export const App: React.VFC = memo(function Fn() {
       );
     }
   }, []);
+  useEffect(() => {
+    window.addEventListener("resize", () => {
+      document.documentElement.style.setProperty(
+        "--vh",
+        `${window.innerHeight * 0.01}px`
+      );
+    });
+  }, []);
   return (
-    <Flex
-      minH="100vh"
-      direction="column"
+    <Box
+      minH="calc(var(--vh, 1vh) * 100)"
       color={colors.text}
       bgColor={colors.base}
-      transition="0.3s ease-in"
     >
       <Router>
         <Routes>
@@ -38,18 +47,33 @@ export const App: React.VFC = memo(function Fn() {
             element={
               <Auth>
                 <SocketManager>
-                  <Routes>
-                    <Route path="user">
-                      <Route path=":id" element={<UserPage />} />
-                    </Route>
-                    <Route path="/" element={<Home />} />
-                  </Routes>
+                  <HStack justify="space-between" alignItems="start" w="full">
+                    <LeftBar />
+                    <Box flex="1" minW="1">
+                      <MainHeader />
+                      <Box
+                        sx={{
+                          "@media (min-aspect-ratio: 3/2)": {
+                            px: "10%",
+                          },
+                        }}
+                      >
+                        <Routes>
+                          <Route path="user">
+                            <Route path=":id" element={<UserPage />} />
+                          </Route>
+                          <Route path="/" element={<Home />} />
+                        </Routes>
+                      </Box>
+                    </Box>
+                    <RightBar />
+                  </HStack>
                 </SocketManager>
               </Auth>
             }
           />
         </Routes>
       </Router>
-    </Flex>
+    </Box>
   );
 });

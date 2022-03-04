@@ -1,4 +1,4 @@
-import { Box } from "@chakra-ui/react";
+import { Box, VStack } from "@chakra-ui/react";
 import React, { memo } from "react";
 
 import { useAppSelector } from "../app/hooks";
@@ -11,11 +11,13 @@ export const TimeLine = memo(function Fn() {
   const noteTypes = useAppSelector(allNoteTypes);
   return (
     <>
-      {notes.map((note, i) => (
-        <Box key={note.id}>
-          <Note note={note} type={noteTypes[i]} />
-        </Box>
-      ))}
+      <VStack alignItems="start">
+        {notes.map((note, i) => (
+          <Box key={note.id} w="full">
+            <Note note={note} type={noteTypes[i]} />
+          </Box>
+        ))}
+      </VStack>
     </>
   );
 });

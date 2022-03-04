@@ -1,12 +1,12 @@
 import React, { memo } from "react";
 
-import { ColorMode } from "../components/ColorMode";
 import { TimeLine } from "../components/TimeLine";
+import { useSetHeader } from "../features/header";
 
 export const Home = memo(function Fn() {
+  useSetHeader("タイムライン");
   return (
     <>
-      <ColorMode />
       <TimeLine />
     </>
   );

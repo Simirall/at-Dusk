@@ -10,9 +10,9 @@ export const Note: React.VFC<{ note: mkNote; type: NoteType }> = memo(
   function Fn({ note, type }) {
     return (
       <>
-        <HStack>
+        <HStack w="full" overflow="hidden">
           <Avatar user={note.user} />
-          <Box color="red.300">
+          <Box flex="1" color="red.300" isTruncated>
             {note.user.name ? note.user.name : note.user.username}
           </Box>
         </HStack>
