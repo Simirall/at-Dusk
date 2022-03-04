@@ -5,6 +5,7 @@ import { useGetSocket, useSetSocket } from "../features/socket";
 
 import { useSocketInit } from "./useSocketInit";
 import { useSocketRecv } from "./useSocketRecv";
+import { useSwrInit } from "./useSwrInit";
 
 export const SocketManager: React.VFC<{
   children: React.ReactNode;
@@ -12,6 +13,7 @@ export const SocketManager: React.VFC<{
   useSetSocket();
   useSocketInit();
   useSocketRecv();
+  useSwrInit();
   const socket = useGetSocket();
   const toast = useToast();
   if (socket) {
