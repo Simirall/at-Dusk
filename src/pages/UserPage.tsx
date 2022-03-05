@@ -9,7 +9,17 @@ import { useGetUserData } from "../features/swr/useGetUserData";
 export const UserPage = memo(function Fn() {
   const { id } = useParams();
   const { data, error, isLoading } = useGetUserData(id);
-  useSetHeader(data && data.name ? data.name : <Loading small />);
+  useSetHeader(
+    isLoading ? (
+      <Loading small />
+    ) : error ? (
+      <>{id}</>
+    ) : data.name ? (
+      data.name
+    ) : (
+      data.username
+    )
+  );
   return (
     <>
       {isLoading ? (

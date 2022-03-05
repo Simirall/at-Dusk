@@ -16,11 +16,19 @@ export const useGetUserData = (
       host: id?.split("@")[2] ? id?.split("@")[2] : null,
     },
   }) as string;
-  const fetcher = (path: string) =>
-    fetch(`https://${userInfo.instance}/api${path}`, {
+  const fetcher = async (path: string) => {
+    const res = await fetch(`https://${userInfo.instance}/api${path}`, {
       method: "POST",
       body: body,
-    }).then((r) => r.json());
+    });
+    if (!res.ok) {
+      const text = await res.json();
+      const error = new Error(await text.error.message);
+      error.name = await text.error.code;
+      throw error;
+    }
+    return res.json();
+  };
   const { data, error } = useSWR(["/users/show", id], fetcher);
   return { data, error, isLoading: !error && !data };
 };

@@ -1,4 +1,4 @@
-import { ReactElement } from "react";
+import { ReactElement, useEffect } from "react";
 import { atom, useRecoilValue, useSetRecoilState } from "recoil";
 
 const headerState = atom<ReactElement | string>({
@@ -8,7 +8,9 @@ const headerState = atom<ReactElement | string>({
 
 export const useSetHeader = (elm: ReactElement | string) => {
   const setHeader = useSetRecoilState(headerState);
-  setHeader(elm);
+  useEffect(() => {
+    setHeader(elm);
+  }, [setHeader, elm]);
 };
 
 export const useGetHeader = () => {
