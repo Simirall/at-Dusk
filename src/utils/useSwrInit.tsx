@@ -1,10 +1,11 @@
-import { Note } from "misskey-js/built/entities";
 import { useEffect } from "react";
 
 import { useAppDispatch } from "../app/hooks";
 import { useGetSocket } from "../features/recoil/socket";
 import { addLower } from "../features/rtk/notesSlice";
 import { useGetInitNotes } from "../features/swr/useGetInitNotes";
+
+import { sendSubNotes } from "./sendSubNotes";
 
 export const useSwrInit = () => {
   const initNotes = useGetInitNotes();
@@ -18,17 +19,4 @@ export const useSwrInit = () => {
       ]);
     }
   }, [initNotes, dispatch, socket]);
-};
-
-const sendSubNotes = async (socket: WebSocket, notes: Array<Note>) => {
-  notes.forEach(async (note: Note) => {
-    socket.send(
-      JSON.stringify({
-        type: "subNote",
-        body: {
-          id: note.renoteId && !note.text ? note.renoteId : note.id,
-        },
-      })
-    );
-  });
 };
