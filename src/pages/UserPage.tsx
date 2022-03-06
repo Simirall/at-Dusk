@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 
 import { Avatar } from "../components/Avatar";
 import { Loading } from "../components/ui/Loading";
-import { useSetHeader } from "../features/header";
+import { useSetHeader } from "../features/recoil/header";
 import { useGetUserData } from "../features/swr/useGetUserData";
 
 export const UserPage = memo(function Fn() {

@@ -1,7 +1,7 @@
 import { useToast } from "@chakra-ui/react";
 import React, { memo } from "react";
 
-import { useGetSocket, useSetSocket } from "../features/socket";
+import { useGetSocket, useSetSocket } from "../features/recoil/socket";
 
 import { useSocketInit } from "./useSocketInit";
 import { useSocketRecv } from "./useSocketRecv";

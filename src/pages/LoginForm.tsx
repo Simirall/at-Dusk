@@ -14,7 +14,7 @@ import { v4 as uuid } from "uuid";
 import { store } from "../app/store";
 import { Button } from "../components/ui/Button";
 import { Input } from "../components/ui/Input";
-import { setUserInfo } from "../features/settingsSlice";
+import { setUserInfo } from "../features/rtk/settingsSlice";
 import { useColorContext } from "../utils/ColorContext";
 
 export const LoginForm: React.VFC = memo(function Fn() {

@@ -2,8 +2,8 @@ import { Note } from "misskey-js/built/entities";
 import { useEffect } from "react";
 
 import { useAppDispatch } from "../app/hooks";
-import { addUpper } from "../features/notesSlice";
-import { useGetSocket } from "../features/socket";
+import { useGetSocket } from "../features/recoil/socket";
+import { addUpper } from "../features/rtk/notesSlice";
 
 export const useSocketRecv = () => {
   const socket = useGetSocket();

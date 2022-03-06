@@ -3,7 +3,7 @@ import useSWR from "swr";
 
 import { useAppSelector } from "../../app/hooks";
 import { useAPIObject } from "../../utils/useAPIObject";
-import { settings } from "../settingsSlice";
+import { settings } from "../rtk/settingsSlice";
 
 export const useGetUserData = (
   id: string | undefined

@@ -1,7 +1,7 @@
 import React, { memo } from "react";
 import { Navigate } from "react-router-dom";
 
-import { useGetLogin, useSetIsLogin } from "../features/loginState";
+import { useGetLogin, useSetIsLogin } from "../features/recoil/loginState";
 
 import { GetToken } from "./GetToken";
 import { LoginForm } from "./LoginForm";

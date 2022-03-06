@@ -3,8 +3,8 @@ import useSWR from "swr";
 
 import { useAppSelector } from "../../app/hooks";
 import { useAPIObject } from "../../utils/useAPIObject";
-import { allNotes } from "../notesSlice";
-import { settings } from "../settingsSlice";
+import { allNotes } from "../rtk/notesSlice";
+import { settings } from "../rtk/settingsSlice";
 
 export const useGetInitNotes = (): {
   data: Array<Note>;

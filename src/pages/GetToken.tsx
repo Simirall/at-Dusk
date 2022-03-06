@@ -5,8 +5,8 @@ import { useNavigate } from "react-router-dom";
 
 import { store } from "../app/store";
 import { Loading } from "../components/ui/Loading";
-import { useGetLogin, useSetLogin } from "../features/loginState";
-import { setUserInfo } from "../features/settingsSlice";
+import { useGetLogin, useSetLogin } from "../features/recoil/loginState";
+import { setUserInfo } from "../features/rtk/settingsSlice";
 
 export const GetToken: React.VFC<{
   uuid: string;

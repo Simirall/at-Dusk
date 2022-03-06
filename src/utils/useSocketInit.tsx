@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 
 import { useAppSelector } from "../app/hooks";
-import { settings } from "../features/settingsSlice";
-import { useGetSocket } from "../features/socket";
+import { useGetSocket } from "../features/recoil/socket";
+import { settings } from "../features/rtk/settingsSlice";
 
 import { useAPIObject } from "./useAPIObject";
 

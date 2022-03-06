@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ID, Note } from "misskey-js/built/entities";
 
-import { RootState } from "../app/store";
+import { RootState } from "../../app/store";
 
 export interface NoteType {
   id: ID;

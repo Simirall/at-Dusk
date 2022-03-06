@@ -1,9 +1,8 @@
 import { useEffect } from "react";
 import { atom, useRecoilValue, useSetRecoilState } from "recoil";
 
-import { useAppSelector } from "../app/hooks";
-
-import { settings } from "./settingsSlice";
+import { useAppSelector } from "../../app/hooks";
+import { settings } from "../rtk/settingsSlice";
 
 const loginState = atom<boolean>({
   key: "loginState",

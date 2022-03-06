@@ -2,8 +2,8 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { AnyAction } from "redux";
 import { ThunkDispatch } from "redux-thunk";
 
-import { NotesState } from "../features/notesSlice";
-import { SettingsState } from "../features/settingsSlice";
+import { NotesState } from "../features/rtk/notesSlice";
+import { SettingsState } from "../features/rtk/settingsSlice";
 
 import type { RootState, AppDispatch } from "./store";
 

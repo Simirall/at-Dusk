@@ -3,7 +3,7 @@ import React, { memo } from "react";
 import { FaMoon } from "react-icons/fa";
 
 import { useAppDispatch, useAppSelector } from "../app/hooks";
-import { setTheme, settings } from "../features/settingsSlice";
+import { setTheme, settings } from "../features/rtk/settingsSlice";
 import { useColorContext } from "../utils/ColorContext";
 
 import { IconButton } from "./ui/IconButton";

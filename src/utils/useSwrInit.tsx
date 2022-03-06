@@ -2,8 +2,8 @@ import { Note } from "misskey-js/built/entities";
 import { useEffect } from "react";
 
 import { useAppDispatch } from "../app/hooks";
-import { addLower } from "../features/notesSlice";
-import { useGetSocket } from "../features/socket";
+import { useGetSocket } from "../features/recoil/socket";
+import { addLower } from "../features/rtk/notesSlice";
 import { useGetInitNotes } from "../features/swr/useGetInitNotes";
 
 export const useSwrInit = () => {

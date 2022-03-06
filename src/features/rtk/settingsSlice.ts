@@ -5,7 +5,7 @@ import {
   MeDetailed,
 } from "misskey-js/built/entities";
 
-import { RootState } from "../app/store";
+import { RootState } from "../../app/store";
 
 export interface SettingsState {
   theme: {

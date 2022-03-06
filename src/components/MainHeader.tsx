@@ -1,7 +1,7 @@
 import { chakra } from "@chakra-ui/react";
 import { memo } from "react";
 
-import { useGetHeader } from "../features/header";
+import { useGetHeader } from "../features/recoil/header";
 import { useColorContext } from "../utils/ColorContext";
 
 export const MainHeader = memo(function Fn() {

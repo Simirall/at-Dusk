@@ -2,7 +2,7 @@ import { Box, HStack } from "@chakra-ui/react";
 import { Note as mkNote } from "misskey-js/built/entities";
 import React, { memo } from "react";
 
-import { NoteType } from "../features/notesSlice";
+import { NoteType } from "../features/rtk/notesSlice";
 
 import { Avatar } from "./Avatar";
 

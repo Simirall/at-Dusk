@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 
-import { useGetLogin } from "../features/loginState";
+import { useGetLogin } from "../features/recoil/loginState";
 
 interface StreamBody {
   id: string;
