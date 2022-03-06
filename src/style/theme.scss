@@ -1,23 +1,26 @@
 :root {
   font-size: 14px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary_thick) var(--base_thick);
   &[mode="light"] {
     --alpha50: #0000000a;
     --alpha200: #00000014;
     --alpha400: #0000003d;
     --alpha600: #0000007a;
-    --blend: overlay;
+    --backdrop: blur(5px) brightness(80%);
   }
   &[mode="dark"] {
     --alpha50: #ffffff0a;
     --alpha200: #ffffff14;
     --alpha400: #ffffff3d;
     --alpha600: #ffffff7a;
-    --blend: screen;
+    --backdrop: blur(5px) brightness(120%);
   }
   &[theme="illuminating"] {
     --base: #f2f8f3;
     --base_thin: #fdfefc;
     --base_thick: #d9e2db;
+    --base_alpha: #d9e2dbcc;
     --panel: #f0f3e9;
     --primary: #f5df4d;
     --primary_thin: #fbefa2;
@@ -34,6 +37,7 @@
     --base: #5f736a;
     --base_thin: #85a798;
     --base_thick: #3b5248;
+    --base_alpha: #3b5248cc;
     --panel: #6a7b74;
     --primary: #f2e5a2;
     --primary_thin: #f4eed1;
@@ -50,6 +54,7 @@
     --base: #012639;
     --base_thin: #0f2f59;
     --base_thick: #001520;
+    --base_alpha: #0f2f59cc;
     --panel: #0c2b3b;
     --primary: #075f73;
     --primary_thin: #1c8da7;
@@ -66,6 +71,7 @@
     --base: #1a1117;
     --base_thin: #5f3c47;
     --base_thick: #d9e2db;
+    --base_alpha: #5f3c47cc;
     --panel: #1f151b;
     --primary: #3367d7;
     --primary_thin: #85b6e9;

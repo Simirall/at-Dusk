@@ -17,11 +17,10 @@ export const MainHeader = memo(function Fn() {
       display="flex"
       justifyContent="center"
       alignItems="center"
-      color={colors.text}
-      bgColor={colors.base}
       borderRadius="lg"
-      backdropFilter="blur(10px) brightness(50%)"
-      sx={{ mixBlendMode: "var(--blend)" }}
+      color={colors.text}
+      bgColor={colors.baseAlpha}
+      backdropFilter={colors.backdrop}
     >
       {headerState}
     </chakra.header>

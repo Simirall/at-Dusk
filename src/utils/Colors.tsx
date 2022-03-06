@@ -6,6 +6,7 @@ export const useColors = (): Record<string, string> => {
   const base = "var(--base)";
   const baseThin = "var(--base_thin)";
   const baseThick = "var(--base_thick)";
+  const baseAlpha = "var(--base_alpha)";
   const panel = "var(--panel)";
   const primary = "var(--primary)";
   const primaryThin = "var(--primary_thin)";
@@ -17,6 +18,7 @@ export const useColors = (): Record<string, string> => {
   const textPrimary = "var(--text_primary)";
   const textSecondary = "var(--text_secondary)";
   const textInverse = "var(--text_inverse)";
+  const backdrop = "var(--backdrop)";
   return {
     alpha50,
     alpha200,
@@ -25,6 +27,7 @@ export const useColors = (): Record<string, string> => {
     base,
     baseThin,
     baseThick,
+    baseAlpha,
     panel,
     primary,
     primaryThin,
@@ -36,5 +39,6 @@ export const useColors = (): Record<string, string> => {
     textPrimary,
     textSecondary,
     textInverse,
+    backdrop,
   };
 };
