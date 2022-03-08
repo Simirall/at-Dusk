@@ -11,6 +11,7 @@ import { SocketManager } from "../utils/SocketManager";
 
 import { Home } from "./Home";
 import { Login } from "./Login";
+import { Settings } from "./Settings";
 import { UserPage } from "./UserPage";
 
 import "../style/theme.scss";
@@ -62,6 +63,7 @@ export const App: React.VFC = memo(function Fn() {
                           <Route path="user">
                             <Route path=":id" element={<UserPage />} />
                           </Route>
+                          <Route path="settings" element={<Settings />} />
                           <Route path="/" element={<Home />} />
                         </Routes>
                       </Box>

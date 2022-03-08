@@ -48,7 +48,7 @@ export const TimeLine = memo(function Fn() {
         </Box>
       ))}
       <Button
-        mode="alpha"
+        model="alpha"
         alignSelf="center"
         ref={ref}
         disabled={moreLoading}

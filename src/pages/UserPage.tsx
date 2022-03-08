@@ -18,7 +18,8 @@ export const UserPage = memo(function Fn() {
       data.name
     ) : (
       data.username
-    )
+    ),
+    isLoading || error ? (id as string) : data.name ? data.name : data.username
   );
   return (
     <>

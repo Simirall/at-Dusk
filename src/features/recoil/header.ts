@@ -6,11 +6,12 @@ const headerState = atom<ReactElement | string>({
   default: "",
 });
 
-export const useSetHeader = (elm: ReactElement | string) => {
+export const useSetHeader = (elm: ReactElement | string, title: string) => {
   const setHeader = useSetRecoilState(headerState);
   useEffect(() => {
+    document.title = `${title} | at Dusk.`;
     setHeader(elm);
-  }, [setHeader, elm]);
+  }, [setHeader, elm, title]);
 };
 
 export const useGetHeader = () => {

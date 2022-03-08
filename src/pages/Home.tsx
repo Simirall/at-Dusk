@@ -4,7 +4,7 @@ import { TimeLine } from "../components/TimeLine";
 import { useSetHeader } from "../features/recoil/header";
 
 export const Home = memo(function Fn() {
-  useSetHeader("タイムライン");
+  useSetHeader("タイムライン", "タイムライン");
   return (
     <>
       <TimeLine />

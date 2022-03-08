@@ -1,6 +1,6 @@
 import { useColorMode } from "@chakra-ui/react";
 import React, { memo } from "react";
-import { FaMoon } from "react-icons/fa";
+import { IoMoon } from "react-icons/io5";
 
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { setTheme, settings } from "../features/rtk/settingsSlice";
@@ -22,7 +22,7 @@ export const ColorMode: React.VFC = memo(function Fn() {
         dispatch(setTheme({ themeMode: mode === "dark" ? "light" : "dark" }));
         setColorMode(mode === "dark" ? "light" : "dark");
       }}
-      icon={<FaMoon />}
+      icon={<IoMoon color={colors.textPrimary} />}
       aria-label={`Switch to ${mode === "dark" ? "light" : "dark"} mode`}
     />
   );
