@@ -70,7 +70,7 @@
   &[theme="Ginkgo"] {
     --base: #1a1117;
     --base_thin: #5f3c47;
-    --base_thick: #d9e2db;
+    --base_thick: #130b10;
     --base_alpha: #5f3c47cc;
     --panel: #1f151b;
     --primary: #3367d7;
@@ -85,6 +85,7 @@
     --text_inverse: #302608;
   }
   * {
+    color: var(--text);
     scrollbar-width: thin;
     scrollbar-color: var(--primary_thick) var(--base_thick);
     transition: 0.3s ease-in;
@@ -107,7 +108,6 @@
     }
   }
   body {
-    color: var(--text);
     font-size: clamp(1.125rem, 1vw + 0.75rem, 1.375rem);
     label,
     select,

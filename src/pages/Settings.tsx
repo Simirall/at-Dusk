@@ -35,7 +35,7 @@ export const Settings: React.VFC = memo(function Fn() {
     dispatch(setTheme({ theme: data }));
     toast({
       title: "Successfully Changed!",
-      duration: 500,
+      duration: 2000,
       status: "info",
       position: "top",
     });
@@ -49,7 +49,7 @@ export const Settings: React.VFC = memo(function Fn() {
     dispatch(setSettings(data));
     toast({
       title: "Successfully Saved!",
-      duration: 1000,
+      duration: 2000,
       status: "success",
       position: "top",
     });
@@ -66,19 +66,37 @@ export const Settings: React.VFC = memo(function Fn() {
             },
           }}
         >
-          <Tab _selected={{ color: colors.secondary }}>
+          <Tab
+            _selected={{
+              "*": {
+                color: colors.secondary,
+              },
+            }}
+          >
             <HStack mb="1" wrap="wrap" justify="center">
               <SettingsIcon fontSize="lg" color="inherit" />
               <Box>一般</Box>
             </HStack>
           </Tab>
-          <Tab _selected={{ color: colors.secondary }}>
+          <Tab
+            _selected={{
+              "*": {
+                color: colors.secondary,
+              },
+            }}
+          >
             <HStack mb="1" wrap="wrap" justify="center">
               <Icon as={IoColorPalette} fontSize="xl" />
               <Box>テーマ</Box>
             </HStack>
           </Tab>
-          <Tab _selected={{ color: colors.secondary }}>
+          <Tab
+            _selected={{
+              "*": {
+                color: colors.secondary,
+              },
+            }}
+          >
             <HStack mb="1" wrap="wrap" justify="center">
               <InfoIcon fontSize="lg" />
               <Box>情報</Box>

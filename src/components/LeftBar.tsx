@@ -20,6 +20,9 @@ export const LeftBar = memo(function Fn() {
       px="4"
       py="2"
       sx={{
+        "*": {
+          color: colors.textPrimary,
+        },
         "@media (max-aspect-ratio: 3/2), (max-width: 800px)": {
           ".leftbar-label": {
             display: "none",
@@ -28,14 +31,14 @@ export const LeftBar = memo(function Fn() {
         },
       }}
     >
-      <VStack justify="space-between" height="full" color={colors.textPrimary}>
+      <VStack justify="space-between" height="full">
         <VStack alignItems="start" height="full">
           <HStack>
             <IconButton
               model="alpha"
               aria-label="timeline"
               fontSize="1em"
-              icon={<IoHome color={colors.textPrimary} />}
+              icon={<IoHome />}
               as={Link}
               to="/"
             />
@@ -48,7 +51,7 @@ export const LeftBar = memo(function Fn() {
               model="alpha"
               aria-label="settings"
               fontSize="1em"
-              icon={<IoSettings color={colors.textPrimary} />}
+              icon={<IoSettings />}
               as={Link}
               to="/settings"
             />
