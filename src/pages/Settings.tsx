@@ -24,12 +24,13 @@ import { useColorContext } from "../utils/ColorContext";
 export const Settings: React.VFC = memo(function Fn() {
   const { colors } = useColorContext();
   const { register, handleSubmit } = useForm<{
+    defaultVisibility: "public" | "home" | "followers" | "specified";
+    defaultLocalOnly: boolean;
     lightTheme: string;
     darkTheme: string;
     autoMotto: boolean;
     TLPostForm: boolean;
-    defaultVisibility: "public" | "home" | "followers" | "specified";
-    defaultLocalOnly: boolean;
+    iconSidebar: boolean;
   }>();
   const dispatch = useAppDispatch();
   const settingsValue = useAppSelector(settings);
@@ -45,10 +46,11 @@ export const Settings: React.VFC = memo(function Fn() {
     });
   };
   const onSubmitGenerall = (data: {
-    autoMotto: boolean;
-    TLPostForm: boolean;
     defaultVisibility: "public" | "home" | "followers" | "specified";
     defaultLocalOnly: boolean;
+    autoMotto: boolean;
+    TLPostForm: boolean;
+    iconSidebar: boolean;
   }) => {
     dispatch(setClientSettings({ ...settingsValue.client, ...data }));
     toast({
@@ -125,6 +127,14 @@ export const Settings: React.VFC = memo(function Fn() {
                   {...register("TLPostForm")}
                 />
                 TL上部に投稿フォームを表示する
+              </FormLabel>
+              <FormLabel>
+                <Switch
+                  marginRight="2"
+                  defaultChecked={settingsValue.client.iconSidebar}
+                  {...register("iconSidebar")}
+                />
+                サイドバーでアイコンのみを表示する
               </FormLabel>
               <FormLabel>
                 デフォルトの公開範囲

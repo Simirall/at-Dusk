@@ -3,13 +3,15 @@ import React, { memo } from "react";
 import { IoHome, IoSettings } from "react-icons/io5";
 import { Link } from "react-router-dom";
 
+import { useAppSelector } from "../app/hooks";
+import { settings } from "../features/rtk/settingsSlice";
 import { useColorContext } from "../utils/ColorContext";
 
 import { ColorMode } from "./ColorMode";
 import { IconButton } from "./ui/IconButton";
 
 export const LeftBar = memo(function Fn() {
-  const bool = false;
+  const { iconSidebar } = useAppSelector(settings).client;
   const { colors } = useColorContext();
   return (
     <Box
@@ -42,7 +44,10 @@ export const LeftBar = memo(function Fn() {
               as={Link}
               to="/"
             />
-            <Box className="leftbar-label" {...(bool && { display: "none" })}>
+            <Box
+              className="leftbar-label"
+              {...(iconSidebar && { display: "none" })}
+            >
               タイムライン
             </Box>
           </HStack>
@@ -55,7 +60,10 @@ export const LeftBar = memo(function Fn() {
               as={Link}
               to="/settings"
             />
-            <Box className="leftbar-label" {...(bool && { display: "none" })}>
+            <Box
+              className="leftbar-label"
+              {...(iconSidebar && { display: "none" })}
+            >
               設定
             </Box>
           </HStack>
