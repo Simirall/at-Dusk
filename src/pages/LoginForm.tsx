@@ -1,4 +1,5 @@
 import {
+  Box,
   Container,
   FormControl,
   FormErrorMessage,
@@ -84,66 +85,67 @@ export const LoginForm: React.VFC = memo(function Fn() {
   }, [theme, setColorMode]);
 
   return (
-    <Container
-      mt="6"
-      p="4"
-      maxW="container.sm"
-      borderRadius="md"
-      shadow="md"
-      bgColor={colors.panel}
-    >
-      <Heading
-        as="h3"
-        size="2xl"
-        mb="4"
-        fontWeight="normal"
-        bgGradient="linear(to top, #ffa17f, #00223e)"
-        bgClip="text"
-        isTruncated
+    <Box pt="10">
+      <Container
+        p="4"
+        maxW="container.sm"
+        borderRadius="md"
+        shadow="md"
+        bgColor={colors.panel}
       >
-        at Dusk.
-      </Heading>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <VStack>
-          <FormControl isInvalid={errors.appname ? true : false}>
-            <FormLabel htmlFor="appname">アプリ名</FormLabel>
-            <Input
-              id="appname"
-              placeholder="@dusk"
-              defaultValue="@dusk"
-              {...register("appname", { required: "アプリ名は必須です" })}
-            />
-            <FormErrorMessage>
-              {errors.appname && errors.appname.message}
-            </FormErrorMessage>
-          </FormControl>
-          <FormControl isInvalid={errors.instance ? true : false}>
-            <FormLabel htmlFor="instance">インスタンス名</FormLabel>
-            <Input
-              id="instance"
-              placeholder="misskey.io"
-              {...register("instance", {
-                required: "インスタンス名は必須です",
-                pattern: {
-                  value: /(\S+\.)?\S+\.\S+/,
-                  message: "インスタンスのドメインを入力してください。",
-                },
-              })}
-            />
-            <FormErrorMessage>
-              {errors.instance && errors.instance.message}
-            </FormErrorMessage>
-          </FormControl>
-          {!fetchState.ok && (
-            <FormControl isInvalid={!fetchState.ok}>
-              <FormErrorMessage>{fetchState.message}</FormErrorMessage>
+        <Heading
+          as="h3"
+          size="2xl"
+          mb="4"
+          fontWeight="normal"
+          bgGradient="linear(to top, #ffa17f, #00223e)"
+          bgClip="text"
+          isTruncated
+        >
+          at Dusk.
+        </Heading>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <VStack>
+            <FormControl isInvalid={errors.appname ? true : false}>
+              <FormLabel htmlFor="appname">アプリ名</FormLabel>
+              <Input
+                id="appname"
+                placeholder="@dusk"
+                defaultValue="@dusk"
+                {...register("appname", { required: "アプリ名は必須です" })}
+              />
+              <FormErrorMessage>
+                {errors.appname && errors.appname.message}
+              </FormErrorMessage>
             </FormControl>
-          )}
-          <Button model="primary" isLoading={isSubmitting} type="submit">
-            Register
-          </Button>
-        </VStack>
-      </form>
-    </Container>
+            <FormControl isInvalid={errors.instance ? true : false}>
+              <FormLabel htmlFor="instance">インスタンス名</FormLabel>
+              <Input
+                id="instance"
+                placeholder="misskey.io"
+                {...register("instance", {
+                  required: "インスタンス名は必須です",
+                  pattern: {
+                    value: /(\S+\.)?\S+\.\S+/,
+                    message: "インスタンスのドメインを入力してください。",
+                  },
+                })}
+              />
+              <FormErrorMessage>
+                {errors.instance && errors.instance.message}
+              </FormErrorMessage>
+            </FormControl>
+            {!fetchState.ok && (
+              <FormControl isInvalid={!fetchState.ok}>
+                <FormErrorMessage>{fetchState.message}</FormErrorMessage>
+              </FormControl>
+            )}
+            <Button model="primary" isLoading={isSubmitting} type="submit">
+              Register
+            </Button>
+          </VStack>
+        </form>
+      </Container>
+    </Box>
   );
 });

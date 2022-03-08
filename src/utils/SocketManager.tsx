@@ -2,10 +2,10 @@ import { useToast } from "@chakra-ui/react";
 import React, { memo } from "react";
 
 import { useGetSocket, useSetSocket } from "../features/recoil/socket";
+import { useSwrInit } from "../features/swr/useSwrInit";
 
 import { useSocketInit } from "./useSocketInit";
 import { useSocketRecv } from "./useSocketRecv";
-import { useSwrInit } from "./useSwrInit";
 
 export const SocketManager: React.VFC<{
   children: React.ReactNode;
