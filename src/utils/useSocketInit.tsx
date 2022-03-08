@@ -8,7 +8,7 @@ import { useAPIObject } from "./useAPIObject";
 
 export const useSocketInit = () => {
   const socket = useGetSocket();
-  const timeline = useAppSelector(settings).timeline;
+  const timeline = useAppSelector(settings).client.timeline;
   const timelineObject = useAPIObject({
     id: "timeline",
     type: "connect",

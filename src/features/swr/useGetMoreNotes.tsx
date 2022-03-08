@@ -16,7 +16,8 @@ import {
 import { settings } from "../rtk/settingsSlice";
 
 export const useGetMoreNotes = (inView: boolean) => {
-  const { userInfo, timeline } = useAppSelector(settings);
+  const { userInfo } = useAppSelector(settings);
+  const { timeline } = useAppSelector(settings).client;
   const socket = useGetSocket();
   const notes = useAppSelector(allNotes);
   const last = useAppSelector(isLastInstanceNote);

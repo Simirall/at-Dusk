@@ -18,8 +18,8 @@ export const useInit = (
   updateLoad: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
   const notes = useAppSelector(allNotes);
-  const userInfo = useAppSelector(settings).userInfo;
-  const timeline = useAppSelector(settings).timeline;
+  const { userInfo } = useAppSelector(settings);
+  const { timeline } = useAppSelector(settings).client;
   const dispatch = useAppDispatch();
   const socket = useGetSocket();
   const initNotesObject = useAPIObject({

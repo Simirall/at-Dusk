@@ -19,7 +19,8 @@ export const useGetMoreNotesByButton = (
   mottoClicked: boolean,
   updateMotto: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
-  const { userInfo, timeline } = useAppSelector(settings);
+  const { userInfo } = useAppSelector(settings);
+  const { timeline } = useAppSelector(settings).client;
   const socket = useGetSocket();
   const notes = useAppSelector(allNotes);
   const last = useAppSelector(isLastInstanceNote);

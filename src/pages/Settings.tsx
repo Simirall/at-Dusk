@@ -14,7 +14,11 @@ import { IoCodeSlash, IoColorPalette } from "react-icons/io5";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { Button } from "../components/ui/Button";
 import { useSetHeader } from "../features/recoil/header";
-import { setTheme, setSettings, settings } from "../features/rtk/settingsSlice";
+import {
+  setTheme,
+  setClientSettings,
+  settings,
+} from "../features/rtk/settingsSlice";
 import { useColorContext } from "../utils/ColorContext";
 
 export const Settings: React.VFC = memo(function Fn() {
@@ -46,7 +50,7 @@ export const Settings: React.VFC = memo(function Fn() {
     defaultVisibility: "public" | "home" | "followers" | "specified";
     defaultLocalOnly: boolean;
   }) => {
-    dispatch(setSettings(data));
+    dispatch(setClientSettings({ ...settingsValue.client, ...data }));
     toast({
       title: "Successfully Saved!",
       duration: 2000,
@@ -109,7 +113,7 @@ export const Settings: React.VFC = memo(function Fn() {
               <FormLabel>
                 <Switch
                   marginRight="2"
-                  defaultChecked={settingsValue.autoMotto}
+                  defaultChecked={settingsValue.client.autoMotto}
                   {...register("autoMotto")}
                 />
                 自動でもっと読む
@@ -117,7 +121,7 @@ export const Settings: React.VFC = memo(function Fn() {
               <FormLabel>
                 <Switch
                   marginRight="2"
-                  defaultChecked={settingsValue.TLPostForm}
+                  defaultChecked={settingsValue.client.TLPostForm}
                   {...register("TLPostForm")}
                 />
                 TL上部に投稿フォームを表示する
@@ -126,7 +130,7 @@ export const Settings: React.VFC = memo(function Fn() {
                 デフォルトの公開範囲
                 <Select
                   {...register("defaultVisibility")}
-                  defaultValue={settingsValue.defaultVisibility}
+                  defaultValue={settingsValue.client.defaultVisibility}
                   w="fit-content"
                   borderColor={colors.text}
                   _hover={{
@@ -150,7 +154,7 @@ export const Settings: React.VFC = memo(function Fn() {
               <FormLabel>
                 <Switch
                   marginRight="2"
-                  defaultChecked={settingsValue.defaultLocalOnly}
+                  defaultChecked={settingsValue.client.defaultLocalOnly}
                   {...register("defaultLocalOnly")}
                 />
                 ローカルのみ

@@ -21,7 +21,7 @@ import { Loading } from "./ui/Loading";
 export const TimeLine = memo(function Fn() {
   const notes = useAppSelector(allNotes);
   const noteTypes = useAppSelector(allNoteTypes);
-  const { autoMotto } = useAppSelector(settings);
+  const { autoMotto } = useAppSelector(settings).client;
   const [mottoClicked, updateMotto] = useState(false);
   const dispatch = useAppDispatch();
   const { ref, inView } = useInView({
