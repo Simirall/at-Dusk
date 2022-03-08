@@ -15,7 +15,10 @@ import {
 } from "../rtk/notesSlice";
 import { settings } from "../rtk/settingsSlice";
 
-export const useGetMoreNotes = (inView: boolean) => {
+export const useGetMoreNotesByButton = (
+  mottoClicked: boolean,
+  updateMotto: React.Dispatch<React.SetStateAction<boolean>>
+) => {
   const { userInfo, timeline } = useAppSelector(settings);
   const socket = useGetSocket();
   const notes = useAppSelector(allNotes);
@@ -31,6 +34,7 @@ export const useGetMoreNotes = (inView: boolean) => {
     },
   }) as string;
   const fetcher = async (socket: WebSocket, path: string) => {
+    updateMotto(false);
     dispatch(updateMoreNote(false));
     const res = await fetch(`https://${userInfo.instance}/api${path}`, {
       method: "POST",
@@ -42,7 +46,7 @@ export const useGetMoreNotes = (inView: boolean) => {
     return;
   };
   useSWR(
-    socket && !last && notes.length !== 0 && motto && inView
+    socket && !last && notes.length !== 0 && motto && mottoClicked
       ? [socket, getAPITimeline(timeline), oldest]
       : null,
     fetcher

@@ -6,10 +6,13 @@ import { useAppDispatch, useAppSelector } from "../app/hooks";
 import {
   allNotes,
   allNoteTypes,
+  moreNoteLoading,
   updateMoreNote,
+  updateMoreNoteLoading,
 } from "../features/rtk/notesSlice";
 import { settings } from "../features/rtk/settingsSlice";
 import { useGetMoreNotes } from "../features/swr/useGetMoreNotes";
+import { useGetMoreNotesByButton } from "../features/swr/useGetMoreNotesByButton";
 
 import { Note } from "./Note";
 import { Button } from "./ui/Button";
@@ -24,10 +27,19 @@ export const TimeLine = memo(function Fn() {
   const { ref, inView } = useInView({
     threshold: 0.8,
   });
-  const { isLoading } = useGetMoreNotes(autoMotto && inView, mottoClicked);
+  const moreLoading = useAppSelector(moreNoteLoading);
+  useGetMoreNotes(autoMotto && inView);
+  useGetMoreNotesByButton(mottoClicked, updateMotto);
   useEffect(() => {
-    dispatch(updateMoreNote(inView));
-  }, [dispatch, inView]);
+    if (autoMotto && inView) {
+      dispatch(updateMoreNote(inView));
+      dispatch(updateMoreNoteLoading(true));
+    }
+    if (mottoClicked) {
+      dispatch(updateMoreNote(true));
+      dispatch(updateMoreNoteLoading(true));
+    }
+  }, [dispatch, inView, autoMotto, mottoClicked]);
   return notes.length ? (
     <VStack alignItems="start" pb="4">
       {notes.map((note, i) => (
@@ -39,13 +51,12 @@ export const TimeLine = memo(function Fn() {
         mode="alpha"
         alignSelf="center"
         ref={ref}
-        disabled={isLoading}
+        disabled={moreLoading}
         onClick={() => {
           updateMotto(true);
-          updateMotto(false);
         }}
       >
-        {!isLoading ? "MOTTO" : <Loading small />}
+        {!moreLoading ? "MOTTO" : <Loading small />}
       </Button>
     </VStack>
   ) : (
