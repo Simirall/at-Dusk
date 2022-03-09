@@ -8,7 +8,14 @@ import React from "react";
 import { useColorContext } from "../../utils/ColorContext";
 
 export const IconButton = forwardRef<
-  IconButtonProps & { model?: "alpha" | "alpha-primary" | "primary" } & {
+  IconButtonProps & {
+    model?:
+      | "alpha"
+      | "alpha-primary"
+      | "primary"
+      | "alpha-secondary"
+      | "secondary";
+  } & {
     state?: boolean;
   },
   "button"
@@ -17,6 +24,11 @@ export const IconButton = forwardRef<
   const colorProps: Omit<IconButtonProps, "aria-label"> =
     model === "alpha"
       ? {
+          sx: {
+            "*": {
+              color: colors.text,
+            },
+          },
           color: colors.text,
           bgColor: colors.alpha50,
           _hover: {
@@ -28,8 +40,13 @@ export const IconButton = forwardRef<
         }
       : model === "alpha-primary"
       ? {
+          sx: {
+            "*": {
+              color: state ? colors.textPrimary : colors.text,
+            },
+          },
           color: state ? colors.textPrimary : colors.text,
-          bgColor: state ? colors.primaryColor : colors.alpha50,
+          bgColor: state ? colors.primary : colors.alpha50,
           _hover: {
             bgColor: state ? colors.primaryThick : colors.alpha400,
           },
@@ -39,6 +56,11 @@ export const IconButton = forwardRef<
         }
       : model === "primary"
       ? {
+          sx: {
+            "*": {
+              color: colors.textPrimary,
+            },
+          },
           color: colors.textPrimary,
           bgColor: colors.primary,
           _hover: {
@@ -46,6 +68,38 @@ export const IconButton = forwardRef<
           },
           _active: {
             bgColor: colors.primaryThin,
+          },
+        }
+      : model === "alpha-secondary"
+      ? {
+          sx: {
+            "*": {
+              color: state ? colors.textSecondary : colors.text,
+            },
+          },
+          color: state ? colors.textSecondary : colors.text,
+          bgColor: state ? colors.secondary : colors.alpha50,
+          _hover: {
+            bgColor: state ? colors.secondaryThick : colors.alpha400,
+          },
+          _active: {
+            bgColor: state ? colors.secondaryThin : colors.alpha200,
+          },
+        }
+      : model === "secondary"
+      ? {
+          sx: {
+            "*": {
+              color: colors.textSecondary,
+            },
+          },
+          color: colors.textSecondary,
+          bgColor: colors.secondary,
+          _hover: {
+            bgColor: colors.secondaryThick,
+          },
+          _active: {
+            bgColor: colors.secondaryThin,
           },
         }
       : {};

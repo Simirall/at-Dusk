@@ -1,17 +1,20 @@
 import { Box, HStack, VStack } from "@chakra-ui/react";
 import React, { memo } from "react";
 import { IoHome, IoSettings } from "react-icons/io5";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 import { useAppSelector } from "../app/hooks";
 import { settings } from "../features/rtk/settingsSlice";
 import { useColorContext } from "../utils/ColorContext";
 
+import { Avatar } from "./Avatar";
 import { ColorMode } from "./ColorMode";
-import { IconButton } from "./ui/IconButton";
+import { Button } from "./ui/Button";
 
 export const LeftBar = memo(function Fn() {
+  const param = useParams();
   const { iconSidebar } = useAppSelector(settings).client;
+  const { userData } = useAppSelector(settings).userInfo;
   const { colors } = useColorContext();
   return (
     <Box
@@ -35,40 +38,71 @@ export const LeftBar = memo(function Fn() {
     >
       <VStack justify="space-between" height="full">
         <VStack alignItems="start" height="full">
-          <HStack>
-            <IconButton
-              model="alpha"
-              aria-label="timeline"
+          <HStack w="full">
+            <Button
               fontSize="1em"
-              icon={<IoHome />}
+              state={param["*"] === ""}
+              model="alpha-secondary"
               as={Link}
               to="/"
-            />
-            <Box
-              className="leftbar-label"
-              {...(iconSidebar && { display: "none" })}
             >
-              タイムライン
-            </Box>
+              <IoHome fontSize="1.2em" />
+              <Box
+                className="leftbar-label"
+                ml="1"
+                {...(iconSidebar && { display: "none" })}
+              >
+                タイムライン
+              </Box>
+            </Button>
           </HStack>
-          <HStack>
-            <IconButton
-              model="alpha"
-              aria-label="settings"
+          <HStack w="full">
+            <Button
+              state={param["*"] === "settings"}
+              model="alpha-secondary"
               fontSize="1em"
-              icon={<IoSettings />}
               as={Link}
               to="/settings"
-            />
-            <Box
-              className="leftbar-label"
-              {...(iconSidebar && { display: "none" })}
+              isFullWidth
+              justifyContent="start"
             >
-              設定
-            </Box>
+              <IoSettings fontSize="1.2em" />
+              <Box
+                className="leftbar-label"
+                ml="1"
+                {...(iconSidebar && { display: "none" })}
+              >
+                設定
+              </Box>
+            </Button>
           </HStack>
         </VStack>
-        <ColorMode />
+        <VStack>
+          <Button
+            state={param["*"] === `user/@${userData.username}`}
+            model="alpha-secondary"
+            fontSize="1em"
+            as={Link}
+            to={`/user/@${userData.username}`}
+            isFullWidth
+            justifyContent="start"
+            h="fit-content"
+            maxW="8em"
+            overflow="hidden"
+          >
+            <Avatar user={userData} small />
+            <Box
+              w="full"
+              className="leftbar-label"
+              ml="1"
+              {...(iconSidebar && { display: "none" })}
+              isTruncated
+            >
+              @{userData.username}
+            </Box>
+          </Button>
+          <ColorMode />
+        </VStack>
       </VStack>
     </Box>
   );

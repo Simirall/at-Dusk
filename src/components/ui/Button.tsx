@@ -5,7 +5,12 @@ import { useColorContext } from "../../utils/ColorContext";
 
 export const Button = forwardRef<
   ButtonProps & {
-    model?: "alpha" | "alpha-primary" | "primary" | "secondary";
+    model?:
+      | "alpha"
+      | "alpha-primary"
+      | "primary"
+      | "alpha-secondary"
+      | "secondary";
   } & {
     state?: boolean;
   },
@@ -15,6 +20,11 @@ export const Button = forwardRef<
   const colorProps: ButtonProps =
     model === "alpha"
       ? {
+          sx: {
+            "*": {
+              color: colors.text,
+            },
+          },
           color: colors.text,
           bgColor: colors.alpha50,
           _hover: {
@@ -26,8 +36,13 @@ export const Button = forwardRef<
         }
       : model === "alpha-primary"
       ? {
+          sx: {
+            "*": {
+              color: state ? colors.textPrimary : colors.text,
+            },
+          },
           color: state ? colors.textPrimary : colors.text,
-          bgColor: state ? colors.primaryColor : colors.alpha50,
+          bgColor: state ? colors.primary : colors.alpha50,
           _hover: {
             bgColor: state ? colors.primaryThick : colors.alpha400,
           },
@@ -37,6 +52,11 @@ export const Button = forwardRef<
         }
       : model === "primary"
       ? {
+          sx: {
+            "*": {
+              color: colors.textPrimary,
+            },
+          },
           color: colors.textPrimary,
           bgColor: colors.primary,
           _hover: {
@@ -46,8 +66,29 @@ export const Button = forwardRef<
             bgColor: colors.primaryThin,
           },
         }
+      : model === "alpha-secondary"
+      ? {
+          sx: {
+            "*": {
+              color: state ? colors.textSecondary : colors.text,
+            },
+          },
+          color: state ? colors.textSecondary : colors.text,
+          bgColor: state ? colors.secondary : colors.alpha50,
+          _hover: {
+            bgColor: state ? colors.secondaryThick : colors.alpha400,
+          },
+          _active: {
+            bgColor: state ? colors.secondaryThin : colors.alpha200,
+          },
+        }
       : model === "secondary"
       ? {
+          sx: {
+            "*": {
+              color: colors.textSecondary,
+            },
+          },
           color: colors.textSecondary,
           bgColor: colors.secondary,
           _hover: {
