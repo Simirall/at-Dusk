@@ -18,7 +18,7 @@ import { Input } from "../components/ui/Input";
 import { setUserInfo } from "../features/rtk/settingsSlice";
 import { useColorContext } from "../utils/ColorContext";
 
-export const LoginForm: React.VFC = memo(function Fn() {
+export const LoginForm: React.FC = memo(function Fn() {
   const { colors } = useColorContext();
   const { setColorMode } = useColorMode();
   const theme = window.matchMedia("(prefers-color-scheme: dark)").matches
@@ -100,7 +100,7 @@ export const LoginForm: React.VFC = memo(function Fn() {
           fontWeight="normal"
           bgGradient="linear(to top, #ffa17f, #00223e)"
           bgClip="text"
-          isTruncated
+          noOfLines={1}
         >
           at Dusk.
         </Heading>

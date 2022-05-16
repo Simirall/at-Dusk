@@ -8,8 +8,8 @@ interface ColorType {
 
 const ColorContext = createContext({} as ColorType);
 
-const ColorProvider: React.VFC<{
-  children: React.ReactChild;
+const ColorProvider: React.FC<{
+  children: React.ReactNode;
 }> = ({ children }) => {
   const colors = useColors();
   return (

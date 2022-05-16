@@ -21,7 +21,7 @@ import {
 } from "../features/rtk/settingsSlice";
 import { useColorContext } from "../utils/ColorContext";
 
-export const Settings: React.VFC = memo(function Fn() {
+export const Settings: React.FC = memo(function Fn() {
   const { colors } = useColorContext();
   const { register, handleSubmit } = useForm<{
     defaultVisibility: "public" | "home" | "followers" | "specified";
@@ -64,14 +64,7 @@ export const Settings: React.VFC = memo(function Fn() {
   return (
     <Box w="full" marginBlock="2" bgColor={colors.panel} borderRadius="md">
       <Tabs variant="enclosed" p="1">
-        <TabList
-          borderColor={colors.text}
-          sx={{
-            "*": {
-              transitionProperty: "none",
-            },
-          }}
-        >
+        <TabList borderColor={colors.text}>
           <Tab
             _selected={{
               "*": {

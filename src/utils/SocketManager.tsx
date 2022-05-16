@@ -7,7 +7,7 @@ import { useSwrInit } from "../features/swr/useSwrInit";
 import { useSocketInit } from "./useSocketInit";
 import { useSocketRecv } from "./useSocketRecv";
 
-export const SocketManager: React.VFC<{
+export const SocketManager: React.FC<{
   children: React.ReactNode;
 }> = memo(function Fn({ children }) {
   useSetSocket();

@@ -6,7 +6,7 @@ import { useGetLogin, useSetIsLogin } from "../features/recoil/loginState";
 import { GetToken } from "./GetToken";
 import { LoginForm } from "./LoginForm";
 
-export const Login: React.VFC = memo(function Fn() {
+export const Login: React.FC = memo(function Fn() {
   const session = getUuid();
   useSetIsLogin();
   const { login } = useGetLogin();

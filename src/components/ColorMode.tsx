@@ -7,7 +7,7 @@ import { setTheme, settings } from "../features/rtk/settingsSlice";
 
 import { IconButton } from "./ui/IconButton";
 
-export const ColorMode: React.VFC = memo(function Fn() {
+export const ColorMode: React.FC = memo(function Fn() {
   const mode = useAppSelector(settings).userInfo.themeMode;
   const dispatch = useAppDispatch();
   const { setColorMode } = useColorMode();

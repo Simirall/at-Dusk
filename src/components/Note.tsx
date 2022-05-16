@@ -20,11 +20,11 @@ export const Note: React.VFC<{ note: mkNote; type: NoteType }> = memo(
         >
           <HStack w="full" overflow="hidden">
             <Avatar user={note.user} />
-            <Box flex="1" color="red.300" isTruncated>
+            <Box flex="1" color="red.300" noOfLines={1}>
               {note.user.name ? note.user.name : note.user.username}
             </Box>
           </HStack>
-          <Box w="full" isTruncated>
+          <Box w="full" noOfLines={1}>
             {note.text}
           </Box>
         </VStack>

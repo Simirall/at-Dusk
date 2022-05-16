@@ -1,6 +1,6 @@
 import React, { memo } from "react";
 
-export const Cat: React.VFC<{ color: string }> = memo(function Fn({ color }) {
+export const Cat: React.FC<{ color: string }> = memo(function Fn({ color }) {
   return (
     <svg
       viewBox="0 0 800 800"

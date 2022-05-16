@@ -9,7 +9,7 @@ import {
   useSetTheme,
 } from "../features/recoil/loginState";
 
-export const Auth: React.VFC<{
+export const Auth: React.FC<{
   children: React.ReactNode;
 }> = memo(function Fn({ children }) {
   useSetIsLogin();
@@ -20,8 +20,8 @@ export const Auth: React.VFC<{
   ) : (
     <>
       <HStack justify="center">
-        <Text isTruncated mt="4">
-          <Link as={routerLink} to="/login" color="blue.300" isTruncated>
+        <Text mt="4" noOfLines={1}>
+          <Link as={routerLink} to="/login" color="blue.300" noOfLines={1}>
             LOGIN
           </Link>
           REQUIRED

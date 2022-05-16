@@ -8,7 +8,7 @@ const focusVisibleStyle = css`
   }
 `;
 
-export const FocusVisible: React.VFC = memo(function Fn() {
+export const FocusVisible: React.FC = memo(function Fn() {
   return (
     <>
       <Global styles={focusVisibleStyle} />

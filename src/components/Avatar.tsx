@@ -6,7 +6,7 @@ import { useColorContext } from "../utils/ColorContext";
 
 import { Cat } from "./Cat";
 
-export const Avatar: React.VFC<{
+export const Avatar: React.FC<{
   user: UserLite & { isCat?: boolean };
   small?: boolean;
 }> = memo(function Fn({ user, small }) {

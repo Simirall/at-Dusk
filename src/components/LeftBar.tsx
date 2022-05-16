@@ -63,7 +63,7 @@ export const LeftBar = memo(function Fn() {
               fontSize="1em"
               as={Link}
               to="/settings"
-              isFullWidth
+              width="full"
               justifyContent="start"
             >
               <IoSettings fontSize="1.2em" />
@@ -84,7 +84,7 @@ export const LeftBar = memo(function Fn() {
             fontSize="1em"
             as={Link}
             to={`/user/@${userData.username}`}
-            isFullWidth
+            width="full"
             justifyContent="start"
             h="fit-content"
             maxW="8em"
@@ -96,7 +96,7 @@ export const LeftBar = memo(function Fn() {
               className="leftbar-label"
               ml="1"
               {...(iconSidebar && { display: "none" })}
-              isTruncated
+              noOfLines={1}
             >
               @{userData.username}
             </Box>

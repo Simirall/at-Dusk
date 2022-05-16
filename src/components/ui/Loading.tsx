@@ -5,7 +5,7 @@ import { memo } from "react";
 
 import { useColorContext } from "../../utils/ColorContext";
 
-export const Loading: React.VFC<{ small?: boolean }> = memo(function Fn({
+export const Loading: React.FC<{ small?: boolean }> = memo(function Fn({
   small,
 }) {
   const { colors } = useColorContext();

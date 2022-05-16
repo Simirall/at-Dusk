@@ -8,7 +8,7 @@ import { Loading } from "../components/ui/Loading";
 import { useGetLogin, useSetLogin } from "../features/recoil/loginState";
 import { setUserInfo } from "../features/rtk/settingsSlice";
 
-export const GetToken: React.VFC<{
+export const GetToken: React.FC<{
   uuid: string;
 }> = ({ uuid }) => {
   const navigate = useNavigate();

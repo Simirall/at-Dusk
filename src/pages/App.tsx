@@ -16,7 +16,7 @@ import { UserPage } from "./UserPage";
 
 import "../style/theme.scss";
 
-export const App: React.VFC = memo(function Fn() {
+export const App: React.FC = memo(function Fn() {
   const { colors } = useColorContext();
   useEffect(() => {
     if (document.location.href.includes("localhost")) {
