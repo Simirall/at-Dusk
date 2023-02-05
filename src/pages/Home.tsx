@@ -1,13 +1,24 @@
-import React, { memo } from "react";
+import { Button } from "@mantine/core";
+import { useLocalStorage } from "@mantine/hooks";
+import { useNavigate } from "react-router-dom";
 
-import { TimeLine } from "../components/TimeLine";
-import { useSetHeader } from "../features/recoil/header";
-
-export const Home = memo(function Fn() {
-  useSetHeader("タイムライン", "タイムライン");
+export const Home = () => {
+  const navigate = useNavigate();
+  const [, setLogin] = useLocalStorage({
+    key: "login",
+    defaultValue: false,
+  });
   return (
     <>
-      <TimeLine />
+      HOME
+      <Button
+        onClick={() => {
+          setLogin(false);
+          navigate("/login");
+        }}
+      >
+        LOGOUT
+      </Button>
     </>
   );
-});
+};

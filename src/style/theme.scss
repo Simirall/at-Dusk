@@ -85,12 +85,12 @@
     --text_inverse: #302608;
   }
   * {
-    transition-duration: var(--chakra-transition-duration-slow);
-    transition-timing-function: var(--chakra-transition-easing-ease-in);
-    transition-property: var(--chakra-transition-property-colors);
-    color: var(--text);
     scrollbar-width: thin;
     scrollbar-color: var(--primary_thick) var(--base_thick);
+    > * {
+      transition: 0.3s ease-in;
+      transition-property: color, background-color, fill;
+    }
     &::selection {
       color: var(--text_primary);
       background-color: var(--primary_thick);
@@ -110,10 +110,5 @@
   }
   body {
     font-size: clamp(1.125rem, 1vw + 0.75rem, 1.375rem);
-    label,
-    select,
-    button {
-      font-size: inherit;
-    }
   }
 }

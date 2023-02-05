@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { atom, useRecoilValue, useSetRecoilState } from "recoil";
 
 import { useAppSelector } from "../../app/hooks";
@@ -10,14 +10,18 @@ const socketState = atom<WebSocket | undefined>({
 });
 
 export const useSetSocket = () => {
+  const mount = useRef(false);
   const userInfo = useAppSelector(settings).userInfo;
   const setSocket = useSetRecoilState(socketState);
   useEffect(() => {
-    setSocket(
-      new WebSocket(
-        `wss://${userInfo.instance}/streaming?i=${userInfo.userToken}`
-      )
-    );
+    if (!mount.current) {
+      mount.current = true;
+      setSocket(
+        new WebSocket(
+          `wss://${userInfo.instance}/streaming?i=${userInfo.userToken}`
+        )
+      );
+    }
   }, [setSocket, userInfo.instance, userInfo.userToken]);
 };
 

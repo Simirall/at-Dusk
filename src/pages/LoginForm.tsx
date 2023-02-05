@@ -1,151 +1,120 @@
-import {
-  Box,
-  Container,
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
-  Heading,
-  useColorMode,
-  VStack,
-} from "@chakra-ui/react";
-import React, { useState, useEffect, memo } from "react";
+import { Button, Card, Input, InputWrapper, Stack, Title } from "@mantine/core";
+import { useLocalStorage } from "@mantine/hooks";
+import { memo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { v4 as uuid } from "uuid";
 
-import { store } from "../app/store";
-import { Button } from "../components/ui/Button";
-import { Input } from "../components/ui/Input";
-import { setUserInfo } from "../features/rtk/settingsSlice";
-import { useColorContext } from "../utils/ColorContext";
-
 export const LoginForm: React.FC = memo(function Fn() {
-  const { colors } = useColorContext();
-  const { setColorMode } = useColorMode();
-  const theme = window.matchMedia("(prefers-color-scheme: dark)").matches
-    ? "dark"
-    : "light";
+  const [error, updateError] = useState("");
+  const [, setInstance] = useLocalStorage<string>({
+    key: "instance",
+  });
   const {
     handleSubmit,
     register,
-    formState: { errors, isSubmitting },
-  } = useForm<{
-    appname: string;
-    instance: string;
-  }>();
-
-  const [fetchState, updateFetchState] = useState<{
-    ok: boolean;
-    message: string;
-  }>({ ok: true, message: "" });
+    formState: { isSubmitting },
+  } = useForm<{ appname: string; instance: string }>();
 
   const onSubmit = (data: { appname: string; instance: string }) => {
     const id = uuid();
     const appURL = document.location.href;
-    const checkMiAuthURL = `https://${data.instance}/api/endpoints`;
     (async () => {
       try {
-        const res = await fetch(checkMiAuthURL, { method: "POST" });
-        const text = await res.json();
-        if (text.includes("miauth/gen-token")) {
-          const settings = store.getState().settings.userInfo;
-          store.dispatch(
-            setUserInfo({
-              ...settings,
-              instance: data.instance,
-              appname: data.appname,
-              themeMode: theme,
-            })
-          );
+        const res = await fetch(`https://${data.instance}/api/endpoint`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ endpoint: "miauth/gen-token" }),
+        });
+        if (!res.ok) throw new Error(res.statusText);
+        else if (res.status === 204)
+          updateError("MiAuthに対応していないようです。");
+        else {
+          setInstance(data.instance);
           const authURL =
             `https://${data.instance}/miauth/${id}?name=${data.appname}&callback=${appURL}` +
-            // "&permission=read:account,write:account,read:blocks,write:blocks,read:drive,write:drive,read:favorites,write:favorites,read:following,write:following,read:messaging,write:messaging,read:mutes,write:mutes,write:notes,read:notifications,write:notifications,read:reactions,write:reactions,write:votes,read:pages,write:pages,write:page-likes,read:page-likes,read:user-groups,write:user-groups,read:channels,write:channels,read:gallery,write:gallery,read:gallery-likes,write:gallery-likes";
-            "&permission=read:account,write:account,read:blocks,write:blocks,read:drive,write:drive,read:favorites,write:favorites,read:following,write:following,read:messaging,write:messaging,read:mutes,write:mutes,write:notes,read:notifications,write:notifications,read:reactions,write:reactions,write:votes,read:channels,write:channels";
+            "&permission=read:account,write:account,read:blocks,write:blocks,read:drive,write:drive,read:favorites,write:favorites,read:following,write:following,read:mutes,write:mutes,write:notes,read:notifications,write:notifications,read:reactions,write:reactions,write:votes";
           window.location.href = authURL;
-        } else {
-          updateFetchState({
-            ok: false,
-            message: "インスタンスがMiAuthに対応していないようです",
-          });
         }
-      } catch {
-        updateFetchState({
-          ok: false,
-          message: "それはMisskeyのインスタンスですか？",
-        });
+      } catch (error) {
+        console.error(error);
+        updateError("それはMisskeyインスタンスですか？");
       }
     })();
   };
-
-  useEffect(() => {
-    document.querySelector(":root")?.setAttribute("mode", theme);
-    document
-      .querySelector(":root")
-      ?.setAttribute("theme", theme === "dark" ? "chillout" : "illuminating");
-    setColorMode(theme);
-  }, [theme, setColorMode]);
-
   return (
-    <Box pt="10">
-      <Container
-        p="4"
-        maxW="container.sm"
-        borderRadius="md"
-        shadow="md"
-        bgColor={colors.panel}
+    <Stack
+      sx={{
+        flexDirection: "row",
+        flexWrap: "wrap",
+        alignContent: "center",
+        height: "100vh",
+        "@supports(height: 100dvh)": {
+          height: "100dvh",
+        },
+      }}
+      align="center"
+      justify="space-evenly"
+    >
+      <Title
+        order={1}
+        sx={{
+          fontSize: "3rem",
+          fontWeight: "normal",
+          backgroundImage: "linear-gradient(to top, #ffa17f, #00223e)",
+          WebkitBackgroundClip: "text",
+          backgroundClip: "text",
+          color: "transparent",
+        }}
       >
-        <Heading
-          as="h3"
-          size="2xl"
-          mb="4"
-          fontWeight="normal"
-          bgGradient="linear(to top, #ffa17f, #00223e)"
-          bgClip="text"
-          noOfLines={1}
-        >
-          at Dusk.
-        </Heading>
+        at Dusk.
+      </Title>
+      <Card>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <VStack>
-            <FormControl isInvalid={errors.appname ? true : false}>
-              <FormLabel htmlFor="appname">アプリ名</FormLabel>
+          <Stack align="center">
+            <InputWrapper
+              id="appname"
+              required
+              label="アプリケーション名"
+              description="Misskeyに登録するこのアプリの名前です。"
+            >
               <Input
                 id="appname"
-                placeholder="@dusk"
                 defaultValue="@dusk"
-                {...register("appname", { required: "アプリ名は必須です" })}
+                {...register("appname")}
+                required
               />
-              <FormErrorMessage>
-                {errors.appname && errors.appname.message}
-              </FormErrorMessage>
-            </FormControl>
-            <FormControl isInvalid={errors.instance ? true : false}>
-              <FormLabel htmlFor="instance">インスタンス名</FormLabel>
+            </InputWrapper>
+            <InputWrapper
+              id="instance"
+              required
+              label="インスタンス名"
+              description="Misskey v12以降が必要です。"
+              error={error}
+              sx={{
+                width: "100%",
+              }}
+            >
               <Input
                 id="instance"
                 placeholder="misskey.io"
-                {...register("instance", {
-                  required: "インスタンス名は必須です",
-                  pattern: {
-                    value: /(\S+\.)?\S+\.\S+/,
-                    message: "インスタンスのドメインを入力してください。",
-                  },
-                })}
+                {...register("instance")}
+                required
               />
-              <FormErrorMessage>
-                {errors.instance && errors.instance.message}
-              </FormErrorMessage>
-            </FormControl>
-            {!fetchState.ok && (
-              <FormControl isInvalid={!fetchState.ok}>
-                <FormErrorMessage>{fetchState.message}</FormErrorMessage>
-              </FormControl>
-            )}
-            <Button model="primary" isLoading={isSubmitting} type="submit">
-              Register
+            </InputWrapper>
+            <Button
+              loading={isSubmitting}
+              type="submit"
+              sx={{
+                width: "fit-content",
+              }}
+            >
+              LOGIN
             </Button>
-          </VStack>
+          </Stack>
         </form>
-      </Container>
-    </Box>
+      </Card>
+    </Stack>
   );
 });

@@ -42,16 +42,3 @@ export const useSetIsLogin = () => {
     setLoginToken(userInfo.userToken);
   }, [setLoginState, setLoginToken, userInfo.login, userInfo.userToken]);
 };
-
-export const useSetTheme = () => {
-  const s = useAppSelector(settings);
-  useEffect(() => {
-    document.querySelector(":root")?.setAttribute("mode", s.userInfo.themeMode);
-    document
-      .querySelector(":root")
-      ?.setAttribute(
-        "theme",
-        s.userInfo.themeMode === "dark" ? s.theme.darkTheme : s.theme.lightTheme
-      );
-  }, [s.userInfo.themeMode, s.theme]);
-};

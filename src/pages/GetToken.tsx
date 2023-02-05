@@ -1,93 +1,81 @@
-import { Box, Center } from "@chakra-ui/layout";
-import { useToast } from "@chakra-ui/react";
-import React, { useEffect } from "react";
+import { Loader, Stack } from "@mantine/core";
+import { useLocalStorage } from "@mantine/hooks";
+import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { store } from "../app/store";
-import { Loading } from "../components/ui/Loading";
-import { useGetLogin, useSetLogin } from "../features/recoil/loginState";
 import { setUserInfo } from "../features/rtk/settingsSlice";
 
 export const GetToken: React.FC<{
   uuid: string;
 }> = ({ uuid }) => {
   const navigate = useNavigate();
-  const { login } = useGetLogin();
-  const tokenUrl = `https://${
-    store.getState().settings.userInfo.instance
-  }/api/miauth/${uuid}/check`;
-  useFetchData(tokenUrl, useSetLogin);
+  const [login, setLogin] = useLocalStorage<boolean>({
+    key: "login",
+  });
+  const [instance] = useLocalStorage<boolean>({
+    key: "instance",
+  });
+  const mount = useRef(false);
+  const tokenUrl = `https://${instance}/api/miauth/${uuid}/check`;
+
   useEffect(() => {
-    if (login) {
-      navigate("/");
+    if (!mount.current) {
+      mount.current = true;
+      if (login) {
+        navigate("/");
+      } else {
+        verifyLogin(tokenUrl, setLogin);
+      }
     }
-  }, [login, navigate]);
+  }, [login, navigate, tokenUrl, setLogin]);
+
   return (
-    <Box w="full">
-      <Center>
-        <Loading />
-      </Center>
-    </Box>
+    <Stack
+      sx={{
+        flexDirection: "row",
+        flexWrap: "wrap",
+        alignContent: "center",
+        height: "100vh",
+        "@supports(height: 100dvh)": {
+          height: "100dvh",
+        },
+      }}
+      align="center"
+      justify="space-evenly"
+    >
+      <Loader size="xl" />
+    </Stack>
   );
 };
 
-function useFetchData(
+const verifyLogin = async (
   tokenUrl: string,
-  useSetLogin: (login: boolean, token?: string | undefined) => void
-) {
-  const toast = useToast();
-  let token = "";
+  setLogin: (val: boolean | ((prevState: boolean) => boolean)) => void
+) => {
   try {
-    (async () => {
-      const res = await fetch(tokenUrl, { method: "POST" });
+    const res = await fetch(tokenUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({}),
+    });
+    if (!res.ok) throw new Error(res.statusText);
+    else {
       const text = await res.json();
       if (text.token) {
-        localStorage.setItem("userId", text.user.id);
         const settings = store.getState().settings.userInfo;
+        localStorage.setItem("userId", text.user.id);
         store.dispatch(
           setUserInfo({ ...settings, login: text.ok, userToken: text.token })
         );
-        Promise.allSettled([fetchMeta(), fetchUser(text.user.id)]).then(() => {
-          token = text.token;
-        });
+        setLogin(true);
       }
-    })();
+    }
   } catch (error) {
-    toast({
-      title: "Login Error.",
-      status: "error",
-      duration: 1000,
-    });
-  } finally {
-    useSetLogin(true, token);
+    console.error(error);
+    localStorage.clear();
+    window.location.href = "/login";
   }
-}
-
-async function fetchMeta() {
-  const settings = store.getState().settings.userInfo;
-  const res = await fetch(
-    `https://${store.getState().settings.userInfo.instance}/api/meta`,
-    {
-      method: "POST",
-    }
-  );
-  const text = await res.json();
-  store.dispatch(setUserInfo({ ...settings, instanceMeta: await text }));
-  await Promise.resolve();
-}
-
-async function fetchUser(id: string) {
-  const settings = store.getState().settings.userInfo;
-  const res = await fetch(
-    `https://${store.getState().settings.userInfo.instance}/api/users/show`,
-    {
-      method: "POST",
-      body: JSON.stringify({
-        userId: id,
-      }),
-    }
-  );
-  const text = await res.json();
-  store.dispatch(setUserInfo({ ...settings, userData: await text }));
-  await Promise.resolve();
-}
+};
