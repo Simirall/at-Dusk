@@ -1,16 +1,20 @@
 {
   "env": {
-    "es6": true,
-    "node": true,
     "browser": true,
-    "commonjs": true
+    "es2021": true
   },
+  "ignorePatterns": "src/style/",
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react-hooks/recommended",
+    "prettier"
+  ],
+  "overrides": [],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "ecmaVersion": 2018,
-    "ecmaFeatures": {
-      "jsx": true
-    },
+    "ecmaVersion": "latest",
     "sourceType": "module"
   },
   "settings": {
@@ -18,41 +22,38 @@
       "version": "detect"
     }
   },
-  "plugins": ["react-hooks", "react", "@typescript-eslint", "import"],
-  "extends": [
-    "eslint:recommended",
-    "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:react/recommended",
-    "plugin:react-hooks/recommended",
-    "prettier"
-  ],
-  "ignorePatterns": "src/style",
+  "plugins": ["react", "@typescript-eslint", "import"],
   "rules": {
-    "react/prop-types": "off",
+    "react/react-in-jsx-scope": "off",
+    "react/no-unknown-property": ["error", { "ignore": ["css"] }],
     "import/order": [
       "error",
       {
         "groups": [
           "builtin",
           "external",
-          "parent",
-          "sibling",
+          ["sibling", "parent"],
           "index",
           "object",
           "type"
         ],
-        "pathGroups": [
-          {
-            "pattern": "@alias/**",
-            "group": "parent",
-            "position": "before"
-          }
-        ],
         "alphabetize": {
-          "order": "asc"
+          "order": "asc",
+          "caseInsensitive": true
         },
         "newlines-between": "always"
+      }
+    ],
+    "@typescript-eslint/consistent-type-imports": [
+      "error",
+      { "prefer": "type-imports" }
+    ],
+    "import/no-duplicates": "error",
+    "@typescript-eslint/naming-convention": [
+      "error",
+      {
+        "selector": "typeAlias",
+        "format": ["PascalCase"]
       }
     ]
   }
