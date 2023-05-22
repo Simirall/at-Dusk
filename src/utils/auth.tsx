@@ -1,8 +1,8 @@
 import { redirect } from "react-router-dom";
 
-import { loginAtom, loginStore } from "../apps/login";
-
 import type { RouteObject } from "react-router-dom";
+
+import { loginAtom, loginStore } from "@/apps/login";
 
 export const auth = (routes: Array<RouteObject>) => {
   let isLogin = loginStore.get(loginAtom).isLogin;

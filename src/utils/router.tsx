@@ -1,10 +1,11 @@
 import { createBrowserRouter } from "react-router-dom";
 
 import { auth, guest } from "./auth";
-import { Login } from "../pages/auth/Login";
-import { Root } from "../pages/Root";
 
 import type { RouteObject } from "react-router-dom";
+
+import { Login } from "@/pages/auth/Login";
+import { Root } from "@/pages/Root";
 
 const routes = [
   {

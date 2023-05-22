@@ -2,7 +2,8 @@ import { useAtomValue } from "jotai";
 import { Link } from "react-router-dom";
 
 import { Landing } from "./Landing";
-import { loginAtom } from "../apps/login";
+
+import { loginAtom } from "@/apps/login";
 
 export const Root = () => {
   const login = useAtomValue(loginAtom);
