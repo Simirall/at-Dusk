@@ -1,10 +1,25 @@
-import { useAtomValue } from "jotai";
-
 import { Landing } from "./Landing";
 
-import { loginAtom } from "@/apps/login";
+import { setLogin, useGetLogin } from "@/apps/login";
 
 export const Root = () => {
-  const login = useAtomValue(loginAtom);
-  return login.isLogin ? <>ログインしています。</> : <Landing />;
+  const login = useGetLogin();
+  return login.isLogin ? (
+    <>
+      ログインしています。
+      <p>
+        <button
+          onClick={() => {
+            setLogin({
+              isLogin: false,
+            });
+          }}
+        >
+          ログアウト
+        </button>
+      </p>
+    </>
+  ) : (
+    <Landing />
+  );
 };
