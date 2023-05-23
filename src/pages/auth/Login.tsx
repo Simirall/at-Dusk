@@ -2,6 +2,7 @@ import { useSetAtom } from "jotai";
 import { useNavigate } from "react-router-dom";
 
 import { loginAtom } from "@/apps/login";
+import { clientRoutes } from "@/consts/routes";
 
 export const Login = () => {
   const setLogin = useSetAtom(loginAtom);
@@ -16,7 +17,7 @@ export const Login = () => {
               isLogin: true,
               token: "token",
             });
-            navigate("/");
+            navigate(clientRoutes.index);
           }}
         >
           LOGIN

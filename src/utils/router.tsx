@@ -4,26 +4,22 @@ import { auth, guest } from "./auth";
 
 import type { RouteObject } from "react-router-dom";
 
+import { clientRoutes } from "@/consts/routes";
 import { Login } from "@/pages/auth/Login";
 import { Root } from "@/pages/Root";
 
 const routes = [
   {
-    path: "/",
+    path: clientRoutes.index,
     element: <Root />,
   },
   guest([
     {
-      path: "/login",
+      path: clientRoutes.login,
       element: <Login />,
     },
   ]),
-  auth([
-    {
-      path: "/profile",
-      element: <>profile</>,
-    },
-  ]),
+  auth([]),
 ] satisfies ReadonlyArray<RouteObject>;
 
 export const router = createBrowserRouter(routes);

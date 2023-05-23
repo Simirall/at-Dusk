@@ -3,6 +3,7 @@ import { redirect } from "react-router-dom";
 import type { RouteObject } from "react-router-dom";
 
 import { loginAtom, loginStore } from "@/apps/login";
+import { clientRoutes } from "@/consts/routes";
 
 export const auth = (routes: Array<RouteObject>) => {
   let isLogin = loginStore.get(loginAtom).isLogin;
@@ -14,7 +15,7 @@ export const auth = (routes: Array<RouteObject>) => {
     children: routes,
     loader: async () => {
       if (!isLogin) {
-        return redirect("/login");
+        return redirect(clientRoutes.login);
       }
       return null;
     },
@@ -31,7 +32,7 @@ export const guest = (routes: Array<RouteObject>) => {
     children: routes,
     loader: async () => {
       if (isLogin) {
-        return redirect("/");
+        return redirect(clientRoutes.index);
       }
       return null;
     },

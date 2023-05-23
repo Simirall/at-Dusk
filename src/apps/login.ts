@@ -13,5 +13,5 @@ export const loginAtom = atomWithStorage<LoginState>("login", {
 });
 
 loginStore.sub(loginAtom, () => {
-  console.log(loginStore.get(loginAtom));
+  console.log(`Login: ${loginStore.get(loginAtom).isLogin}`);
 });
