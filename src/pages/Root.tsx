@@ -1,12 +1,15 @@
 import { Landing } from "./Landing";
 
 import { setLogin, useGetLogin } from "@/apps/login";
+import { useGetMySelf } from "@/apps/user";
 
 export const Root = () => {
   const login = useGetLogin();
-  return login.isLogin ? (
+  const myself = useGetMySelf();
+  return login.isLogin && myself ? (
     <>
       ログインしています。
+      <p>ログインユーザー: {`@${myself.username}@${login.instance}`}</p>
       <p>
         <button
           onClick={() => {

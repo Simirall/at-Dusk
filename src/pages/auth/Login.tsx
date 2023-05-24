@@ -1,26 +1,25 @@
-import { useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
-import { setLogin } from "@/apps/login";
-import { clientRoutes } from "@/consts/routes";
+import { GetToken } from "./GetToken";
+import { LoginForm } from "./LoginForm";
 
-export const Login = () => {
-  const navigate = useNavigate();
-  return (
-    <>
-      ログインページです。
-      <p>
-        <button
-          onClick={() => {
-            setLogin({
-              isLogin: true,
-              token: "token",
-            });
-            navigate(clientRoutes.index);
-          }}
-        >
-          LOGIN
-        </button>
-      </p>
-    </>
+import { useGetLogin } from "@/apps/login";
+
+export const Login: React.FC = () => {
+  const session = getUuid();
+  const login = useGetLogin();
+
+  return login.isLogin ? (
+    <Navigate to="/" />
+  ) : session ? (
+    <GetToken uuid={session} />
+  ) : (
+    <LoginForm />
   );
 };
+
+function getUuid(): string | null {
+  const params = new URLSearchParams(document.location.search.substring(1));
+  const session = params.get("session");
+  return session;
+}

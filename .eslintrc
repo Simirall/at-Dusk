@@ -25,6 +25,7 @@
   "plugins": ["react", "@typescript-eslint", "import"],
   "rules": {
     "react/react-in-jsx-scope": "off",
+    "react/prop-types": "off",
     "react/no-unknown-property": ["error", { "ignore": ["css"] }],
     "import/order": [
       "error",
