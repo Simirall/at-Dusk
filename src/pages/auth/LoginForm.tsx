@@ -1,15 +1,19 @@
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { v4 as uuid } from "uuid";
+import z from "zod";
 
 import type { SubmitHandler } from "react-hook-form";
 
 import { useLoginStore } from "@/store/login";
 
-type LoginInputs = {
-  appName: string;
-  instance: string;
-};
+const LoginSchema = z.object({
+  appName: z.string().min(1).max(20),
+  instance: z.string().min(1).max(255),
+});
+
+type LoginType = z.infer<typeof LoginSchema>;
 
 export const LoginForm = () => {
   const [loginError, setLoginError] = useState<string | undefined>();
@@ -18,9 +22,11 @@ export const LoginForm = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginInputs>();
+  } = useForm<z.infer<typeof LoginSchema>>({
+    resolver: zodResolver(LoginSchema),
+  });
 
-  const onLoginSubmit: SubmitHandler<LoginInputs> = (loginData) =>
+  const onLoginSubmit: SubmitHandler<LoginType> = (loginData) =>
     authApplication({ loginData: loginData, setLoginError: setLoginError });
 
   return (
@@ -50,7 +56,7 @@ const authApplication = async ({
   loginData,
   setLoginError,
 }: {
-  loginData: LoginInputs;
+  loginData: LoginType;
   setLoginError: React.Dispatch<React.SetStateAction<string | undefined>>;
 }) => {
   const id = uuid();
@@ -59,7 +65,7 @@ const authApplication = async ({
   const login = useLoginStore.getState();
   const setLogin = useLoginStore.setState;
 
-  const endpoints: Array<string> = await fetch(checkEndpointURL, {
+  const endpoints: ReadonlyArray<string> = await fetch(checkEndpointURL, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
