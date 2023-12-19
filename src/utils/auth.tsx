@@ -2,14 +2,11 @@ import { redirect } from "react-router-dom";
 
 import type { RouteObject } from "react-router-dom";
 
-import { getLogin, subscribeLogin } from "@/apps/login";
 import { clientRoutes } from "@/consts/routes";
+import { useLoginStore } from "@/store/login";
 
 export const auth = (routes: Array<RouteObject>) => {
-  let isLogin = getLogin().isLogin;
-  subscribeLogin(() => {
-    isLogin = getLogin().isLogin;
-  });
+  const isLogin = useLoginStore.getState().isLogin;
 
   return {
     children: routes,
@@ -23,10 +20,7 @@ export const auth = (routes: Array<RouteObject>) => {
 };
 
 export const guest = (routes: Array<RouteObject>) => {
-  let isLogin = getLogin().isLogin;
-  subscribeLogin(() => {
-    isLogin = getLogin().isLogin;
-  });
+  const isLogin = useLoginStore.getState().isLogin;
 
   return {
     children: routes,

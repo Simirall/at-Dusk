@@ -3,13 +3,13 @@ import { Navigate } from "react-router-dom";
 import { GetToken } from "./GetToken";
 import { LoginForm } from "./LoginForm";
 
-import { useGetLogin } from "@/apps/login";
+import { useLoginStore } from "@/store/login";
 
 export const Login: React.FC = () => {
   const session = getUuid();
-  const login = useGetLogin();
+  const isLogin = useLoginStore().isLogin;
 
-  return login.isLogin ? (
+  return isLogin ? (
     <Navigate to="/" />
   ) : session ? (
     <GetToken uuid={session} />

@@ -1,16 +1,14 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-import type { LoginState } from "@/apps/login";
-
-import { setLogin, useGetLogin } from "@/apps/login";
-import { setMyself } from "@/apps/user";
+import { useLoginStore, type LoginState } from "@/store/login";
+import { useMySelfStore } from "@/store/user";
 
 export const GetToken: React.FC<{
   uuid: string;
 }> = ({ uuid }) => {
   const navigate = useNavigate();
-  const login = useGetLogin();
+  const login = useLoginStore();
 
   const tokenUrl = `https://${login.instance}/api/miauth/${uuid}/check`;
   fetchData(tokenUrl, login);
@@ -25,6 +23,9 @@ export const GetToken: React.FC<{
 };
 
 const fetchData = async (tokenUrl: string, login: LoginState) => {
+  const setMyself = useMySelfStore.setState;
+  const setLogin = useLoginStore.setState;
+
   const data = await fetch(tokenUrl, {
     method: "POST",
   })
@@ -39,7 +40,7 @@ const fetchData = async (tokenUrl: string, login: LoginState) => {
     });
 
   if (data.token) {
-    setMyself(data.user);
+    setMyself({ mySelf: data.user });
     setLogin({
       ...login,
       isLogin: true,

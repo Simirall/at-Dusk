@@ -1,11 +1,12 @@
 import { Landing } from "./Landing";
 
-import { setLogin, useGetLogin } from "@/apps/login";
-import { useGetMySelf } from "@/apps/user";
+import { useLoginStore } from "@/store/login";
+import { useMySelfStore } from "@/store/user";
 
 export const Root = () => {
-  const login = useGetLogin();
-  const myself = useGetMySelf();
+  const login = useLoginStore();
+  const myself = useMySelfStore().mySelf;
+
   return login.isLogin && myself ? (
     <>
       ログインしています。
@@ -13,9 +14,7 @@ export const Root = () => {
       <p>
         <button
           onClick={() => {
-            setLogin({
-              isLogin: false,
-            });
+            login.logout();
           }}
         >
           ログアウト

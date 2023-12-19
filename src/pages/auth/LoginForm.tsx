@@ -4,7 +4,7 @@ import { v4 as uuid } from "uuid";
 
 import type { SubmitHandler } from "react-hook-form";
 
-import { getLogin, setLogin } from "@/apps/login";
+import { useLoginStore } from "@/store/login";
 
 type LoginInputs = {
   appName: string;
@@ -43,8 +43,8 @@ export const LoginForm = () => {
         />
         {errors.appName && <span>アプリ名は必須です。</span>}
         <input
-          placeholder="misskey.io"
-          defaultValue="misskey.io"
+          placeholder="example.com"
+          defaultValue="honi.club"
           {...register("instance", { required: true })}
         />
         {errors.instance && <span>インスタンス名は必須です。</span>}
@@ -65,7 +65,8 @@ const authApplication = async ({
   const id = uuid();
   const appURL = document.location.href;
   const checkEndpointURL = `https://${loginData.instance}/api/endpoints`;
-  const login = getLogin();
+  const login = useLoginStore.getState();
+  const setLogin = useLoginStore.setState;
 
   const endpoints: Array<string> = await fetch(checkEndpointURL, {
     method: "POST",
