@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { v4 as uuid } from "uuid";
 
@@ -22,15 +22,6 @@ export const LoginForm = () => {
 
   const onLoginSubmit: SubmitHandler<LoginInputs> = (loginData) =>
     authApplication({ loginData: loginData, setLoginError: setLoginError });
-
-  useEffect(() => {
-    if (document.location.href.includes("localhost")) {
-      document.location = document.location.href.replace(
-        "localhost",
-        "127.0.0.1",
-      );
-    }
-  }, []);
 
   return (
     <>
