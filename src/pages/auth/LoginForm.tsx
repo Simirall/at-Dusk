@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Button, Input, Text, VStack } from "@yamada-ui/react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { v4 as uuid } from "uuid";
@@ -30,25 +31,27 @@ export const LoginForm = () => {
     authApplication({ loginData: loginData, setLoginError: setLoginError });
 
   return (
-    <>
-      ログインページです。
-      <form onSubmit={handleSubmit(onLoginSubmit)}>
-        <input
+    <VStack p="md">
+      <Text>ログインページです。</Text>
+      <VStack as="form" onSubmit={handleSubmit(onLoginSubmit)}>
+        <Input
           placeholder="@dusk"
           defaultValue="@dusk"
           {...register("appName", { required: true })}
         />
-        {errors.appName && <span>アプリ名は必須です。</span>}
-        <input
+        {errors.appName && <Text color="warning">アプリ名は必須です。</Text>}
+        <Input
           placeholder="example.com"
           defaultValue="honi.club"
           {...register("instance", { required: true })}
         />
-        {errors.instance && <span>インスタンス名は必須です。</span>}
-        <button type="submit">次へ</button>
+        {errors.instance && (
+          <Text color="warning">インスタンス名は必須です。</Text>
+        )}
+        <Button type="submit">次へ</Button>
         {loginError && <p>{loginError}</p>}
-      </form>
-    </>
+      </VStack>
+    </VStack>
   );
 };
 
