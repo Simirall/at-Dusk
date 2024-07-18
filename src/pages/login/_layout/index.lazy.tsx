@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { createLazyFileRoute } from "@tanstack/react-router";
 import { Button, Input, Text, VStack } from "@yamada-ui/react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -16,7 +17,11 @@ const LoginSchema = z.object({
 
 type LoginType = z.infer<typeof LoginSchema>;
 
-export const LoginForm = () => {
+export const Route = createLazyFileRoute("/login/_layout/")({
+  component: Login,
+});
+
+function Login() {
   const [loginError, setLoginError] = useState<string | undefined>();
 
   const {
@@ -53,7 +58,7 @@ export const LoginForm = () => {
       </VStack>
     </VStack>
   );
-};
+}
 
 const authApplication = async ({
   loginData,
@@ -63,7 +68,7 @@ const authApplication = async ({
   setLoginError: React.Dispatch<React.SetStateAction<string | undefined>>;
 }) => {
   const id = uuid();
-  const appURL = document.location.href;
+  const appURL = `${document.location.href}/getToken`;
   const checkEndpointURL = `https://${loginData.instance}/api/endpoints`;
   const login = useLoginStore.getState();
   const setLogin = useLoginStore.setState;
@@ -100,7 +105,6 @@ const authApplication = async ({
     )}/miauth/${id}?name=${encodeURIComponent(
       loginData.appName,
     )}&callback=${appURL}` +
-    // "&permission=read:account,write:account,read:blocks,write:blocks,read:drive,write:drive,read:favorites,write:favorites,read:following,write:following,read:messaging,write:messaging,read:mutes,write:mutes,write:notes,read:notifications,write:notifications,read:reactions,write:reactions,write:votes,read:pages,write:pages,write:page-likes,read:page-likes,read:user-groups,write:user-groups,read:channels,write:channels,read:gallery,write:gallery,read:gallery-likes,write:gallery-likes";
     "&permission=read:account,write:account,read:blocks,write:blocks,read:drive,write:drive,read:favorites,write:favorites,read:following,write:following,read:messaging,write:messaging,read:mutes,write:mutes,write:notes,read:notifications,write:notifications,read:reactions,write:reactions,write:votes,read:channels,write:channels";
   window.location.href = authURL;
 };
