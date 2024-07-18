@@ -26,6 +26,7 @@ export const pooool: ThemeTokens = {
     },
     colorSchemes: {
       primary: "teal",
+      secondary: "sky",
     },
   },
 };

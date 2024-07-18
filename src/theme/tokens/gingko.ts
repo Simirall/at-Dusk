@@ -26,6 +26,7 @@ export const gingko: ThemeTokens = {
     },
     colorSchemes: {
       primary: "sky",
+      secondary: "yellow",
     },
   },
 };
