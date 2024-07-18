@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-import type { MeDetailed } from "misskey-js/built/entities";
+import type { MeDetailed } from "misskey-js/entities.js";
 
 export type MySelfState = {
   mySelf: MeDetailed | undefined;
