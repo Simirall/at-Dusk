@@ -1,6 +1,8 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
+import { useMySelfStore } from "./user";
+
 export type LoginState = {
   isLogin: boolean;
   token?: string;
@@ -21,10 +23,14 @@ export const useLoginStore = create<LoginState & LoginActions>()(
           isLogin: true,
           ...payload,
         })),
-      logout: () =>
+      logout: () => {
         set(() => ({
           isLogin: false,
-        })),
+        }));
+        useMySelfStore.setState({
+          mySelf: undefined,
+        });
+      },
     }),
     { name: "login" },
   ),
