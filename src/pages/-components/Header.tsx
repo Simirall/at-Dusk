@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import { Avatar, HStack, Heading } from "@yamada-ui/react";
 
 import { HeaderMenu } from "./HeaderMenu";
@@ -16,7 +17,7 @@ export const Header = () => {
       bg="bg"
       color="darkText"
     >
-      <Heading as="h1" size="lg" isTruncated fontWeight="light">
+      <Heading size="lg" isTruncated fontWeight="light" as={Link} to="/">
         at Dusk.
       </Heading>
       {mySelf ? (

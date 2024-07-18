@@ -1,26 +1,37 @@
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { z } from "zod";
 
-import { useLoginStore, type LoginState } from "@/store/login";
+import type { LoginState } from "@/store/login";
+
+import { useLoginStore } from "@/store/login";
 import { useMySelfStore } from "@/store/user";
 
-export const GetToken: React.FC<{
-  uuid: string;
-}> = ({ uuid }) => {
+const sessionSearchSchema = z.object({
+  session: z.string().uuid(),
+});
+
+export const Route = createFileRoute("/login/_layout/getToken")({
+  validateSearch: sessionSearchSchema,
+  component: GetToken,
+});
+
+function GetToken() {
+  const { session } = Route.useSearch();
   const navigate = useNavigate();
   const login = useLoginStore();
 
-  const tokenUrl = `https://${login.instance}/api/miauth/${uuid}/check`;
+  const tokenUrl = `https://${login.instance}/api/miauth/${session}/check`;
   fetchData(tokenUrl, login);
 
   useEffect(() => {
     if (login.isLogin) {
-      navigate("/");
+      navigate({ to: "/", replace: true });
     }
   }, [login, navigate]);
 
   return <>loading...</>;
-};
+}
 
 const fetchData = async (tokenUrl: string, login: LoginState) => {
   const setMyself = useMySelfStore.setState;

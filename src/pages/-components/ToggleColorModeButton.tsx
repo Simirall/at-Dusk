@@ -3,7 +3,10 @@ import { Button, useColorMode, useColorModeValue } from "@yamada-ui/react";
 
 export const ToggleColorModeButton = () => {
   const { toggleColorMode } = useColorMode();
-  const icon = useColorModeValue(<Moon />, <Sun />);
+  const icon = useColorModeValue(
+    <Moon weight="bold" size={20} />,
+    <Sun weight="bold" size={20} />,
+  );
 
   return (
     <Button
