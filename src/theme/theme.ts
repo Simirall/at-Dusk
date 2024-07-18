@@ -4,6 +4,7 @@ import {
   withDefaultColorScheme,
 } from "@yamada-ui/react";
 
+import { Dialog } from "./components/dialog";
 import { Menu } from "./components/menu";
 import { themeSchemes } from "./themeSchemes";
 
@@ -45,6 +46,7 @@ export const theme = extendTheme(
     },
     components: {
       Menu,
+      Dialog,
     },
   },
   withDefaultColorScheme({
