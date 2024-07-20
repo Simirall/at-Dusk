@@ -1,7 +1,15 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
-import { Container, Text } from "@yamada-ui/react";
+import {
+  Avatar,
+  Button,
+  Container,
+  HStack,
+  Text,
+  VStack,
+} from "@yamada-ui/react";
 
-import { useMySelfStore } from "@/store/user";
+import { useTimeLine } from "@/apis/websocket/timeline";
+import { useTimeLineStore } from "@/store/timeline";
 
 export const Route = createFileRoute("/")({
   beforeLoad: ({ context }) => {
@@ -13,10 +21,29 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
-  const { mySelf } = useMySelfStore();
+  useTimeLine();
+  const { notes } = useTimeLineStore();
+
   return (
     <Container>
-      <Text>{`おかえりなさい、${mySelf?.name}さん`}</Text>
+      {notes.map((n) => (
+        <VStack key={n.id}>
+          <HStack align="start">
+            <Avatar src={n.user.avatarUrl ?? undefined} />
+            <VStack>
+              <Text>{`${n.user.name} @${n.user.username}${n.user.host ? `@${n.user.host}` : ""}`}</Text>
+              <Text
+                whiteSpace="pre-wrap"
+                wordBreak="keep-all"
+                overflowWrap="anywhere"
+              >
+                {n.text}
+              </Text>
+            </VStack>
+          </HStack>
+        </VStack>
+      ))}
+      {notes.length > 0 && <Button>もっとみる</Button>}
     </Container>
   );
 }

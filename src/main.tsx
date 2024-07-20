@@ -1,9 +1,11 @@
 import { UIProvider, getThemeSchemeScript } from "@yamada-ui/react";
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { SWRConfig } from "swr";
 
 import { Router } from "./Router";
 import { theme, config } from "./theme/theme";
+import { fetcher } from "./utils/fetcher";
 
 const injectThemeSchemeScript = () => {
   const scriptContent = getThemeSchemeScript({
@@ -22,7 +24,9 @@ injectThemeSchemeScript();
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <UIProvider theme={theme} config={config}>
-      <Router />
+      <SWRConfig value={{ fetcher: fetcher }}>
+        <Router />
+      </SWRConfig>
     </UIProvider>
   </React.StrictMode>,
 );
