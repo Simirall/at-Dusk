@@ -32,7 +32,7 @@ const LoginRoute = LoginImport.update({
 const IndexRoute = IndexImport.update({
   path: "/",
   getParentRoute: () => rootRoute,
-} as any)
+} as any).lazy(() => import("./pages/index.lazy").then((d) => d.Route))
 
 const LoginLayoutRoute = LoginLayoutImport.update({
   id: "/_layout",
@@ -49,7 +49,9 @@ const LoginLayoutIndexLazyRoute = LoginLayoutIndexLazyImport.update({
 const LoginLayoutGetTokenRoute = LoginLayoutGetTokenImport.update({
   path: "/getToken",
   getParentRoute: () => LoginLayoutRoute,
-} as any)
+} as any).lazy(() =>
+  import("./pages/login/_layout/getToken.lazy").then((d) => d.Route),
+)
 
 // Populate the FileRoutesByPath interface
 
