@@ -1,34 +1,43 @@
 import { useEffect, useRef } from "react";
 import ReconnectingWebSocket from "reconnecting-websocket";
 
+import type { Timelines } from "@/store/currentTimeline";
 import type { Note } from "misskey-js/entities.js";
 
+import { useCurrentTimelineStore } from "@/store/currentTimeline";
 import { useLoginStore } from "@/store/login";
 import { useTimeLineStore } from "@/store/timeline";
 
-const id = "homeTimeLine";
-
-type ChannelNote = {
+type ChannelNote<T> = {
   type: "channel";
   body: {
-    id: typeof id;
+    id: T;
     type: "note";
     body: Note;
   };
 };
 
-const connectHomeTimeLineObject = JSON.stringify({
-  type: "connect",
-  body: {
-    channel: "homeTimeline",
-    id: id,
-  },
-});
+const streamTimelineObject = ({
+  type,
+  channel,
+}: {
+  type: "connect" | "disconnect";
+  channel: Timelines;
+}) =>
+  JSON.stringify({
+    type: type,
+    body: {
+      channel: channel,
+      id: channel,
+    },
+  });
 
 export const useTimeLine = () => {
   const { instance, token } = useLoginStore();
   const { addNoteToTop } = useTimeLineStore();
+  const { currentTimeline } = useCurrentTimelineStore();
 
+  const prevTimeline = useRef(currentTimeline);
   const socketRef = useRef<ReconnectingWebSocket>();
 
   useEffect(() => {
@@ -39,13 +48,39 @@ export const useTimeLine = () => {
       socketRef.current = socket;
 
       socket.onopen = () => {
-        socket.send(connectHomeTimeLineObject);
+        socket.send(
+          streamTimelineObject({
+            type: "connect",
+            channel: currentTimeline,
+          }),
+        );
       };
 
       socket.onmessage = (event: MessageEvent) => {
-        const response: ChannelNote = JSON.parse(event.data);
+        const response: ChannelNote<typeof currentTimeline> = JSON.parse(
+          event.data,
+        );
         addNoteToTop(response.body.body);
       };
     }
-  }, [instance, token, addNoteToTop]);
+  }, [instance, token, addNoteToTop, currentTimeline]);
+
+  useEffect(() => {
+    if (socketRef.current?.readyState === WebSocket.OPEN) {
+      console.log(currentTimeline, prevTimeline.current);
+      socketRef.current.send(
+        streamTimelineObject({
+          type: "disconnect",
+          channel: prevTimeline.current,
+        }),
+      );
+      socketRef.current.send(
+        streamTimelineObject({
+          type: "connect",
+          channel: currentTimeline,
+        }),
+      );
+      prevTimeline.current = currentTimeline;
+    }
+  }, [currentTimeline]);
 };
