@@ -1,8 +1,6 @@
 import { useEffect, useRef } from "react";
 import ReconnectingWebSocket from "reconnecting-websocket";
 
-import { useGetTimeLine } from "../notes/timeline";
-
 import type { Note } from "misskey-js/entities.js";
 
 import { useLoginStore } from "@/store/login";
@@ -30,7 +28,6 @@ const connectHomeTimeLineObject = JSON.stringify({
 export const useTimeLine = () => {
   const { instance, token } = useLoginStore();
   const { addNoteToTop } = useTimeLineStore();
-  const { getTimeLine } = useGetTimeLine();
 
   const socketRef = useRef<ReconnectingWebSocket>();
 
@@ -42,9 +39,6 @@ export const useTimeLine = () => {
       socketRef.current = socket;
 
       socket.onopen = () => {
-        if (useTimeLineStore.getState().notes.length === 0) {
-          getTimeLine();
-        }
         socket.send(connectHomeTimeLineObject);
       };
 
@@ -53,5 +47,5 @@ export const useTimeLine = () => {
         addNoteToTop(response.body.body);
       };
     }
-  }, [instance, token, addNoteToTop, getTimeLine]);
+  }, [instance, token, addNoteToTop]);
 };
