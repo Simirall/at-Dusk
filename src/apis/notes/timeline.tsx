@@ -1,3 +1,5 @@
+import { useCallback } from "react";
+
 import type { Note } from "misskey-js/entities.js";
 
 import { useCurrentTimelineStore } from "@/store/currentTimeline";
@@ -15,13 +17,16 @@ export const useGetTimeLine = () => {
   const { currentTimeline } = useCurrentTimelineStore();
   const { addNotesToBottom } = useTimeLineStore();
 
-  const getTimeLine = async (arg?: { untilId?: string }) => {
-    const notes = await fetcher<ReadonlyArray<Note>>([
-      apiPath[currentTimeline],
-      arg,
-    ]);
-    addNotesToBottom(notes);
-  };
+  const getTimeLine = useCallback(
+    async (arg?: { untilId?: string }) => {
+      const notes = await fetcher<ReadonlyArray<Note>>([
+        apiPath[currentTimeline],
+        arg,
+      ]);
+      addNotesToBottom(notes);
+    },
+    [addNotesToBottom, currentTimeline],
+  );
 
   return { getTimeLine };
 };

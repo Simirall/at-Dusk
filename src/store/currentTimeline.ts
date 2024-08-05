@@ -1,8 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-import { useTimeLineStore } from "./timeline";
-
 export type Timelines =
   | "homeTimeline"
   | "localTimeline"
@@ -27,7 +25,6 @@ export const useCurrentTimelineStore = create<
         set(() => ({
           currentTimeline: payload,
         }));
-        useTimeLineStore.setState({ notes: [] });
       },
     }),
     { name: "currentTimeline" },

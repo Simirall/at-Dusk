@@ -10,6 +10,7 @@ type TimeLineActions = {
   addNoteToTop: (payload: Note) => void;
   addNotesToTop: (payload: ReadonlyArray<Note>) => void;
   addNotesToBottom: (payload: ReadonlyArray<Note>) => void;
+  clear: () => void;
 };
 
 export const useTimeLineStore = create<TimeLine & TimeLineActions>((set) => ({
@@ -27,6 +28,11 @@ export const useTimeLineStore = create<TimeLine & TimeLineActions>((set) => ({
   addNotesToBottom: (payload) => {
     set((state) => ({
       notes: [...state.notes, ...payload],
+    }));
+  },
+  clear: () => {
+    set(() => ({
+      notes: [],
     }));
   },
 }));

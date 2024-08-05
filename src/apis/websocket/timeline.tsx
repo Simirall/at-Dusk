@@ -1,6 +1,8 @@
 import { useEffect, useRef } from "react";
 import ReconnectingWebSocket from "reconnecting-websocket";
 
+import { useGetTimeLine } from "../notes/timeline";
+
 import type { Timelines } from "@/store/currentTimeline";
 import type { Note } from "misskey-js/entities.js";
 
@@ -36,6 +38,8 @@ export const useTimeLine = () => {
   const { instance, token } = useLoginStore();
   const { addNoteToTop } = useTimeLineStore();
   const { currentTimeline } = useCurrentTimelineStore();
+  const { clear } = useTimeLineStore();
+  const { getTimeLine } = useGetTimeLine();
 
   const prevTimeline = useRef(currentTimeline);
   const socketRef = useRef<ReconnectingWebSocket>();
@@ -48,12 +52,14 @@ export const useTimeLine = () => {
       socketRef.current = socket;
 
       socket.onopen = () => {
-        socket.send(
-          streamTimelineObject({
-            type: "connect",
-            channel: currentTimeline,
-          }),
-        );
+        getTimeLine().then(() => {
+          socket.send(
+            streamTimelineObject({
+              type: "connect",
+              channel: currentTimeline,
+            }),
+          );
+        });
       };
 
       socket.onmessage = (event: MessageEvent) => {
@@ -63,24 +69,26 @@ export const useTimeLine = () => {
         addNoteToTop(response.body.body);
       };
     }
-  }, [instance, token, addNoteToTop, currentTimeline]);
+  }, [instance, token, addNoteToTop, currentTimeline, getTimeLine]);
 
   useEffect(() => {
     if (socketRef.current?.readyState === WebSocket.OPEN) {
-      console.log(currentTimeline, prevTimeline.current);
       socketRef.current.send(
         streamTimelineObject({
           type: "disconnect",
           channel: prevTimeline.current,
         }),
       );
-      socketRef.current.send(
-        streamTimelineObject({
-          type: "connect",
-          channel: currentTimeline,
-        }),
-      );
+      clear();
       prevTimeline.current = currentTimeline;
+      getTimeLine().then(() => {
+        socketRef.current?.send(
+          streamTimelineObject({
+            type: "connect",
+            channel: currentTimeline,
+          }),
+        );
+      });
     }
-  }, [currentTimeline]);
+  }, [currentTimeline, getTimeLine, clear]);
 };

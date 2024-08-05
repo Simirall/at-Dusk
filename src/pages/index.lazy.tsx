@@ -12,7 +12,6 @@ import { TimeLineTab } from "./-components/TimeLineTab";
 
 import { useTimeLine } from "@/apis/websocket/timeline";
 import { useTimeLineStore } from "@/store/timeline";
-import { useWatchCurrentTimeline } from "@/utils/useWatchCurrentTimeline";
 
 export const Route = createLazyFileRoute("/")({
   component: Index,
@@ -20,7 +19,6 @@ export const Route = createLazyFileRoute("/")({
 
 function Index() {
   useTimeLine();
-  useWatchCurrentTimeline();
   const { notes } = useTimeLineStore();
 
   return (
