@@ -10,13 +10,13 @@ import {
 
 const optionalTimelines = (
   localTimelineEnabled?: boolean,
-  globalTimeLineEnabled?: boolean,
+  globalTimelineEnabled?: boolean,
 ) => {
   const t: Array<Timelines> = [];
   if (localTimelineEnabled) {
     t.push("localTimeline", "hybridTimeline");
   }
-  if (globalTimeLineEnabled) {
+  if (globalTimelineEnabled) {
     t.push("globalTimeline");
   }
   return t;
@@ -36,7 +36,7 @@ const timelineIcon = {
   globalTimeline: <Meteor size={24} weight="fill" />,
 };
 
-export const TimeLineTab = () => {
+export const TimelineTab = () => {
   const { currentTimeline, setCurrentTimeline } = useCurrentTimelineStore();
   const features = useMeta().data?.features;
   const timelines = useMemo<Array<Timelines>>(

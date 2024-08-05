@@ -8,22 +8,22 @@ import {
   VStack,
 } from "@yamada-ui/react";
 
-import { TimeLineTab } from "./-components/TimeLineTab";
+import { TimelineTab } from "./-components/TimelineTab";
 
-import { useTimeLine } from "@/apis/websocket/timeline";
-import { useTimeLineStore } from "@/store/timeline";
+import { useTimeline } from "@/apis/websocket/timeline";
+import { useTimelineStore } from "@/store/timeline";
 
 export const Route = createLazyFileRoute("/")({
   component: Index,
 });
 
 function Index() {
-  useTimeLine();
-  const { notes } = useTimeLineStore();
+  useTimeline();
+  const { notes } = useTimelineStore();
 
   return (
     <Container>
-      <TimeLineTab />
+      <TimelineTab />
       {notes.map((n) => (
         <VStack key={n.id}>
           <HStack align="start">

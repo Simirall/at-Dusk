@@ -1,14 +1,14 @@
 import { useEffect, useRef } from "react";
 import ReconnectingWebSocket from "reconnecting-websocket";
 
-import { useGetTimeLine } from "../notes/timeline";
+import { useGetTimeline } from "../notes/timeline";
 
 import type { Timelines } from "@/store/currentTimeline";
 import type { Note } from "misskey-js/entities.js";
 
 import { useCurrentTimelineStore } from "@/store/currentTimeline";
 import { useLoginStore } from "@/store/login";
-import { useTimeLineStore } from "@/store/timeline";
+import { useTimelineStore } from "@/store/timeline";
 
 type ChannelNote<T> = {
   type: "channel";
@@ -34,12 +34,12 @@ const streamTimelineObject = ({
     },
   });
 
-export const useTimeLine = () => {
+export const useTimeline = () => {
   const { instance, token } = useLoginStore();
-  const { addNoteToTop } = useTimeLineStore();
+  const { addNoteToTop } = useTimelineStore();
   const { currentTimeline } = useCurrentTimelineStore();
-  const { clear } = useTimeLineStore();
-  const { getTimeLine } = useGetTimeLine();
+  const { clear } = useTimelineStore();
+  const { getTimeline } = useGetTimeline();
 
   const prevTimeline = useRef(currentTimeline);
   const socketRef = useRef<ReconnectingWebSocket>();
@@ -52,7 +52,7 @@ export const useTimeLine = () => {
       socketRef.current = socket;
 
       socket.onopen = () => {
-        getTimeLine().then(() => {
+        getTimeline().then(() => {
           socket.send(
             streamTimelineObject({
               type: "connect",
@@ -69,7 +69,7 @@ export const useTimeLine = () => {
         addNoteToTop(response.body.body);
       };
     }
-  }, [instance, token, addNoteToTop, currentTimeline, getTimeLine]);
+  }, [instance, token, addNoteToTop, currentTimeline, getTimeline]);
 
   useEffect(() => {
     if (socketRef.current?.readyState === WebSocket.OPEN) {
@@ -81,7 +81,7 @@ export const useTimeLine = () => {
       );
       clear();
       prevTimeline.current = currentTimeline;
-      getTimeLine().then(() => {
+      getTimeline().then(() => {
         socketRef.current?.send(
           streamTimelineObject({
             type: "connect",
@@ -90,5 +90,5 @@ export const useTimeLine = () => {
         );
       });
     }
-  }, [currentTimeline, getTimeLine, clear]);
+  }, [currentTimeline, getTimeline, clear]);
 };

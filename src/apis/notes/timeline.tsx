@@ -3,7 +3,7 @@ import { useCallback } from "react";
 import type { Note } from "misskey-js/entities.js";
 
 import { useCurrentTimelineStore } from "@/store/currentTimeline";
-import { useTimeLineStore } from "@/store/timeline";
+import { useTimelineStore } from "@/store/timeline";
 import { fetcher } from "@/utils/fetcher";
 
 const apiPath = {
@@ -13,11 +13,11 @@ const apiPath = {
   globalTimeline: "/notes/global-timeline",
 };
 
-export const useGetTimeLine = () => {
+export const useGetTimeline = () => {
   const { currentTimeline } = useCurrentTimelineStore();
-  const { addNotesToBottom } = useTimeLineStore();
+  const { addNotesToBottom } = useTimelineStore();
 
-  const getTimeLine = useCallback(
+  const getTimeline = useCallback(
     async (arg?: { untilId?: string }) => {
       const notes = await fetcher<ReadonlyArray<Note>>([
         apiPath[currentTimeline],
@@ -28,5 +28,5 @@ export const useGetTimeLine = () => {
     [addNotesToBottom, currentTimeline],
   );
 
-  return { getTimeLine };
+  return { getTimeline };
 };
