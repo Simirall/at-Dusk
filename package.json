@@ -11,9 +11,9 @@
     "preview": "vite preview",
     "theme": "yamada-cli tokens src/theme/theme.ts",
     "theme:watch": "yamada-cli tokens src/theme/theme.ts --watch",
-    "format": "prettier --write src/**/*.{js,jsx,ts,tsx,css,scss}",
-    "lint": "eslint src/**",
-    "lint:fix": "pnpm lint --fix"
+    "format": "biome format --write src/",
+    "lint": "biome lint src/",
+    "lint:fix": "biome lint --write src/"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
@@ -32,9 +32,7 @@
     "zustand": "^4.5.4"
   },
   "devDependencies": {
-    "@eslint/compat": "^1.1.1",
-    "@eslint/eslintrc": "^3.1.0",
-    "@eslint/js": "^9.7.0",
+    "@biomejs/biome": "1.8.3",
     "@tanstack/router-cli": "^1.45.2",
     "@tanstack/router-devtools": "^1.45.4",
     "@tanstack/router-plugin": "^1.45.3",
@@ -42,21 +40,11 @@
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@types/uuid": "^10.0.0",
-    "@typescript-eslint/eslint-plugin": "^7.16.1",
-    "@typescript-eslint/parser": "^7.16.1",
     "@vitejs/plugin-react-swc": "^3.7.0",
     "@yamada-ui/cli": "^1.0.5",
-    "eslint": "^9.7.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-import": "^2.29.1",
-    "eslint-plugin-react": "^7.34.4",
-    "eslint-plugin-react-hooks": "^4.6.2",
-    "eslint-plugin-unused-imports": "^4.0.0",
-    "globals": "^15.8.0",
-    "prettier": "^3.3.3",
     "typescript": "^5.5.3",
     "vite": "^5.3.4",
     "vite-tsconfig-paths": "^4.3.2"
   },
-  "packageManager": "pnpm@9.5.0+sha512.140036830124618d624a2187b50d04289d5a087f326c9edfc0ccd733d76c4f52c3a313d4fc148794a2a9d81553016004e6742e8cf850670268a7387fc220c903"
+  "packageManager": "pnpm@9.10.0+sha512.73a29afa36a0d092ece5271de5177ecbf8318d454ecd701343131b8ebc0c1a91c487da46ab77c8e596d6acf1461e3594ced4becedf8921b074fbd8653ed7051c"
 }
