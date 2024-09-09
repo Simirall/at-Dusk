@@ -2,7 +2,8 @@ import { useLoginStore } from "@/store/login";
 
 export const fetcher = async <T>([path, args]: [
   path: string,
-  args?: Record<string, any>, // eslint-disable-line @typescript-eslint/no-explicit-any
+  // biome-ignore lint/suspicious/noExplicitAny: RequestのBodyは任意のため
+  args?: Record<string, any>,
 ]): Promise<T> => {
   const url = `https://${useLoginStore.getState().instance}/api${path}`;
 

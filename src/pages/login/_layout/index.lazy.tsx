@@ -99,12 +99,8 @@ const authApplication = async ({
     ...login,
     instance: loginData.instance,
   });
-  const authURL =
-    `https://${encodeURIComponent(
-      loginData.instance,
-    )}/miauth/${id}?name=${encodeURIComponent(
-      loginData.appName,
-    )}&callback=${appURL}` +
-    "&permission=read:account,write:account,read:blocks,write:blocks,read:drive,write:drive,read:favorites,write:favorites,read:following,write:following,read:messaging,write:messaging,read:mutes,write:mutes,write:notes,read:notifications,write:notifications,read:reactions,write:reactions,write:votes,read:channels,write:channels";
+  const authURL = `https://${encodeURIComponent(loginData.instance)}/miauth/${id}?name=${encodeURIComponent(
+    loginData.appName,
+  )}&callback=${appURL}&permission=read:account,write:account,read:blocks,write:blocks,read:drive,write:drive,read:favorites,write:favorites,read:following,write:following,read:messaging,write:messaging,read:mutes,write:mutes,write:notes,read:notifications,write:notifications,read:reactions,write:reactions,write:votes,read:channels,write:channels`;
   window.location.href = authURL;
 };
