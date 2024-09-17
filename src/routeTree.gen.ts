@@ -97,15 +97,80 @@ declare module "@tanstack/react-router" {
 
 // Create and export the route tree
 
-export const routeTree = rootRoute.addChildren({
-  IndexRoute,
-  LoginRoute: LoginRoute.addChildren({
-    LoginLayoutRoute: LoginLayoutRoute.addChildren({
-      LoginLayoutGetTokenRoute,
-      LoginLayoutIndexLazyRoute,
-    }),
-  }),
-})
+interface LoginLayoutRouteChildren {
+  LoginLayoutGetTokenRoute: typeof LoginLayoutGetTokenRoute
+  LoginLayoutIndexLazyRoute: typeof LoginLayoutIndexLazyRoute
+}
+
+const LoginLayoutRouteChildren: LoginLayoutRouteChildren = {
+  LoginLayoutGetTokenRoute: LoginLayoutGetTokenRoute,
+  LoginLayoutIndexLazyRoute: LoginLayoutIndexLazyRoute,
+}
+
+const LoginLayoutRouteWithChildren = LoginLayoutRoute._addFileChildren(
+  LoginLayoutRouteChildren,
+)
+
+interface LoginRouteChildren {
+  LoginLayoutRoute: typeof LoginLayoutRouteWithChildren
+}
+
+const LoginRouteChildren: LoginRouteChildren = {
+  LoginLayoutRoute: LoginLayoutRouteWithChildren,
+}
+
+const LoginRouteWithChildren = LoginRoute._addFileChildren(LoginRouteChildren)
+
+export interface FileRoutesByFullPath {
+  "/": typeof IndexRoute
+  "/login": typeof LoginLayoutRouteWithChildren
+  "/login/getToken": typeof LoginLayoutGetTokenRoute
+  "/login/": typeof LoginLayoutIndexLazyRoute
+}
+
+export interface FileRoutesByTo {
+  "/": typeof IndexRoute
+  "/login": typeof LoginLayoutIndexLazyRoute
+  "/login/getToken": typeof LoginLayoutGetTokenRoute
+}
+
+export interface FileRoutesById {
+  __root__: typeof rootRoute
+  "/": typeof IndexRoute
+  "/login": typeof LoginRouteWithChildren
+  "/login/_layout": typeof LoginLayoutRouteWithChildren
+  "/login/_layout/getToken": typeof LoginLayoutGetTokenRoute
+  "/login/_layout/": typeof LoginLayoutIndexLazyRoute
+}
+
+export interface FileRouteTypes {
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths: "/" | "/login" | "/login/getToken" | "/login/"
+  fileRoutesByTo: FileRoutesByTo
+  to: "/" | "/login" | "/login/getToken"
+  id:
+    | "__root__"
+    | "/"
+    | "/login"
+    | "/login/_layout"
+    | "/login/_layout/getToken"
+    | "/login/_layout/"
+  fileRoutesById: FileRoutesById
+}
+
+export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
+  LoginRoute: typeof LoginRouteWithChildren
+}
+
+const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
+  LoginRoute: LoginRouteWithChildren,
+}
+
+export const routeTree = rootRoute
+  ._addFileChildren(rootRouteChildren)
+  ._addFileTypes<FileRouteTypes>()
 
 /* prettier-ignore-end */
 

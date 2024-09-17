@@ -4,10 +4,17 @@ import { initialThemeScheme } from "../theme";
 
 import type { ComponentMultiStyle, MenuProps } from "@yamada-ui/react";
 
-const YmdMenu: ComponentMultiStyle<MenuProps> = defaultTheme.components.Menu;
+const YmdMenu: ComponentMultiStyle<"Menu", MenuProps> =
+  defaultTheme.components.Menu;
 
-export const Menu: ComponentMultiStyle<MenuProps> = {
+export const Menu: ComponentMultiStyle<"Menu", MenuProps> = {
   baseStyle: ({ theme, themeScheme, colorMode }) => ({
+    ...YmdMenu.baseStyle,
+    content: {
+      // @ts-expect-error contentはあります！
+      ...YmdMenu.baseStyle?.content,
+      minW: "unset",
+    },
     list: {
       // @ts-expect-error listはあります！
       ...YmdMenu.baseStyle?.list,

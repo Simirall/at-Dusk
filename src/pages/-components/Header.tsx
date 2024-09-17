@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { useMatchRoute, useNavigate } from "@tanstack/react-router";
 import { Avatar, HStack, Heading } from "@yamada-ui/react";
 
 import { HeaderMenu } from "./HeaderMenu";
@@ -8,6 +8,8 @@ import { useMySelfStore } from "@/store/user";
 
 export const Header = () => {
   const { mySelf } = useMySelfStore();
+  const navigate = useNavigate();
+  const matchRoute = useMatchRoute();
 
   return (
     <HStack
@@ -16,8 +18,26 @@ export const Header = () => {
       py="2"
       bg="bg"
       color="darkText"
+      pos="sticky"
+      top="0"
+      zIndex="1"
     >
-      <Heading size="lg" isTruncated fontWeight="light" as={Link} to="/">
+      <Heading
+        size="lg"
+        isTruncated
+        fontWeight="light"
+        cursor="pointer"
+        onClick={() => {
+          if (matchRoute({ to: "/" })) {
+            window.scroll({
+              top: 0,
+              behavior: "smooth",
+            });
+          } else {
+            navigate({ to: "/" });
+          }
+        }}
+      >
         at Dusk.
       </Heading>
       {mySelf ? (

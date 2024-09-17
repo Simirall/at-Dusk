@@ -11,6 +11,10 @@
   },
   "linter": {
     "rules": {
+      "correctness": {
+        "noUnusedImports": "warn",
+        "noUnusedVariables": "warn"
+      },
       "style": {
         "noNonNullAssertion": "warn"
       }
