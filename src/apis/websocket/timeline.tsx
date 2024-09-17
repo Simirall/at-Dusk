@@ -1,37 +1,47 @@
 import { useEffect, useRef } from "react";
 import ReconnectingWebSocket from "reconnecting-websocket";
 
-import { useGetTimeLine } from "../notes/timeline";
+import { useGetTimeline } from "../notes/timeline";
 
+import type { Timelines } from "@/store/currentTimeline";
 import type { Note } from "misskey-js/entities.js";
 
+import { useCurrentTimelineStore } from "@/store/currentTimeline";
 import { useLoginStore } from "@/store/login";
-import { useTimeLineStore } from "@/store/timeline";
+import { useTimelineStore } from "@/store/timeline";
 
-const id = "homeTimeLine";
-
-type ChannelNote = {
+type ChannelNote<T> = {
   type: "channel";
   body: {
-    id: typeof id;
+    id: T;
     type: "note";
     body: Note;
   };
 };
 
-const connectHomeTimeLineObject = JSON.stringify({
-  type: "connect",
-  body: {
-    channel: "homeTimeline",
-    id: id,
-  },
-});
+const streamTimelineObject = ({
+  type,
+  channel,
+}: {
+  type: "connect" | "disconnect";
+  channel: Timelines;
+}) =>
+  JSON.stringify({
+    type: type,
+    body: {
+      channel: channel,
+      id: channel,
+    },
+  });
 
-export const useTimeLine = () => {
+export const useTimeline = () => {
   const { instance, token } = useLoginStore();
-  const { addNoteToTop } = useTimeLineStore();
-  const { getTimeLine } = useGetTimeLine();
+  const { addNoteToTop } = useTimelineStore();
+  const { currentTimeline } = useCurrentTimelineStore();
+  const { clear } = useTimelineStore();
+  const { getTimeline } = useGetTimeline();
 
+  const prevTimeline = useRef(currentTimeline);
   const socketRef = useRef<ReconnectingWebSocket>();
 
   useEffect(() => {
@@ -42,16 +52,43 @@ export const useTimeLine = () => {
       socketRef.current = socket;
 
       socket.onopen = () => {
-        if (useTimeLineStore.getState().notes.length === 0) {
-          getTimeLine();
-        }
-        socket.send(connectHomeTimeLineObject);
+        getTimeline().then(() => {
+          socket.send(
+            streamTimelineObject({
+              type: "connect",
+              channel: currentTimeline,
+            }),
+          );
+        });
       };
 
       socket.onmessage = (event: MessageEvent) => {
-        const response: ChannelNote = JSON.parse(event.data);
+        const response: ChannelNote<typeof currentTimeline> = JSON.parse(
+          event.data,
+        );
         addNoteToTop(response.body.body);
       };
     }
-  }, [instance, token, addNoteToTop, getTimeLine]);
+  }, [instance, token, addNoteToTop, currentTimeline, getTimeline]);
+
+  useEffect(() => {
+    if (socketRef.current?.readyState === WebSocket.OPEN) {
+      socketRef.current.send(
+        streamTimelineObject({
+          type: "disconnect",
+          channel: prevTimeline.current,
+        }),
+      );
+      clear();
+      prevTimeline.current = currentTimeline;
+      getTimeline().then(() => {
+        socketRef.current?.send(
+          streamTimelineObject({
+            type: "connect",
+            channel: currentTimeline,
+          }),
+        );
+      });
+    }
+  }, [currentTimeline, getTimeline, clear]);
 };

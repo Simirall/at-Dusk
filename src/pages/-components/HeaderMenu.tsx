@@ -5,6 +5,7 @@ import {
   Menu,
   MenuButton,
   MenuList,
+  VStack,
   useDisclosure,
 } from "@yamada-ui/react";
 
@@ -19,9 +20,9 @@ export const HeaderMenu = () => {
         <DotsNine size={20} weight="bold" />
       </MenuButton>
 
-      <MenuList alignItems="center" gap="md">
+      <MenuList as={VStack} px="2">
         <LogoutButton />
-        <HStack>
+        <HStack justify="center">
           <ToggleThemeButton />
           <ToggleColorModeButton />
         </HStack>

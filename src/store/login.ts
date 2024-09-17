@@ -26,6 +26,8 @@ export const useLoginStore = create<LoginState & LoginActions>()(
       logout: () => {
         set(() => ({
           isLogin: false,
+          token: undefined,
+          instance: undefined,
         }));
         useMySelfStore.setState({
           mySelf: undefined,

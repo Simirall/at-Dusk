@@ -4,7 +4,7 @@ import ReactDOM from "react-dom/client";
 import { SWRConfig } from "swr";
 
 import { Router } from "./Router";
-import { theme, config } from "./theme/theme";
+import { config, theme } from "./theme/theme";
 import { fetcher } from "./utils/fetcher";
 
 const injectThemeSchemeScript = () => {

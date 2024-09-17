@@ -2,17 +2,18 @@ import { create } from "zustand";
 
 import type { Note } from "misskey-js/entities.js";
 
-export type TimeLine = {
+export type Timeline = {
   notes: Array<Note>;
 };
 
-type TimeLineActions = {
+type TimelineActions = {
   addNoteToTop: (payload: Note) => void;
   addNotesToTop: (payload: ReadonlyArray<Note>) => void;
   addNotesToBottom: (payload: ReadonlyArray<Note>) => void;
+  clear: () => void;
 };
 
-export const useTimeLineStore = create<TimeLine & TimeLineActions>((set) => ({
+export const useTimelineStore = create<Timeline & TimelineActions>((set) => ({
   notes: [],
   addNoteToTop: (payload) => {
     set((state) => ({
@@ -27,6 +28,11 @@ export const useTimeLineStore = create<TimeLine & TimeLineActions>((set) => ({
   addNotesToBottom: (payload) => {
     set((state) => ({
       notes: [...state.notes, ...payload],
+    }));
+  },
+  clear: () => {
+    set(() => ({
+      notes: [],
     }));
   },
 }));
