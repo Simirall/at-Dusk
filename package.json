@@ -21,7 +21,7 @@
     "@tanstack/react-router": "^1.56.5",
     "@yamada-ui/carousel": "^1.0.37",
     "@yamada-ui/react": "^1.5.0",
-    "misskey-js": "^2024.8.0",
+    "misskey-js": "^2025.12.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.53.0",
@@ -43,7 +43,7 @@
     "@vitejs/plugin-react-swc": "^3.7.0",
     "@yamada-ui/cli": "^1.1.1",
     "typescript": "^5.5.4",
-    "vite": "^5.4.3",
+    "vite": "^5.4.21",
     "vite-tsconfig-paths": "^4.3.2"
   },
   "packageManager": "pnpm@9.10.0+sha512.73a29afa36a0d092ece5271de5177ecbf8318d454ecd701343131b8ebc0c1a91c487da46ab77c8e596d6acf1461e3594ced4becedf8921b074fbd8653ed7051c"
