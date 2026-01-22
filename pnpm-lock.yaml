@@ -24,8 +24,8 @@ importers:
         specifier: ^1.5.0
         version: 1.5.0(@emotion/is-prop-valid@1.3.0)(@emotion/react@11.11.0(@types/react@18.3.5)(react@18.3.1))(@emotion/styled@11.11.5(@emotion/react@11.11.0(@types/react@18.3.5)(react@18.3.1))(@types/react@18.3.5)(react@18.3.1))(@types/react@18.3.5)(framer-motion@11.5.4(@emotion/is-prop-valid@1.3.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       misskey-js:
-        specifier: ^2024.8.0
-        version: 2024.8.0
+        specifier: ^2025.12.0
+        version: 2025.12.0
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -62,7 +62,7 @@ importers:
         version: 1.56.5(@tanstack/react-router@1.56.5(@tanstack/router-generator@1.56.4)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(csstype@3.1.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@tanstack/router-plugin':
         specifier: ^1.56.4
-        version: 1.56.4(vite@5.4.3(@types/node@20.16.5))(webpack-sources@3.2.3)
+        version: 1.56.4(vite@5.4.21(@types/node@20.16.5))(webpack-sources@3.2.3)
       '@types/node':
         specifier: ^20.16.5
         version: 20.16.5
@@ -77,7 +77,7 @@ importers:
         version: 10.0.0
       '@vitejs/plugin-react-swc':
         specifier: ^3.7.0
-        version: 3.7.0(vite@5.4.3(@types/node@20.16.5))
+        version: 3.7.0(vite@5.4.21(@types/node@20.16.5))
       '@yamada-ui/cli':
         specifier: ^1.1.1
         version: 1.1.1
@@ -85,11 +85,11 @@ importers:
         specifier: ^5.5.4
         version: 5.5.4
       vite:
-        specifier: ^5.4.3
-        version: 5.4.3(@types/node@20.16.5)
+        specifier: ^5.4.21
+        version: 5.4.21(@types/node@20.16.5)
       vite-tsconfig-paths:
         specifier: ^4.3.2
-        version: 4.3.2(typescript@5.5.4)(vite@5.4.3(@types/node@20.16.5))
+        version: 4.3.2(typescript@5.5.4)(vite@5.4.21(@types/node@20.16.5))
 
 packages:
 
@@ -829,6 +829,14 @@ packages:
     peerDependencies:
       react-hook-form: ^7.0.0
 
+  '@isaacs/balanced-match@4.0.1':
+    resolution: {integrity: sha512-yzMTt9lEb8Gv7zRioUilSglI0c0smZ9k5D65677DLWLtWJaXIS3CqcGyUFByYKlnUj6TkjLVs54fBl6+TiGQDQ==}
+    engines: {node: 20 || >=22}
+
+  '@isaacs/brace-expansion@5.0.0':
+    resolution: {integrity: sha512-ZT55BDLV0yv0RBm2czMiZ+SqCGO7AvmOM3G/w2xhVPH+te0aKgFjmBvGlL1dH+ql2tgGO3MVrbb3jCKyvpgnxA==}
+    engines: {node: 20 || >=22}
+
   '@isaacs/cliui@8.0.2':
     resolution: {integrity: sha512-O8jcjabXaleOG9DQ0+ARXWZBTfnP4WNAqzuiJK7ll44AmxGKv/J2M4TPjxjY3znBCfvBXFzucm1twdyFybFqEA==}
     engines: {node: '>=12'}
@@ -862,92 +870,137 @@ packages:
       react: '>= 16.8'
       react-dom: '>= 16.8'
 
-  '@pkgjs/parseargs@0.11.0':
-    resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
-    engines: {node: '>=14'}
-
   '@popperjs/core@2.11.8':
     resolution: {integrity: sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==}
 
-  '@rollup/rollup-android-arm-eabi@4.21.2':
-    resolution: {integrity: sha512-fSuPrt0ZO8uXeS+xP3b+yYTCBUd05MoSp2N/MFOgjhhUhMmchXlpTQrTpI8T+YAwAQuK7MafsCOxW7VrPMrJcg==}
+  '@rollup/rollup-android-arm-eabi@4.56.0':
+    resolution: {integrity: sha512-LNKIPA5k8PF1+jAFomGe3qN3bbIgJe/IlpDBwuVjrDKrJhVWywgnJvflMt/zkbVNLFtF1+94SljYQS6e99klnw==}
     cpu: [arm]
     os: [android]
 
-  '@rollup/rollup-android-arm64@4.21.2':
-    resolution: {integrity: sha512-xGU5ZQmPlsjQS6tzTTGwMsnKUtu0WVbl0hYpTPauvbRAnmIvpInhJtgjj3mcuJpEiuUw4v1s4BimkdfDWlh7gA==}
+  '@rollup/rollup-android-arm64@4.56.0':
+    resolution: {integrity: sha512-lfbVUbelYqXlYiU/HApNMJzT1E87UPGvzveGg2h0ktUNlOCxKlWuJ9jtfvs1sKHdwU4fzY7Pl8sAl49/XaEk6Q==}
     cpu: [arm64]
     os: [android]
 
-  '@rollup/rollup-darwin-arm64@4.21.2':
-    resolution: {integrity: sha512-99AhQ3/ZMxU7jw34Sq8brzXqWH/bMnf7ZVhvLk9QU2cOepbQSVTns6qoErJmSiAvU3InRqC2RRZ5ovh1KN0d0Q==}
+  '@rollup/rollup-darwin-arm64@4.56.0':
+    resolution: {integrity: sha512-EgxD1ocWfhoD6xSOeEEwyE7tDvwTgZc8Bss7wCWe+uc7wO8G34HHCUH+Q6cHqJubxIAnQzAsyUsClt0yFLu06w==}
     cpu: [arm64]
     os: [darwin]
 
-  '@rollup/rollup-darwin-x64@4.21.2':
-    resolution: {integrity: sha512-ZbRaUvw2iN/y37x6dY50D8m2BnDbBjlnMPotDi/qITMJ4sIxNY33HArjikDyakhSv0+ybdUxhWxE6kTI4oX26w==}
+  '@rollup/rollup-darwin-x64@4.56.0':
+    resolution: {integrity: sha512-1vXe1vcMOssb/hOF8iv52A7feWW2xnu+c8BV4t1F//m9QVLTfNVpEdja5ia762j/UEJe2Z1jAmEqZAK42tVW3g==}
     cpu: [x64]
     os: [darwin]
 
-  '@rollup/rollup-linux-arm-gnueabihf@4.21.2':
-    resolution: {integrity: sha512-ztRJJMiE8nnU1YFcdbd9BcH6bGWG1z+jP+IPW2oDUAPxPjo9dverIOyXz76m6IPA6udEL12reYeLojzW2cYL7w==}
+  '@rollup/rollup-freebsd-arm64@4.56.0':
+    resolution: {integrity: sha512-bof7fbIlvqsyv/DtaXSck4VYQ9lPtoWNFCB/JY4snlFuJREXfZnm+Ej6yaCHfQvofJDXLDMTVxWscVSuQvVWUQ==}
+    cpu: [arm64]
+    os: [freebsd]
+
+  '@rollup/rollup-freebsd-x64@4.56.0':
+    resolution: {integrity: sha512-KNa6lYHloW+7lTEkYGa37fpvPq+NKG/EHKM8+G/g9WDU7ls4sMqbVRV78J6LdNuVaeeK5WB9/9VAFbKxcbXKYg==}
+    cpu: [x64]
+    os: [freebsd]
+
+  '@rollup/rollup-linux-arm-gnueabihf@4.56.0':
+    resolution: {integrity: sha512-E8jKK87uOvLrrLN28jnAAAChNq5LeCd2mGgZF+fGF5D507WlG/Noct3lP/QzQ6MrqJ5BCKNwI9ipADB6jyiq2A==}
     cpu: [arm]
     os: [linux]
 
-  '@rollup/rollup-linux-arm-musleabihf@4.21.2':
-    resolution: {integrity: sha512-flOcGHDZajGKYpLV0JNc0VFH361M7rnV1ee+NTeC/BQQ1/0pllYcFmxpagltANYt8FYf9+kL6RSk80Ziwyhr7w==}
+  '@rollup/rollup-linux-arm-musleabihf@4.56.0':
+    resolution: {integrity: sha512-jQosa5FMYF5Z6prEpTCCmzCXz6eKr/tCBssSmQGEeozA9tkRUty/5Vx06ibaOP9RCrW1Pvb8yp3gvZhHwTDsJw==}
     cpu: [arm]
     os: [linux]
 
-  '@rollup/rollup-linux-arm64-gnu@4.21.2':
-    resolution: {integrity: sha512-69CF19Kp3TdMopyteO/LJbWufOzqqXzkrv4L2sP8kfMaAQ6iwky7NoXTp7bD6/irKgknDKM0P9E/1l5XxVQAhw==}
+  '@rollup/rollup-linux-arm64-gnu@4.56.0':
+    resolution: {integrity: sha512-uQVoKkrC1KGEV6udrdVahASIsaF8h7iLG0U0W+Xn14ucFwi6uS539PsAr24IEF9/FoDtzMeeJXJIBo5RkbNWvQ==}
     cpu: [arm64]
     os: [linux]
 
-  '@rollup/rollup-linux-arm64-musl@4.21.2':
-    resolution: {integrity: sha512-48pD/fJkTiHAZTnZwR0VzHrao70/4MlzJrq0ZsILjLW/Ab/1XlVUStYyGt7tdyIiVSlGZbnliqmult/QGA2O2w==}
+  '@rollup/rollup-linux-arm64-musl@4.56.0':
+    resolution: {integrity: sha512-vLZ1yJKLxhQLFKTs42RwTwa6zkGln+bnXc8ueFGMYmBTLfNu58sl5/eXyxRa2RarTkJbXl8TKPgfS6V5ijNqEA==}
     cpu: [arm64]
     os: [linux]
 
-  '@rollup/rollup-linux-powerpc64le-gnu@4.21.2':
-    resolution: {integrity: sha512-cZdyuInj0ofc7mAQpKcPR2a2iu4YM4FQfuUzCVA2u4HI95lCwzjoPtdWjdpDKyHxI0UO82bLDoOaLfpZ/wviyQ==}
+  '@rollup/rollup-linux-loong64-gnu@4.56.0':
+    resolution: {integrity: sha512-FWfHOCub564kSE3xJQLLIC/hbKqHSVxy8vY75/YHHzWvbJL7aYJkdgwD/xGfUlL5UV2SB7otapLrcCj2xnF1dg==}
+    cpu: [loong64]
+    os: [linux]
+
+  '@rollup/rollup-linux-loong64-musl@4.56.0':
+    resolution: {integrity: sha512-z1EkujxIh7nbrKL1lmIpqFTc/sr0u8Uk0zK/qIEFldbt6EDKWFk/pxFq3gYj4Bjn3aa9eEhYRlL3H8ZbPT1xvA==}
+    cpu: [loong64]
+    os: [linux]
+
+  '@rollup/rollup-linux-ppc64-gnu@4.56.0':
+    resolution: {integrity: sha512-iNFTluqgdoQC7AIE8Q34R3AuPrJGJirj5wMUErxj22deOcY7XwZRaqYmB6ZKFHoVGqRcRd0mqO+845jAibKCkw==}
     cpu: [ppc64]
     os: [linux]
 
-  '@rollup/rollup-linux-riscv64-gnu@4.21.2':
-    resolution: {integrity: sha512-RL56JMT6NwQ0lXIQmMIWr1SW28z4E4pOhRRNqwWZeXpRlykRIlEpSWdsgNWJbYBEWD84eocjSGDu/XxbYeCmwg==}
+  '@rollup/rollup-linux-ppc64-musl@4.56.0':
+    resolution: {integrity: sha512-MtMeFVlD2LIKjp2sE2xM2slq3Zxf9zwVuw0jemsxvh1QOpHSsSzfNOTH9uYW9i1MXFxUSMmLpeVeUzoNOKBaWg==}
+    cpu: [ppc64]
+    os: [linux]
+
+  '@rollup/rollup-linux-riscv64-gnu@4.56.0':
+    resolution: {integrity: sha512-in+v6wiHdzzVhYKXIk5U74dEZHdKN9KH0Q4ANHOTvyXPG41bajYRsy7a8TPKbYPl34hU7PP7hMVHRvv/5aCSew==}
     cpu: [riscv64]
     os: [linux]
 
-  '@rollup/rollup-linux-s390x-gnu@4.21.2':
-    resolution: {integrity: sha512-PMxkrWS9z38bCr3rWvDFVGD6sFeZJw4iQlhrup7ReGmfn7Oukrr/zweLhYX6v2/8J6Cep9IEA/SmjXjCmSbrMQ==}
+  '@rollup/rollup-linux-riscv64-musl@4.56.0':
+    resolution: {integrity: sha512-yni2raKHB8m9NQpI9fPVwN754mn6dHQSbDTwxdr9SE0ks38DTjLMMBjrwvB5+mXrX+C0npX0CVeCUcvvvD8CNQ==}
+    cpu: [riscv64]
+    os: [linux]
+
+  '@rollup/rollup-linux-s390x-gnu@4.56.0':
+    resolution: {integrity: sha512-zhLLJx9nQPu7wezbxt2ut+CI4YlXi68ndEve16tPc/iwoylWS9B3FxpLS2PkmfYgDQtosah07Mj9E0khc3Y+vQ==}
     cpu: [s390x]
     os: [linux]
 
-  '@rollup/rollup-linux-x64-gnu@4.21.2':
-    resolution: {integrity: sha512-B90tYAUoLhU22olrafY3JQCFLnT3NglazdwkHyxNDYF/zAxJt5fJUB/yBoWFoIQ7SQj+KLe3iL4BhOMa9fzgpw==}
+  '@rollup/rollup-linux-x64-gnu@4.56.0':
+    resolution: {integrity: sha512-MVC6UDp16ZSH7x4rtuJPAEoE1RwS8N4oK9DLHy3FTEdFoUTCFVzMfJl/BVJ330C+hx8FfprA5Wqx4FhZXkj2Kw==}
     cpu: [x64]
     os: [linux]
 
-  '@rollup/rollup-linux-x64-musl@4.21.2':
-    resolution: {integrity: sha512-7twFizNXudESmC9oneLGIUmoHiiLppz/Xs5uJQ4ShvE6234K0VB1/aJYU3f/4g7PhssLGKBVCC37uRkkOi8wjg==}
+  '@rollup/rollup-linux-x64-musl@4.56.0':
+    resolution: {integrity: sha512-ZhGH1eA4Qv0lxaV00azCIS1ChedK0V32952Md3FtnxSqZTBTd6tgil4nZT5cU8B+SIw3PFYkvyR4FKo2oyZIHA==}
     cpu: [x64]
     os: [linux]
 
-  '@rollup/rollup-win32-arm64-msvc@4.21.2':
-    resolution: {integrity: sha512-9rRero0E7qTeYf6+rFh3AErTNU1VCQg2mn7CQcI44vNUWM9Ze7MSRS/9RFuSsox+vstRt97+x3sOhEey024FRQ==}
+  '@rollup/rollup-openbsd-x64@4.56.0':
+    resolution: {integrity: sha512-O16XcmyDeFI9879pEcmtWvD/2nyxR9mF7Gs44lf1vGGx8Vg2DRNx11aVXBEqOQhWb92WN4z7fW/q4+2NYzCbBA==}
+    cpu: [x64]
+    os: [openbsd]
+
+  '@rollup/rollup-openharmony-arm64@4.56.0':
+    resolution: {integrity: sha512-LhN/Reh+7F3RCgQIRbgw8ZMwUwyqJM+8pXNT6IIJAqm2IdKkzpCh/V9EdgOMBKuebIrzswqy4ATlrDgiOwbRcQ==}
+    cpu: [arm64]
+    os: [openharmony]
+
+  '@rollup/rollup-win32-arm64-msvc@4.56.0':
+    resolution: {integrity: sha512-kbFsOObXp3LBULg1d3JIUQMa9Kv4UitDmpS+k0tinPBz3watcUiV2/LUDMMucA6pZO3WGE27P7DsfaN54l9ing==}
     cpu: [arm64]
     os: [win32]
 
-  '@rollup/rollup-win32-ia32-msvc@4.21.2':
-    resolution: {integrity: sha512-5rA4vjlqgrpbFVVHX3qkrCo/fZTj1q0Xxpg+Z7yIo3J2AilW7t2+n6Q8Jrx+4MrYpAnjttTYF8rr7bP46BPzRw==}
+  '@rollup/rollup-win32-ia32-msvc@4.56.0':
+    resolution: {integrity: sha512-vSSgny54D6P4vf2izbtFm/TcWYedw7f8eBrOiGGecyHyQB9q4Kqentjaj8hToe+995nob/Wv48pDqL5a62EWtg==}
     cpu: [ia32]
     os: [win32]
 
-  '@rollup/rollup-win32-x64-msvc@4.21.2':
-    resolution: {integrity: sha512-6UUxd0+SKomjdzuAcp+HAmxw1FlGBnl1v2yEPSabtx4lBfdXHDVsW7+lQkgz9cNFJGY3AWR7+V8P5BqkD9L9nA==}
+  '@rollup/rollup-win32-x64-gnu@4.56.0':
+    resolution: {integrity: sha512-FeCnkPCTHQJFbiGG49KjV5YGW/8b9rrXAM2Mz2kiIoktq2qsJxRD5giEMEOD2lPdgs72upzefaUvS+nc8E3UzQ==}
     cpu: [x64]
     os: [win32]
+
+  '@rollup/rollup-win32-x64-msvc@4.56.0':
+    resolution: {integrity: sha512-H8AE9Ur/t0+1VXujj90w0HrSOuv0Nq9r1vSZF2t5km20NTfosQsGGUXDaKdQZzwuLts7IyL1fYT4hM95TI9c4g==}
+    cpu: [x64]
+    os: [win32]
+
+  '@simplewebauthn/types@12.0.0':
+    resolution: {integrity: sha512-q6y8MkoV8V8jB4zzp18Uyj2I7oFp2/ONL8c3j8uT06AOWu3cIChc1au71QYHrP2b+xDapkGTiv+9lX7xkTlAsA==}
+    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
 
   '@swc/core-darwin-arm64@1.6.3':
     resolution: {integrity: sha512-3r7cJf1BcE30iyF1rnOSKrEzIR+cqnyYSZvivrm62TZdXVsIjfXe1xulsKGxZgNeLY5erIu7ukvMvBvPhnQvqA==}
@@ -1097,8 +1150,8 @@ packages:
   '@types/babel__traverse@7.20.6':
     resolution: {integrity: sha512-r1bzfrm0tomOI8g1SzvCaQHo6Lcv6zu0EA+W2kHrt8dyrHQxGzBBL4kdkzIS+jBMV+EYcMAEAqXqYaLJq5rOZg==}
 
-  '@types/estree@1.0.5':
-    resolution: {integrity: sha512-/kYRxGDLWzHOB7q+wtSUQlFrtcdUccpfy+X+9iMBpHK8QLLhx2wIPYuS5DYtR9Wa/YlZAbIovy7qVdB1Aq6Lyw==}
+  '@types/estree@1.0.8':
+    resolution: {integrity: sha512-dWHzHa2WqEXI/O1E9OjrocMTKJl2mSrEolh1Iomrv6U+JuNwaHXsXx9bLu5gG7BUWFIN0skIQJQ/L1rIex4X6w==}
 
   '@types/node@20.16.5':
     resolution: {integrity: sha512-VwYCweNo3ERajwy0IUlqqcyZ8/A7Zwa9ZP3MnENWcB11AejO+tLy3pu850goUW2FC/IJMdZUfKpX/yxL1gymCA==}
@@ -1125,56 +1178,67 @@ packages:
 
   '@yamada-ui/accordion@2.0.7':
     resolution: {integrity: sha512-4k7r3U6IPeldHEgnygpslpnnRL5+rDfwoymiOnZm8Zp+8P5sR+1snIMhFmZM6A7I6GV3L85cuN1VP4PQE10Tmg==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/alert@1.0.38':
     resolution: {integrity: sha512-MAlMCyjATqdi/INYZ29jDF4SLM2ewNYXUzRJJx2I0nO+im03RLWKMWS6vuy2m795VT4L13eovfimllxuDC64Yg==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/autocomplete@1.5.0':
     resolution: {integrity: sha512-qGxVwAlZtH4vXuw1zyekKRnBGxVl6hwioKlhGF5tMb9nC11mpgIja0Hgo652brKUZxl7XNFaTx4KfflIyOq47g==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/avatar@1.2.6':
     resolution: {integrity: sha512-9VaeWQQfCONgOxpko8gb03sZMjTrLLM5jSES4fD02ge6rK87UTfrCFxRTqYPiINlbqhw3IBlOG1w9qKJMPQYaw==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/badge@1.0.35':
     resolution: {integrity: sha512-X5wRobkq693ErBcxtR9BA459fS+1AtvgQ8ObTdd0KF7ROOLQVX1pVOoHjroWbk7NYyo936A1dYkvZyp2bn184Q==}
+    deprecated: This package is deprecated. Please use @yamada-ui/react instead.
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/breadcrumb@1.3.9':
     resolution: {integrity: sha512-nveYMYiK7kyNFG2RvXVKbCEM/llyVsUchmmrQBYzjvb778BKkrlxG4B+UyFcC1O+mMsWHMJQUArjIfJE6uHl5A==}
+    deprecated: This package is deprecated. Please use @yamada-ui/react instead.
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/button@1.0.36':
     resolution: {integrity: sha512-mHnZ91yUNpcBHfeCL2wC1vTKCoKjbLnb+Ith+2Hh+9Xbi/G58MZvVSZ3kqwoTXzuwjXXG5wLsyFW1nTeor+Hew==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/button@1.0.40':
     resolution: {integrity: sha512-SI5zrugFlItBxoM/weDCKw1iTF7jEgJhNggxzM8OB1vmoOTnmbbLOLFWT5WH1B5/Xx0+MUp9ns3oraS0RK/BFg==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/card@1.0.37':
     resolution: {integrity: sha512-5QUK9d92nf/JU8ASYU8bbM7eJ/Oj/kM7+rZ8we19NZrGJzliBebR8FJFRR/7NhZTyEdi7yDjOLl+hVQ4nK6ZLg==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/carousel@1.0.37':
     resolution: {integrity: sha512-DAihSs4mQTJI4LbA910aOU7PWHx4Cu9ZfUyvLVB8Kg2+hei6b0XNdd48p71IaOMy40YV25ftsqI2nqkbfTGkTA==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/checkbox@1.1.6':
     resolution: {integrity: sha512-2Z6F53CeeZNY9mT6ieaHxVmKwahV4PCciXw64HoS5PAUw5A3Fd+MqkB1GcJ3iGudq4feOHmUcCWgfufheIT0TA==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
@@ -1184,11 +1248,13 @@ packages:
 
   '@yamada-ui/close-button@1.0.38':
     resolution: {integrity: sha512-lRcHsiDqNoP1k/jj9sMtMQyGcoOG3+ET/JQ8sRwaDIubmp5TBT7h6l0SaX+IINwZnQNfWjijSnwOdowb06u79w==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/color-picker@1.4.0':
     resolution: {integrity: sha512-jGQYrYl8uRX4CUtv6qXQLlRF/QqxXirnoDEps+gRFURmFbyhLYHJTcN5Ku99094u0SPFbNuqqgMrN0eHMfCvvQ==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
@@ -1204,168 +1270,201 @@ packages:
 
   '@yamada-ui/editable@1.0.41':
     resolution: {integrity: sha512-erjB3eMxXpbzniB6CqrYqIfG2VweU18FW+eFQBe9tf0jsPIyZ/Bgvk9xxAuDdErXYSL5qRzinj+OmSdZRyuMow==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/file-button@1.1.3':
     resolution: {integrity: sha512-gZMS5uLwU6GGX3sLpOEj8b6QrUGnxscb34n/u0raBmi7wuZxFlK0Rc6/T8qPRzJzlmSruQU2Nxkdl6azlDdd5g==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/file-input@1.0.40':
     resolution: {integrity: sha512-afpaNAAG7PoJV0wkfdghhXyrsbRF30vrYRhENJcbFZ1Ox+FMD/5Klq2lbKha7yJXNc1M3odgi5FPtHJxbn567A==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/focus-lock@1.0.19':
     resolution: {integrity: sha512-aMdZ+BNPS52XepvRV8RHHpeqxwKxkdjAWHg1ezCx9pMGe4Bk2O1R+xxpPEdZ4OakFPrZ2axxd+xgJ7zdwxmm/g==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/form-control@2.1.0':
     resolution: {integrity: sha512-rfDBUjvo69m2R7qegHnqTvWQF/cfbhpvdsNIshZLWlRuZMaxxj+6NGOrXMzOBBvPok7pMKxt4+vxuLEYrRSzlg==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/highlight@1.0.35':
     resolution: {integrity: sha512-wL7naYR953dQYLea5LzIeZNuXEsKj56H7JQI58R3R/9JyiywzXgvH/YJgHU4C9bqYDmQ8tw99vgPq6v2tNpVOg==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/icon@1.1.0':
     resolution: {integrity: sha512-H+wnbsJWXCpeidatQaNHOjxqbDIAtqavun9VrWjlfmtipPMldFyrz84lRj00UG4pGsvLCAxBpAnxnXXh/QZRLA==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/icon@1.1.4':
     resolution: {integrity: sha512-hka5tQiV7dczMxxSHfmokE4aiBcTgjbw5LdqUeXlXJ7W0y6r3LlwLRcxgPU7+kXVK6TAGk5QkA/4KBPGn+Lxjw==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/image@1.2.0':
     resolution: {integrity: sha512-QUudDUJG1WP7U+nGJ7QWE6Dpx922BDIHKJdMkGZKH03VroHwdKTHtweAjNwAUiimlKtEyB2SmQRu4aMfroXbpQ==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/indicator@1.1.35':
     resolution: {integrity: sha512-IJW4WQ0QCptTCAIWEPtQcAbEBdl3FCvd6ZTTOurSHnKxNWyCaOyko9Hdsr/Wg57thJlntpoo0v+OYGB5mzEJuA==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/infinite-scroll-area@1.2.4':
     resolution: {integrity: sha512-zAQO7ikMdIjwDEQfhpAUsrDvHt6u+kYwTJa9j/VIO36Y2Ci8ZxbwfehK0Nyss2ZEWCZ9MopoGt4vgrgLP/wFhA==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/input@1.0.40':
     resolution: {integrity: sha512-npTH6cWFOpTN1W4dmFPYCZFVGobpQy4jXX7C+6GQaop5KEUkiYNpXiZ3qPL+Oyobw2PRrf8+BYGPACkyY8zkGQ==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/kbd@1.0.35':
     resolution: {integrity: sha512-dM5Gui47jCCe8HZSlMg2BlA7qgZgzoamcwfRmwBTqZTnKOqQIFsz7F8U2qCALZ54e5Mxgq0vGTAmb7LurKEp/A==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/layouts@1.1.33':
     resolution: {integrity: sha512-moV/c/gMS6/UnTC6bO4hakf17aH3CYdRhcNrZPPZ46vbPkn9ckJSqgKCkG1jpgal48Ofzce8gaAtpP5OZtjCVA==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/link@1.0.35':
     resolution: {integrity: sha512-OsjtP+IQg4lyvjOAZKd90vAy0MFJK1fBHuoRPtNcofpKSdX+Im7ZvTnnUo2wntkauRK6ZTQUGWr7eYm4cF+pyA==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/list@1.0.37':
     resolution: {integrity: sha512-Pw7xsAHR9YD5VjG0b1CvuYixlsejwS5Jrjp7MLsPjY6TAN4LEwI2RS6eN9uyHY0/bpvAMmvtv70ykM5oVO5J2w==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/loading@1.1.10':
     resolution: {integrity: sha512-S4RHQE8kqqeMnPv91LxGy+GXPPP/0Pwp7ovjvwIu/m+NvbcfvLBQdAcyz8fSkbIkVyzhUtgtgiHIvsronzd5Jw==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/loading@1.1.14':
     resolution: {integrity: sha512-fFr1V2Tl0NHUhOZoX/sM+Zdwqj+Aghc21DN1c75IhrGwy32XZ4yJ2qowsIMnTPs+2ZAmjzbMU4CZqqLa114JjA==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/menu@1.3.11':
     resolution: {integrity: sha512-jbySKjIXKg30wdhvLPfBxD71V6cpCONXue9FwjZx0NsXbcwPSqXvwWMsHYTqr+cASr0p6hDEfYc2G1OrrqFurA==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/modal@1.3.8':
     resolution: {integrity: sha512-7maQ6H7rp8nrzH0M+eHwUuOgRmgA9LJsvP2HsHDREFGNzOwq5A3ZscQB/cuqatpBVnBuEnLlD3JxJs3XHBdIkA==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/motion@2.1.0':
     resolution: {integrity: sha512-NOX52PhO0jOKIx1Ym2diBiBmrlfYnJesPxypkRELiKo60e9O8RSa70qi8d+tvaH+u8f7dIjuDO04m3ASgojFuw==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/motion@2.2.0':
     resolution: {integrity: sha512-ekch9+2fU2Jm/o3le2BiZ3vkW4O4RWdmlTrmuUsYSd+925gGv8AQSeT+MvrrLWKzogQQet9VypPCeOFNTTIBBA==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/native-select@1.0.42':
     resolution: {integrity: sha512-1TZuKM87aG0n6DvRJQTXKmUQqDWH0GgaEcZ2tnietn64eNE8+bk/k6g57DysoouQpRmxE8ar1cyCmFwFFK5JaQ==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/native-table@1.0.37':
     resolution: {integrity: sha512-8EPiP3vzH3P8k7KBGv97GVTzWclLYPsiOA2EseC9J5IQ1PG3s0u3/Xe/HNrbyVmtpKkfqfdqKmWsal5wD4yHwg==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/notice@1.1.1':
     resolution: {integrity: sha512-oIOGDi7DXTZpaA4nn2236+kEXzmbuY5e20H8JeyKXt5uWZW0pMZJtIEZGwzkqX/9OAAmZLh0OFYyJpDvga7N1g==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/number-input@1.1.12':
     resolution: {integrity: sha512-30sHt/6UjltegltH5jO5UISzaFRRS+2JVmyMKJyFPpuJnQMLaP1MBSotOmq74o3enYCBFIVdZFTLg8WSiOFFrQ==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/pagination@1.0.38':
     resolution: {integrity: sha512-mWrdX4QyFWwcpYAPLMqA6acgON5omL1K9nmE+AOjkU9wKy6SCHHmTsQDcDelksrsoeCDCiDBt0zx3C9dPY2+Eg==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/pin-input@1.0.39':
     resolution: {integrity: sha512-efPHzFy8C+QNyLdSfdt1k0CsnboMgOEOAdn6kVkLN/8pMMiNVnTlVEzmZKP1QvT3QnPTUZojOKLEEprlh3JSsw==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/popover@1.3.0':
     resolution: {integrity: sha512-o2AmooZnes0Eo83gkQVQT2N57TlaJvljMU6hVMHAILoMX16+d6RvkFjf3bkFBBsrAwH5osF1TM9spXur86H19A==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/portal@1.0.17':
     resolution: {integrity: sha512-oTo7oRs330poLD0MmJjlFmpXZK6jvbyuLzrkaFFNcuRAcPhKFNhfMWIfpHr3Mp3ETE5fYOTAxxz1v4NUc/86aw==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
       react-dom: '>=18'
 
   '@yamada-ui/portal@1.0.19':
     resolution: {integrity: sha512-mqFPVuV4fnL03B/gOASAT1cWS3z049Kxe+goPcN+G6ha0Vb9N7WwexJbzy0QrOnsYKWOMlhaTcxqg8KFwrNDoQ==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
       react-dom: '>=18'
 
   '@yamada-ui/progress@1.1.0':
     resolution: {integrity: sha512-ZRCUqcfaVYIAem4AvcDLcTn68VEwhK2EORBjN5X81t8pRFQZr9U2URd3UjtWTcmMYImMRB56khhurFzevA4W4g==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/providers@1.2.5':
     resolution: {integrity: sha512-mMwYF4vCTLuVpETPb03Cvsn7ZOkZtpj0lVjNjCWUAWCSmIUG9k5jwJzqPWkgCwNpkWp6WhMGHEWc6NznvN//MA==}
+    deprecated: This package is deprecated. Please use @yamada-ui/react instead.
     peerDependencies:
       '@emotion/react': ^11.0.0
       '@emotion/styled': ^11.0.0
@@ -1374,11 +1473,13 @@ packages:
 
   '@yamada-ui/radio@1.2.6':
     resolution: {integrity: sha512-UympUnXziDvKQB8iii1fY/VNHQljYZLBKzOvblZWC/bwMFA90H80mjj+Ir+GiHze8zdgUdBxkqbX8wsDPhmG3A==}
+    deprecated: This package is deprecated. Please use @yamada-ui/react instead.
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/rating@1.0.39':
     resolution: {integrity: sha512-xVY/OFzhSokpaBhIjATcsR149LblhWdz4Kq4I6mjlhkVK5td8ywH02zPdiSsePxqcNe1IMw9LXo0uQ3RT4BlUA==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
@@ -1393,162 +1494,195 @@ packages:
 
   '@yamada-ui/reorder@2.0.8':
     resolution: {integrity: sha512-mrCCXesukFLhpVJIMSEYnXEfT2QIp0GyQ8dL+wpzrBJkYbro2WhmZvrW0yl8FLg4NtplhsRdqbLRtsz1TEx2pg==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/resizable@1.1.10':
     resolution: {integrity: sha512-GM8i5H3O8nPNXkcj19xAjv4dos+q64xXZloMbfZxlBPU60KXkaAJ9ppT2yQL8+7D5/ediaKKWqXg3JhXOJLM3g==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/ripple@1.0.33':
     resolution: {integrity: sha512-+hSIVqDE8qeH4Ap99DXVVhzqh7SDQmQuck2rUNrXqzYcdzvr732rUpOqZeWba3eDbVVuvKN7xhk9brUaSFck4g==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/ripple@1.0.36':
     resolution: {integrity: sha512-TIeSQo+fUOrBm3959RGUZW+GodxJlTgZ+GajzNKhXeXaGtGSfJrXmUYbpHm4u9mxemmFAdvRC42j6FGvVTh0iw==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/scroll-area@1.0.36':
     resolution: {integrity: sha512-NOJW0j3LrCNqk7V7IVvzbM5iHWaqysxG2/XtEhLmyIMVAgT6sGwTQuYS3vsDOE2PxVPoggarHcIkpr62KM+Phg==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/segmented-control@1.0.38':
     resolution: {integrity: sha512-Yq1HF1aivqIZKe554UH8Yx42pXOy21/OqGF5Ts31X1lPDrJZGF1uXYnq5FGJbXQk2Q20TfkMNURaee0brRyx9w==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/select@1.5.0':
     resolution: {integrity: sha512-KHZ/fmxwy499TRykCQXK+wC95m7DtWccCTqWR4u/aO5Ms/BnPZVFFVQbie+PZ/7NE/BQulL0kBsp80DJUQCMjw==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/skeleton@1.1.3':
     resolution: {integrity: sha512-TKqj2NmrGmNPa8WkML3wy0Lc4twO0qT8hbjqCdeXD0yidnh38XyjL9qAtC80KHN/652/u5rHXR1gX5i0qOKS/Q==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/slider@1.2.3':
     resolution: {integrity: sha512-9MmQuliE1enepak8hporzC3rZxpg0jJGx15CEtUzSgvM11z6DR8rOg/fNGB4AG9NihPqH3arfzYdGy1/iUnwIg==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/snacks@1.1.1':
     resolution: {integrity: sha512-+hOu+QUe9BOJngq9kyWjJ3SR1+ti/cUrYc0zw+TnPjoJqrC6j64zW7W+o5YEb0jb/EgPP70TYj+TauEtf9rSPA==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/stat@1.0.35':
     resolution: {integrity: sha512-M2gxcnSbryrX7dASd7mnqX80ocLGVmZiXdm8AJNKyVJefQlY0EJSvrE8ZdpyPGNZkRHpOQWGLezfySJCZ8BK9Q==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/stepper@1.0.38':
     resolution: {integrity: sha512-VKJ2rkVjfTmWaQ/Y1z/LeRgybiInGWim1YnzY7iYjyT18OPoIB47nOGPKVltQk9mWMuGjNG2lyy8pNMP6miXrA==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/switch@1.1.7':
     resolution: {integrity: sha512-f/vUfGdTOgP6AiWNFPRA8EutCsg/1fyj7hCD8XLixadkvpmYMrrlK4SafQjdC8/H1IXaBx6Dn4+TsMVySRav1Q==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/tabs@1.0.37':
     resolution: {integrity: sha512-JONuABrpby842T02jdcAsxAAyxR/+cXFPacjRucHUjle4/onpFHOo3DXOHHuhdxDeLwA/5fPCozzBQU7S9CC6Q==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/tag@1.0.38':
     resolution: {integrity: sha512-8r1yVaS1Fq37wSaEctoPTC8mr9BLzWrckKla3WDenI+tcAcsqbNpCi5L5uH3C7kIdiTe2hKJgaYvuBvsFBQ+pA==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/textarea@1.1.27':
     resolution: {integrity: sha512-PGluBpIM09Nw5aXoHllB9HGlvTP+h5ZBgSUtJY/GMCOanAZvRca+nhwfjWa7eizHTT0wm4T7FrxVJmDHUeOV/Q==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/theme-tools@1.1.1':
     resolution: {integrity: sha512-5qh12/Be2hgIxEG5ON/wXQGmR/JiCb2mKM9wOVV50oIXxdi/5zdXMaYaz6RkAgHXQJxXat+oZsuc5gdHhibidg==}
+    deprecated: This package is deprecated. Please use @yamada-ui/react instead.
 
   '@yamada-ui/theme@1.17.0':
     resolution: {integrity: sha512-IVsQv1wNStm/6cb2KUfRGCW4xiKGWfWLEmbpp1y9h9gmE82qkN9VfGix45vzR1df337s+rgBAD5CxC047zTtUg==}
+    deprecated: This package is deprecated. Please use @yamada-ui/react instead.
 
   '@yamada-ui/toggle@1.0.19':
     resolution: {integrity: sha512-vikG2UfjLYTNTBT8kUGD8MWQF7tmdqACT86KaEEF2xIk6UgVjgE0wwBYsGpkdijdl75DwYV8a/Njg8rMoWRSbw==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/tooltip@1.1.9':
     resolution: {integrity: sha512-1e7SClSxnfCINc1wvA589dF5bknUPWtiEqkf6Z7os4hUcXmuz9MqLf71tqkaTzYgo2rkX5XlBq2Rlascl9EC8A==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/transitions@1.1.3':
     resolution: {integrity: sha512-6NyxXi6y2ibR8hZ7ibeQt9Omfnyp8WQFHkw8Su6EMhS1TiWUGD7qLcz/iLVgOs1007q7tGeE++66V/jPkg+/zw==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/typography@1.0.35':
     resolution: {integrity: sha512-V6DdBN3+wp+8JEZU8FHcwdgFXC/qUd+kwhTSb7uAdWX9nvqgBc96HP1cXamNI035ctVHiv4CIHL7F5Tt3hihwg==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/use-animation@1.0.35':
     resolution: {integrity: sha512-MzDxEaD/twgT4NLzeZaEOLrKN1TWBdIRBYEwasLW5o8XOpHxinywj5bzRM5uYUE5aIGldDzm6V5fLwXMbM4Zag==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/use-boolean@1.0.3':
     resolution: {integrity: sha512-uDiQB0dH3cmBZK3IYVzzfiT8+Rx6qgi/lgUrmt9QaezNb41UfX9SyLXeEdKI34XqWD8e7/MtBoxTPGB4XTMXPw==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/use-breakpoint@1.4.3':
     resolution: {integrity: sha512-S0kvIVmkZI4Np/5/WFxaC0StTsyAXNsRVOaP9tJ22Ii5JADgqM8fhlAdZ7waohfQiZ6aJT6pAR1HFIfFUD8jeg==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/use-breakpoint@1.4.6':
     resolution: {integrity: sha512-fX2axEXJhS9XAv8Q3Lz3+ClU8UaSiIBwk6J6fXrcDQOvCqgIBPT8M6j9nU4pHoUhSUBnQGUruK+6J0Wzemp0yg==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/use-clickable@1.2.6':
     resolution: {integrity: sha512-iF5K1mDPhitiNqnOYV/Tr5la0TGVtvmMYGzSIn0pOB2jxAfJdi6lmddOuxYm3iQDmisAYb+tn9JSvKJBmSjawA==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/use-clipboard@1.0.19':
     resolution: {integrity: sha512-2h+kg/2gNE7MHJAYHef6IlAC5NLf5ihX8Nkf7Op5xWJTLFkEZNArZIEGTfs39pG39WLPjKtVeKSTAAD0niDyRQ==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/use-controllable-state@1.0.16':
     resolution: {integrity: sha512-FEzFYKl+D3eRXU6o09rYWAjepVN7y362sb/pavNpouDOD4Jytb+58YzcclLNL5AKSQGye8nL8xWdBXRR0DPf+Q==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/use-controllable-state@1.0.18':
     resolution: {integrity: sha512-wpgFkrLP/7eP+8Ou3L8Y3stYeIkzUtJ394KOj9M1Q/Uww8tP1oNS62yHLiIGFQW/scwWRUJ4aMaKWgbIKsMYzw==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/use-counter@1.0.19':
     resolution: {integrity: sha512-GsQq6QIw9BCjgv4P11qr6ZM+ZMPx/vPzsC1Ig4sIlaWzpP/1EoI87oMwuTcXanHD9VNNxNwPNSXIU5r4As60pA==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/use-descendant@1.0.19':
     resolution: {integrity: sha512-RimlE/YgyaeERLbpF+4JZB1Xcily9k1W7JFDx3Gani4vCBeM62kMRcYOijDQPtprhDtwNf1wI5vEgLYy/iZUQQ==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/use-disclosure@1.0.18':
     resolution: {integrity: sha512-fYm1DK9J80tlORKxnUXFFBI4E2xDER6vpGQ8WgbxMY/TpFR4sPeWwVNfM607zFtXHYpJCfrZFSM3HpwIM68qfQ==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
@@ -1559,121 +1693,145 @@ packages:
 
   '@yamada-ui/use-eye-dropper@1.0.16':
     resolution: {integrity: sha512-Xbpahb3gnTKhXoxv1Dl63V5TmRXwueyIe9XVAKojb+mMTgUw5RlTFdRti/S/dAzHYH2JWm1lmcqeGkhNXRIlQQ==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/use-focus-visible@1.1.5':
     resolution: {integrity: sha512-9T/fu6IwbaYrchkjDF662g/Sx+PaL/ga+V7bO8I4Ep3BVbYIR0czhnDZUEdw9kUdEgmKpm96kFoGmibTRKSmdA==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/use-focus@1.0.19':
     resolution: {integrity: sha512-oGf3S0P2RPHXyIZLzx8dcsLlaz4o6JTdagZ6jTyN9OqWjviETlp1CZbB4nWvghyEfdrTQtXxqrTpBJ4e+l6d4Q==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/use-hover@1.0.19':
     resolution: {integrity: sha512-Ex+gIN2V5i29c5qDitqA7oqYrq14fppWZaOII5Uwv2FV4ayYEG8IW3ZWGEN/G61RAp/ktfcV1KAh7yxlsEC5DQ==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/use-idle@1.0.19':
     resolution: {integrity: sha512-q1rrC0s8EkYHb4v9/sDhJV+47agTxZ9Nt7PnH6YB6cAEww217Vdl+THMSUmcN8zTH9cBv8J/c7uP2ZSIFE9n7g==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/use-infinite-scroll@1.1.2':
     resolution: {integrity: sha512-1IhVf9sAZTObhbXu8a9LPSBxs1w6R29a46Qx6G8/ySHsM4uAI5D3iYqoJHOtkNbayFb3u2y9Di+teoJalKpwCA==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/use-interval@1.0.18':
     resolution: {integrity: sha512-vrAqwrOEqwoytFHWS+RRdp4H6MGShcQhQr3MWLy6M4DUGtN1DG7NaaKwPZEhC33thP1HqiO9AzL/nkCDqxIpVQ==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/use-latest-ref@1.0.3':
     resolution: {integrity: sha512-uRmjiTa/WeUOm0FEXyw/ayTXTnqeWaf9y7DuL7PgzbhnBiWXYxhjuUqs3Kx4zXXATuPwr7EFU/YKqqhFrJ1aBQ==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/use-local-storage@1.0.19':
     resolution: {integrity: sha512-YNC2RYViQ+99bPnq/h7z14+4w0wWBRdjD9aXum9zFczg+zf0ureStjFD30br9UknybEeFBosGLlsahOHJZsb8w==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/use-media-query@1.0.45':
     resolution: {integrity: sha512-wbZmrVZp/t0OTNx3ksexsNATuiaPichZrJ2hfT4HFmluV3QoalZtQ414YCBouVdMGO9DzeM61vgWC2BdfZcphQ==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/use-os@1.0.19':
     resolution: {integrity: sha512-9tjKMTsKLt84NBmna2wxfnhw82sC9diWDggFKbTuIGAWmWbQtYOSIGLChKFtI25X09DiXndsA0yvvlHx+sQrMA==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/use-outside-click@1.0.18':
     resolution: {integrity: sha512-1luFP6Z12ZYfLhmbnXNNMyPqxv4e3CpuIpib/FRZ1pd+zLyyBiMY6sdMobr0SM983c3Fq+yS0jWFpcOEwjYKZw==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/use-pan-event@1.0.20':
     resolution: {integrity: sha512-Vxg+N/NdAEPFlwigJTwdfIRbPW6r/U8b8vVMPGO21XKpPfERUzqw+hUeJMuvrD/NM2vpIz2s+s4pO9Zvj2bKMA==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/use-popper@1.0.35':
     resolution: {integrity: sha512-wP8eJhDHmWtmBmWXD9wIMT5Y/G3hLIFuR6uLn8K2Oh+k+q0vk75pMsAtJX3Nu9bTHA1my65qNsLttENnEpDscg==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/use-previous@1.0.18':
     resolution: {integrity: sha512-pnaJzS/JFwDflmsVMVbDusMR9qKaxQzp49ibVbcJ4RK/aj3R3hE62hThl2R/caNiqwPFPO3RO9gUgap5tDiXAQ==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/use-resize-observer@1.0.18':
     resolution: {integrity: sha512-bilNHIA77/aeUTrGXHEas4OdJq//sQbMl78I7p8G2uF/RnQmrKjROS3ZVNTR9DweMo/J3rG8zMFG4m1+yFXY7g==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/use-size@1.0.18':
     resolution: {integrity: sha512-/ovr+WMXisROYn9wV4OheU7BhKs9nDMePlSro7ZfDE69/illimz4box/G+VTzGXA8W4MB0U0H5X9Go//Rte6Dw==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/use-timeout@1.0.16':
     resolution: {integrity: sha512-iPRfrs6SejR5i+kkXPx0huPFXslstp7sGOb5NX7niP+T7WuaYSG2opl5mpXoK2OAMNfnrpgvXpZM2/l0dDxD2g==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/use-timeout@1.0.18':
     resolution: {integrity: sha512-v+cu8TjglrQarLuuUBd4KExEhV1Be60NfhZaUb2doL0P/uubJVFLTrKnrceVb1aXKiEpox57u4lmf28me/+9Lg==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/use-token@1.1.20':
     resolution: {integrity: sha512-gV3OdkrZ6kVfZifrCazrddYtGt2PHuDn6UXKjAe4VqNTyZTd1Xy/JUUHfzK1TDhLRQMEKo3AxTxwNGVS3V9VmA==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/use-token@1.1.23':
     resolution: {integrity: sha512-JrmMfDSMpPVt7xLuIoI5SpWwpo0lo4R/f/G4DXYba188iRPvnyrWDEVQrTnxiwdtKu5lucNzkLCPvC1pT4QQ0Q==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/use-value@1.1.20':
     resolution: {integrity: sha512-tBLq9wMZKnbFE6+pJlNMaxIWXiAS3ElF+oyKNkwO4PUshu0HNqea6jqAN52Kj0yW2IDmdRYAPfQj5nWqhYTIWQ==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/use-value@1.1.23':
     resolution: {integrity: sha512-bnRKmXfkN14eXk099YQ5uhzAqI92u2m6e2tXECrdk5oxktsvzLfvlnTYZ0BnxL5GD0uegsrkgLv93nCl+O0ZDQ==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
   '@yamada-ui/use-window-event@1.0.19':
     resolution: {integrity: sha512-sb8ots33Ry1lZ6CHUUNj45sLZQvNbEshfs486hq5DbJIm30uzbUeIgeuDgfpWANp+uErwQ1sO2Zrr1I7huvguw==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
@@ -1689,6 +1847,7 @@ packages:
 
   '@yamada-ui/visually-hidden@1.0.9':
     resolution: {integrity: sha512-O8grznkZsG6kp7cJmj59nOAJ506pwCJLgndsw/UoA9F6z5VNOVBmhgS6EuR3GthDNEJlMfbz9GLvyIq5no6IAA==}
+    deprecated: '"This package is deprecated. Please use @yamada-ui/react instead."'
     peerDependencies:
       react: '>=18'
 
@@ -1701,8 +1860,8 @@ packages:
     resolution: {integrity: sha512-quJQXlTSUGL2LH9SUXo8VwsY4soanhgo6LNSm84E1LBcE8s3O0wpdiRzyR9z/ZZJMlMWv37qOOb9pdJlMUEKFQ==}
     engines: {node: '>=8'}
 
-  ansi-regex@6.1.0:
-    resolution: {integrity: sha512-7HSX4QQb4CspciLpVFwyRe79O3xsIZDDLER21kERQ71oaPodF8jL725AgJMFAYbooIqolJoRLuM81SpeUkpkvA==}
+  ansi-regex@6.2.2:
+    resolution: {integrity: sha512-Bq3SmSpyFHaWjPk8If9yc6svM8c56dB5BAtW4Qbw5jHTwwXXcTLoRMkpDJp6VL0XzlWaCHTXrkFURMYmD0sLqg==}
     engines: {node: '>=12'}
 
   ansi-styles@3.2.1:
@@ -1713,8 +1872,8 @@ packages:
     resolution: {integrity: sha512-zbB9rCJAT1rbjiVDb2hqKFHNYLxgtk8NURxZ3IZwD3F6NtxbXZQCnnSi1Lkx+IDohdPlFp222wVALIheZJQSEg==}
     engines: {node: '>=8'}
 
-  ansi-styles@6.2.1:
-    resolution: {integrity: sha512-bN798gFfQX+viw3R7yrGWRqnrN2oRkEkUjjl4JNn4E8GxxbjtG3FbrEIIY3l8/hrwUwIeCZvi4QuOTP4MErVug==}
+  ansi-styles@6.2.3:
+    resolution: {integrity: sha512-4Dj6M28JB+oAH8kFkTLUo+a2jwOFkuqb3yucU0CANcRRUbxS0cP0nZYCGjcc3BNXwRIsUVmDGgzawme7zvJHvg==}
     engines: {node: '>=12'}
 
   anymatch@3.1.3:
@@ -1728,15 +1887,9 @@ packages:
     resolution: {integrity: sha512-Cg7TFGpIr01vOQNODXOOaGz2NpCU5gl8x1qJFbb6hbZxR7XrcE2vtbAsTAbJ7/xwJtUuJEw8K8Zr/AE0LHlesg==}
     engines: {node: '>=10', npm: '>=6'}
 
-  balanced-match@1.0.2:
-    resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
-
   binary-extensions@2.3.0:
     resolution: {integrity: sha512-Ceh+7ox5qe7LJuLHoY0feh3pHuUDHAcRUeyL2VYghZwfpkNIy/+8Ocg0a3UuSoYzavmylwuLWQOf3hl0jjMMIw==}
     engines: {node: '>=8'}
-
-  brace-expansion@2.0.1:
-    resolution: {integrity: sha512-XnAIvQ8eM+kC6aULx6wuQiwVsnzsi9d3WxzV3FpWTGA19F621kwdbsAcFKXgKUHZWsy+mY6iL1sHTxWEFCytDA==}
 
   braces@3.0.3:
     resolution: {integrity: sha512-yQbXgO/OSZVD2IsiLlro+7Hf6Q18EJrKSEsdoMzKePKXct3gvD8oLcOQdIzGupr5Fj+EDe8gO/lxc1BzfMpxvA==}
@@ -1826,8 +1979,8 @@ packages:
     resolution: {integrity: sha512-AdmX6xUzdNASswsFtmwSt7Vj8po9IuqXm0UXz7QKPuEUmPB4XyjGfaAr2PSuELMwkRMVH1EpIkX5bTZGRB3eCA==}
     engines: {node: '>=10'}
 
-  cross-spawn@7.0.3:
-    resolution: {integrity: sha512-iRDPJKUPVEND7dHPO8rkbOnPpyDygcDFtWjpeWNCgy8WP2rXcxXL8TskReQl6OrB2G7+UJrags1q15Fudc7G6w==}
+  cross-spawn@7.0.6:
+    resolution: {integrity: sha512-uV2QOWP2nWzsy2aMp8aRibhi9dlzF5Hgh5SHaB9OiTGEyDTiJJyx0uy51QXdyWbtAHNua4XJzUKca3OzKUd3vA==}
     engines: {node: '>= 8'}
 
   csstype@3.1.3:
@@ -1922,8 +2075,8 @@ packages:
     resolution: {integrity: sha512-QFaHbhv9WPUeLYBDe/PAuLKJ4Dd9OPvKs9xZBr3yLXnUrDNaVXKu2baDBXe3naPY30hgHYSsf2JW4jzas2mDEQ==}
     engines: {node: '>=10'}
 
-  foreground-child@3.3.0:
-    resolution: {integrity: sha512-Ld2g8rrAyMYFXBhEqMz8ZAHBi4J4uS1i/CxGMDnjyFWddMXLVcDp051DZfu+t7+ab7Wv6SMqpWmyFIj5UbfFvg==}
+  foreground-child@3.3.1:
+    resolution: {integrity: sha512-gIXjKqtFuWEgzFRJA9WCQeSJLZDjgJUOMCMzxtvFq/37KojM1BFGufqsCy0r4qSQmYLsZYMeyRqzIWOMup03sw==}
     engines: {node: '>=14'}
 
   framer-motion@11.3.24:
@@ -1984,12 +2137,8 @@ packages:
     resolution: {integrity: sha512-AOIgSQCepiJYwP3ARnGx+5VnTu2HBYdzbGP45eLw1vr3zB3vZLeyed1sC9hnbcOc9/SrMyM5RPQrkGz4aS9Zow==}
     engines: {node: '>= 6'}
 
-  glob@10.4.5:
-    resolution: {integrity: sha512-7Bv8RF0k6xjo7d4A/PxYLbUCfb6c+Vpd2/mB2yRDlew7Jb5hEXiCD9ibfO7wpk8i4sevK6DFny9h7EYbM3/sHg==}
-    hasBin: true
-
-  glob@11.0.0:
-    resolution: {integrity: sha512-9UiX/Bl6J2yaBbxKoEBRm4Cipxgok8kQYcOPEhScPwebu2I0HoQOuYdIO6S3hLuWoZgpDpwQZMzTFxgpkyT76g==}
+  glob@11.1.0:
+    resolution: {integrity: sha512-vuNwKSaKiqm7g0THUBu2x7ckSs3XJLXE+2ssL7/MfTGPLLcrJQ/4Uq1CjPTtO5cCIiRxqvN6Twy1qOwhL0Xjcw==}
     engines: {node: 20 || >=22}
     hasBin: true
 
@@ -2057,11 +2206,8 @@ packages:
   isexe@2.0.0:
     resolution: {integrity: sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==}
 
-  jackspeak@3.4.3:
-    resolution: {integrity: sha512-OGlZQpz2yfahA/Rd1Y8Cd9SIEsqvXkLVoSw/cgwhnhFMDbsQFeZYoJJ7bIZBS9BcamUW96asq/npPWugM+RQBw==}
-
-  jackspeak@4.0.1:
-    resolution: {integrity: sha512-cub8rahkh0Q/bw1+GxP7aeSe29hHHn2V4m29nnDlvCdlgU+3UGxkZp7Z53jLUdpX3jdTO0nJZUDl3xvbWc2Xog==}
+  jackspeak@4.1.1:
+    resolution: {integrity: sha512-zptv57P3GpL+O0I7VdMJNBZCu+BPHVQUk55Ft8/QCJjTVxrnJHuVuX/0Bl2A6/+2oyR/ZMEuFKwmzqqZ/U5nPQ==}
     engines: {node: 20 || >=22}
 
   js-tokens@4.0.0:
@@ -2091,9 +2237,6 @@ packages:
     resolution: {integrity: sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==}
     hasBin: true
 
-  lru-cache@10.4.3:
-    resolution: {integrity: sha512-JNAzZcXrCt42VGLuYz0zfAzDfAvJWW6AfYlDBQyDV5DClI2m5sAmK+OIO7s59XfsRsWHp02jAJrRadPRGTt6SQ==}
-
   lru-cache@11.0.1:
     resolution: {integrity: sha512-CgeuL5uom6j/ZVrg7G/+1IXqRY8JXX4Hghfy5YE0EhoYQWvndP1kufu58cmZLNIDKnRhZrXfdS9urVWx98AipQ==}
     engines: {node: 20 || >=22}
@@ -2101,29 +2244,20 @@ packages:
   lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
 
-  minimatch@10.0.1:
-    resolution: {integrity: sha512-ethXTt3SGGR+95gudmqJ1eNhRO7eGEGIgYA9vnPatK4/etz2MEVDno5GMCibdMTuBMyElzIlgxMna3K94XDIDQ==}
+  minimatch@10.1.1:
+    resolution: {integrity: sha512-enIvLvRAFZYXJzkCYG5RKmPfrFArdLv+R+lbQ53BmIMLIry74bjKzX6iHAm8WYamJkhSSEabrWN5D97XnKObjQ==}
     engines: {node: 20 || >=22}
-
-  minimatch@9.0.5:
-    resolution: {integrity: sha512-G6T0ZX48xgozx7587koeX9Ys2NYy6Gmv//P89sEte9V9whIapMNF4idKxnW2QtCcLiTWlb/wfCabAtAFWhhBow==}
-    engines: {node: '>=16 || 14 >=14.17'}
 
   minipass@7.1.2:
     resolution: {integrity: sha512-qOOzS1cBTWYF4BH8fVePDBOO9iptMnGUEZwNc/cMWnTV2nVLZ7VoNWEPHkYczZA0pdoA7dl6e7FL659nX9S2aw==}
     engines: {node: '>=16 || 14 >=14.17'}
 
-  minizlib@3.0.1:
-    resolution: {integrity: sha512-umcy022ILvb5/3Djuu8LWeqUa8D68JaBzlttKeMWen48SjabqS3iY5w/vzeMzMUNhLDifyhbOwKDSznB1vvrwg==}
+  minizlib@3.1.0:
+    resolution: {integrity: sha512-KZxYo1BUkWD2TVFLr0MQoM8vUUigWD3LlD83a/75BqC+4qE0Hb1Vo5v1FgcfaNXvfXzr+5EhQ6ing/CaBijTlw==}
     engines: {node: '>= 18'}
 
-  misskey-js@2024.8.0:
-    resolution: {integrity: sha512-tRf67HeoTeX0JMVp5SUgR7wjq42KgijoEOHqqLq+E/U1U6DVfYETEvREAUuv18fHhKJrCiiiHTNz0V3Gc5Iyqg==}
-
-  mkdirp@3.0.1:
-    resolution: {integrity: sha512-+NsyUUAZDmo6YVHzL/stxSu3t9YS1iljliy3BSDrXJ/dkn1KYdmtZODGGjLcc9XLgVVpH4KshHB8XmZgMhaBXg==}
-    engines: {node: '>=10'}
-    hasBin: true
+  misskey-js@2025.12.0:
+    resolution: {integrity: sha512-5TQss4cn/T02Oz8RvqbCrOtzLJAfnzSv1mAAhis3fP2W8HuVC0ArvfAgJdjdxZcQAKXYp00ixUHAm/hC+b1NkA==}
 
   ms@2.1.2:
     resolution: {integrity: sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==}
@@ -2131,8 +2265,8 @@ packages:
   ms@2.1.3:
     resolution: {integrity: sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==}
 
-  nanoid@3.3.7:
-    resolution: {integrity: sha512-eSRppjcPIatRIMC1U6UngP8XFcz8MQWGQdt1MTBQ7NaAmvXDfvNxbvWV3x2y6CdEUciCSsDHDQZbhYaB8QEo2g==}
+  nanoid@3.3.11:
+    resolution: {integrity: sha512-N8SpfPUnUp1bK+PMYW8qSWdl9U+wwNWI4QKxOYDy9JAro3WMX7p2OeVRF9v+347pnakNevPmiHhNmZ2HbFA76w==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
@@ -2173,10 +2307,6 @@ packages:
   path-parse@1.0.7:
     resolution: {integrity: sha512-LDJzPVEEEPR+y48z93A0Ed0yXb8pAByGWo/k5YYdYgpY2/2EsOsksJrq7lOHxryrVOn1ejG6oAp8ahvOIQD8sw==}
 
-  path-scurry@1.11.1:
-    resolution: {integrity: sha512-Xa4Nw17FS9ApQFJ9umLiJS4orGjm7ZzwUrwamcGQuHSzDyth9boKDaycYdDcZDuqYATXw4HFXgaqWTctW/v1HA==}
-    engines: {node: '>=16 || 14 >=14.18'}
-
   path-scurry@2.0.0:
     resolution: {integrity: sha512-ypGJsmGtdXUOeM5u93TyeIEfEhM6s+ljAhrk5vAvSx8uyY/02OvrZnA0YNGUrPXfpJMgI1ODd3nwz8Npx4O4cg==}
     engines: {node: 20 || >=22}
@@ -2188,15 +2318,15 @@ packages:
   picocolors@1.0.1:
     resolution: {integrity: sha512-anP1Z8qwhkbmu7MFP5iTt+wQKXgwzf7zTyGlcdzabySa9vd0Xt392U0rVmz9poOaBj0uHJKyyo9/upk0HrEQew==}
 
-  picocolors@1.1.0:
-    resolution: {integrity: sha512-TQ92mBOW0l3LeMeyLV6mzy/kWr8lkd/hp3mTg7wYK7zJhuBStmGMBG0BdeDZS/dZx1IukaX6Bk11zcln25o1Aw==}
+  picocolors@1.1.1:
+    resolution: {integrity: sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA==}
 
   picomatch@2.3.1:
     resolution: {integrity: sha512-JU3teHTNjmE2VCGFzuY8EXzCDVwEqB2a8fsIvwaStHhAWJEeVd1o1QD80CU6+ZdEXXSLbSsuLwJjkCBWqRQUVA==}
     engines: {node: '>=8.6'}
 
-  postcss@8.4.45:
-    resolution: {integrity: sha512-7KTLTdzdZZYscUc65XmjFiB73vBhBfbPztCYdUNvlaso9PrzjzcmjqBPR0lNGkcVlcO4BjiO5rK/qNz+XAen1Q==}
+  postcss@8.5.6:
+    resolution: {integrity: sha512-3Ybi1tAuwAP9s0r1UQ2J4n5Y0G05bJkpUIO0/bI9MhwmD70S5aTWbXGBwxHrelT+XM1k6dM0pk+SwNkpTRN7Pg==}
     engines: {node: ^10 || ^12 || >=14}
 
   prettier@3.3.3:
@@ -2303,12 +2433,8 @@ packages:
     resolution: {integrity: sha512-oKWePCxqpd6FlLvGV1VU0x7bkPmmCNolxzjMf4NczoDnQcIWrAF+cPtZn5i6n+RfD2d9i0tzpKnG6Yk168yIyw==}
     hasBin: true
 
-  rimraf@5.0.10:
-    resolution: {integrity: sha512-l0OE8wL34P4nJH/H2ffoaniAokM2qSmrtXHmlpvYr5AVVX8msAyW0l8NVJFDxlSK4u3Uh/f41cQheDVdnYijwQ==}
-    hasBin: true
-
-  rollup@4.21.2:
-    resolution: {integrity: sha512-e3TapAgYf9xjdLvKQCkQTnbTKd4a6jwlpQSJJFokHGaX2IVjoEqkIIhiQfqsi0cdwlOD+tQGuOd5AJkc5RngBw==}
+  rollup@4.56.0:
+    resolution: {integrity: sha512-9FwVqlgUHzbXtDg9RCMgodF3Ua4Na6Gau+Sdt9vyCN4RhHfVKX2DCHy3BjMLTDd47ITDhYAnTwGulWTblJSDLg==}
     engines: {node: '>=18.0.0', npm: '>=8.0.0'}
     hasBin: true
 
@@ -2354,8 +2480,8 @@ packages:
     resolution: {integrity: sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==}
     engines: {node: '>=8'}
 
-  strip-ansi@7.1.0:
-    resolution: {integrity: sha512-iq6eVVI64nQQTRYq2KtEg2d2uU7LElhTJwsH4YzIHZshxlgZms/wIc4VoDQTlG/IvVIrBKG06CrZnp0qv7hkcQ==}
+  strip-ansi@7.1.2:
+    resolution: {integrity: sha512-gmBGslpoQJtgnMAvOVqGZpEz9dyoKTCzy2nfz/n8aIFhN/jCE/rCmcxabB6jOOHV+0WNnylOxaxBQPSvcWklhA==}
     engines: {node: '>=12'}
 
   stylis@4.2.0:
@@ -2378,8 +2504,8 @@ packages:
     peerDependencies:
       react: ^16.11.0 || ^17.0.0 || ^18.0.0
 
-  tar@7.4.3:
-    resolution: {integrity: sha512-5S7Va8hKfV7W5U6g3aYxXmlPoZVAwUMy9AOKyF2fVuZa2UD3qZjg578OrLRt8PcNN1PleVaL/5/yYATNL0ICUw==}
+  tar@7.5.6:
+    resolution: {integrity: sha512-xqUeu2JAIJpXyvskvU3uvQW8PAmHrtXp2KDuMJwQqW8Sqq0CaZBAQ+dKS3RBXVhU4wC5NjAdKrmh84241gO9cA==}
     engines: {node: '>=18'}
 
   tiny-invariant@1.3.3:
@@ -2480,8 +2606,8 @@ packages:
       vite:
         optional: true
 
-  vite@5.4.3:
-    resolution: {integrity: sha512-IH+nl64eq9lJjFqU+/yrRnrHPVTlgy42/+IzbOdaFDVlyLgI/wDlf+FCobXLX1cT0X5+7LMyH1mIy2xJdLfo8Q==}
+  vite@5.4.21:
+    resolution: {integrity: sha512-o5a9xKjbtuhY6Bi5S3+HvbRERmouabWbyUcpXXUA1u+GNUKoROi9byOJ8M0nHbHYHkYICiMlqxkg1KkYmm25Sw==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
     peerDependencies:
@@ -2582,7 +2708,7 @@ snapshots:
   '@babel/code-frame@7.24.7':
     dependencies:
       '@babel/highlight': 7.24.7
-      picocolors: 1.0.1
+      picocolors: 1.1.1
 
   '@babel/compat-data@7.25.4': {}
 
@@ -2687,7 +2813,7 @@ snapshots:
       '@babel/helper-validator-identifier': 7.24.7
       chalk: 2.4.2
       js-tokens: 4.0.0
-      picocolors: 1.0.1
+      picocolors: 1.1.1
 
   '@babel/parser@7.24.8':
     dependencies:
@@ -2803,7 +2929,7 @@ snapshots:
 
   '@clack/core@0.3.4':
     dependencies:
-      picocolors: 1.0.1
+      picocolors: 1.1.1
       sisteransi: 1.0.5
 
   '@clack/prompts@0.7.0':
@@ -3227,11 +3353,17 @@ snapshots:
     dependencies:
       react-hook-form: 7.53.0(react@18.3.1)
 
+  '@isaacs/balanced-match@4.0.1': {}
+
+  '@isaacs/brace-expansion@5.0.0':
+    dependencies:
+      '@isaacs/balanced-match': 4.0.1
+
   '@isaacs/cliui@8.0.2':
     dependencies:
       string-width: 5.1.2
       string-width-cjs: string-width@4.2.3
-      strip-ansi: 7.1.0
+      strip-ansi: 7.1.2
       strip-ansi-cjs: strip-ansi@6.0.1
       wrap-ansi: 8.1.0
       wrap-ansi-cjs: wrap-ansi@7.0.0
@@ -3262,58 +3394,84 @@ snapshots:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
 
-  '@pkgjs/parseargs@0.11.0':
-    optional: true
-
   '@popperjs/core@2.11.8': {}
 
-  '@rollup/rollup-android-arm-eabi@4.21.2':
+  '@rollup/rollup-android-arm-eabi@4.56.0':
     optional: true
 
-  '@rollup/rollup-android-arm64@4.21.2':
+  '@rollup/rollup-android-arm64@4.56.0':
     optional: true
 
-  '@rollup/rollup-darwin-arm64@4.21.2':
+  '@rollup/rollup-darwin-arm64@4.56.0':
     optional: true
 
-  '@rollup/rollup-darwin-x64@4.21.2':
+  '@rollup/rollup-darwin-x64@4.56.0':
     optional: true
 
-  '@rollup/rollup-linux-arm-gnueabihf@4.21.2':
+  '@rollup/rollup-freebsd-arm64@4.56.0':
     optional: true
 
-  '@rollup/rollup-linux-arm-musleabihf@4.21.2':
+  '@rollup/rollup-freebsd-x64@4.56.0':
     optional: true
 
-  '@rollup/rollup-linux-arm64-gnu@4.21.2':
+  '@rollup/rollup-linux-arm-gnueabihf@4.56.0':
     optional: true
 
-  '@rollup/rollup-linux-arm64-musl@4.21.2':
+  '@rollup/rollup-linux-arm-musleabihf@4.56.0':
     optional: true
 
-  '@rollup/rollup-linux-powerpc64le-gnu@4.21.2':
+  '@rollup/rollup-linux-arm64-gnu@4.56.0':
     optional: true
 
-  '@rollup/rollup-linux-riscv64-gnu@4.21.2':
+  '@rollup/rollup-linux-arm64-musl@4.56.0':
     optional: true
 
-  '@rollup/rollup-linux-s390x-gnu@4.21.2':
+  '@rollup/rollup-linux-loong64-gnu@4.56.0':
     optional: true
 
-  '@rollup/rollup-linux-x64-gnu@4.21.2':
+  '@rollup/rollup-linux-loong64-musl@4.56.0':
     optional: true
 
-  '@rollup/rollup-linux-x64-musl@4.21.2':
+  '@rollup/rollup-linux-ppc64-gnu@4.56.0':
     optional: true
 
-  '@rollup/rollup-win32-arm64-msvc@4.21.2':
+  '@rollup/rollup-linux-ppc64-musl@4.56.0':
     optional: true
 
-  '@rollup/rollup-win32-ia32-msvc@4.21.2':
+  '@rollup/rollup-linux-riscv64-gnu@4.56.0':
     optional: true
 
-  '@rollup/rollup-win32-x64-msvc@4.21.2':
+  '@rollup/rollup-linux-riscv64-musl@4.56.0':
     optional: true
+
+  '@rollup/rollup-linux-s390x-gnu@4.56.0':
+    optional: true
+
+  '@rollup/rollup-linux-x64-gnu@4.56.0':
+    optional: true
+
+  '@rollup/rollup-linux-x64-musl@4.56.0':
+    optional: true
+
+  '@rollup/rollup-openbsd-x64@4.56.0':
+    optional: true
+
+  '@rollup/rollup-openharmony-arm64@4.56.0':
+    optional: true
+
+  '@rollup/rollup-win32-arm64-msvc@4.56.0':
+    optional: true
+
+  '@rollup/rollup-win32-ia32-msvc@4.56.0':
+    optional: true
+
+  '@rollup/rollup-win32-x64-gnu@4.56.0':
+    optional: true
+
+  '@rollup/rollup-win32-x64-msvc@4.56.0':
+    optional: true
+
+  '@simplewebauthn/types@12.0.0': {}
 
   '@swc/core-darwin-arm64@1.6.3':
     optional: true
@@ -3409,7 +3567,7 @@ snapshots:
       tsx: 4.19.0
       zod: 3.23.8
 
-  '@tanstack/router-plugin@1.56.4(vite@5.4.3(@types/node@20.16.5))(webpack-sources@3.2.3)':
+  '@tanstack/router-plugin@1.56.4(vite@5.4.21(@types/node@20.16.5))(webpack-sources@3.2.3)':
     dependencies:
       '@babel/core': 7.25.2
       '@babel/generator': 7.25.6
@@ -3430,7 +3588,7 @@ snapshots:
       unplugin: 1.14.0(webpack-sources@3.2.3)
       zod: 3.23.8
     optionalDependencies:
-      vite: 5.4.3(@types/node@20.16.5)
+      vite: 5.4.21(@types/node@20.16.5)
     transitivePeerDependencies:
       - supports-color
       - webpack-sources
@@ -3460,7 +3618,7 @@ snapshots:
     dependencies:
       '@babel/types': 7.25.6
 
-  '@types/estree@1.0.5': {}
+  '@types/estree@1.0.8': {}
 
   '@types/node@20.16.5':
     dependencies:
@@ -3481,10 +3639,10 @@ snapshots:
 
   '@types/uuid@10.0.0': {}
 
-  '@vitejs/plugin-react-swc@3.7.0(vite@5.4.3(@types/node@20.16.5))':
+  '@vitejs/plugin-react-swc@3.7.0(vite@5.4.21(@types/node@20.16.5))':
     dependencies:
       '@swc/core': 1.6.3
-      vite: 5.4.3(@types/node@20.16.5)
+      vite: 5.4.21(@types/node@20.16.5)
     transitivePeerDependencies:
       - '@swc/helpers'
 
@@ -3650,9 +3808,9 @@ snapshots:
       cli-check-node: 1.3.4
       cli-handle-unhandled: 1.1.1
       commander: 12.1.0
-      glob: 11.0.0
+      glob: 11.1.0
       prettier: 3.3.3
-      tar: 7.4.3
+      tar: 7.5.6
       typescript: 5.5.4
 
   '@yamada-ui/close-button@1.0.38(@emotion/is-prop-valid@1.3.0)(@types/react@18.3.5)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
@@ -4829,7 +4987,7 @@ snapshots:
 
   ansi-regex@5.0.1: {}
 
-  ansi-regex@6.1.0: {}
+  ansi-regex@6.2.2: {}
 
   ansi-styles@3.2.1:
     dependencies:
@@ -4839,7 +4997,7 @@ snapshots:
     dependencies:
       color-convert: 2.0.1
 
-  ansi-styles@6.2.1: {}
+  ansi-styles@6.2.3: {}
 
   anymatch@3.1.3:
     dependencies:
@@ -4861,13 +5019,7 @@ snapshots:
       cosmiconfig: 7.1.0
       resolve: 1.22.8
 
-  balanced-match@1.0.2: {}
-
   binary-extensions@2.3.0: {}
-
-  brace-expansion@2.0.1:
-    dependencies:
-      balanced-match: 1.0.2
 
   braces@3.0.3:
     dependencies:
@@ -4970,7 +5122,7 @@ snapshots:
       path-type: 4.0.0
       yaml: 1.10.2
 
-  cross-spawn@7.0.3:
+  cross-spawn@7.0.6:
     dependencies:
       path-key: 3.1.1
       shebang-command: 2.0.0
@@ -5106,9 +5258,9 @@ snapshots:
     dependencies:
       tslib: 2.7.0
 
-  foreground-child@3.3.0:
+  foreground-child@3.3.1:
     dependencies:
-      cross-spawn: 7.0.3
+      cross-spawn: 7.0.6
       signal-exit: 4.1.0
 
   framer-motion@11.3.24(@emotion/is-prop-valid@1.3.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
@@ -5150,20 +5302,11 @@ snapshots:
     dependencies:
       is-glob: 4.0.3
 
-  glob@10.4.5:
+  glob@11.1.0:
     dependencies:
-      foreground-child: 3.3.0
-      jackspeak: 3.4.3
-      minimatch: 9.0.5
-      minipass: 7.1.2
-      package-json-from-dist: 1.0.0
-      path-scurry: 1.11.1
-
-  glob@11.0.0:
-    dependencies:
-      foreground-child: 3.3.0
-      jackspeak: 4.0.1
-      minimatch: 10.0.1
+      foreground-child: 3.3.1
+      jackspeak: 4.1.1
+      minimatch: 10.1.1
       minipass: 7.1.2
       package-json-from-dist: 1.0.0
       path-scurry: 2.0.0
@@ -5219,17 +5362,9 @@ snapshots:
 
   isexe@2.0.0: {}
 
-  jackspeak@3.4.3:
+  jackspeak@4.1.1:
     dependencies:
       '@isaacs/cliui': 8.0.2
-    optionalDependencies:
-      '@pkgjs/parseargs': 0.11.0
-
-  jackspeak@4.0.1:
-    dependencies:
-      '@isaacs/cliui': 8.0.2
-    optionalDependencies:
-      '@pkgjs/parseargs': 0.11.0
 
   js-tokens@4.0.0: {}
 
@@ -5249,41 +5384,33 @@ snapshots:
     dependencies:
       js-tokens: 4.0.0
 
-  lru-cache@10.4.3: {}
-
   lru-cache@11.0.1: {}
 
   lru-cache@5.1.1:
     dependencies:
       yallist: 3.1.1
 
-  minimatch@10.0.1:
+  minimatch@10.1.1:
     dependencies:
-      brace-expansion: 2.0.1
-
-  minimatch@9.0.5:
-    dependencies:
-      brace-expansion: 2.0.1
+      '@isaacs/brace-expansion': 5.0.0
 
   minipass@7.1.2: {}
 
-  minizlib@3.0.1:
+  minizlib@3.1.0:
     dependencies:
       minipass: 7.1.2
-      rimraf: 5.0.10
 
-  misskey-js@2024.8.0:
+  misskey-js@2025.12.0:
     dependencies:
+      '@simplewebauthn/types': 12.0.0
       eventemitter3: 5.0.1
       reconnecting-websocket: 4.4.0
-
-  mkdirp@3.0.1: {}
 
   ms@2.1.2: {}
 
   ms@2.1.3: {}
 
-  nanoid@3.3.7: {}
+  nanoid@3.3.11: {}
 
   node-eval@2.0.0:
     dependencies:
@@ -5314,11 +5441,6 @@ snapshots:
 
   path-parse@1.0.7: {}
 
-  path-scurry@1.11.1:
-    dependencies:
-      lru-cache: 10.4.3
-      minipass: 7.1.2
-
   path-scurry@2.0.0:
     dependencies:
       lru-cache: 11.0.1
@@ -5328,14 +5450,14 @@ snapshots:
 
   picocolors@1.0.1: {}
 
-  picocolors@1.1.0: {}
+  picocolors@1.1.1: {}
 
   picomatch@2.3.1: {}
 
-  postcss@8.4.45:
+  postcss@8.5.6:
     dependencies:
-      nanoid: 3.3.7
-      picocolors: 1.1.0
+      nanoid: 3.3.11
+      picocolors: 1.1.1
       source-map-js: 1.2.1
 
   prettier@3.3.3: {}
@@ -5434,30 +5556,35 @@ snapshots:
       path-parse: 1.0.7
       supports-preserve-symlinks-flag: 1.0.0
 
-  rimraf@5.0.10:
+  rollup@4.56.0:
     dependencies:
-      glob: 10.4.5
-
-  rollup@4.21.2:
-    dependencies:
-      '@types/estree': 1.0.5
+      '@types/estree': 1.0.8
     optionalDependencies:
-      '@rollup/rollup-android-arm-eabi': 4.21.2
-      '@rollup/rollup-android-arm64': 4.21.2
-      '@rollup/rollup-darwin-arm64': 4.21.2
-      '@rollup/rollup-darwin-x64': 4.21.2
-      '@rollup/rollup-linux-arm-gnueabihf': 4.21.2
-      '@rollup/rollup-linux-arm-musleabihf': 4.21.2
-      '@rollup/rollup-linux-arm64-gnu': 4.21.2
-      '@rollup/rollup-linux-arm64-musl': 4.21.2
-      '@rollup/rollup-linux-powerpc64le-gnu': 4.21.2
-      '@rollup/rollup-linux-riscv64-gnu': 4.21.2
-      '@rollup/rollup-linux-s390x-gnu': 4.21.2
-      '@rollup/rollup-linux-x64-gnu': 4.21.2
-      '@rollup/rollup-linux-x64-musl': 4.21.2
-      '@rollup/rollup-win32-arm64-msvc': 4.21.2
-      '@rollup/rollup-win32-ia32-msvc': 4.21.2
-      '@rollup/rollup-win32-x64-msvc': 4.21.2
+      '@rollup/rollup-android-arm-eabi': 4.56.0
+      '@rollup/rollup-android-arm64': 4.56.0
+      '@rollup/rollup-darwin-arm64': 4.56.0
+      '@rollup/rollup-darwin-x64': 4.56.0
+      '@rollup/rollup-freebsd-arm64': 4.56.0
+      '@rollup/rollup-freebsd-x64': 4.56.0
+      '@rollup/rollup-linux-arm-gnueabihf': 4.56.0
+      '@rollup/rollup-linux-arm-musleabihf': 4.56.0
+      '@rollup/rollup-linux-arm64-gnu': 4.56.0
+      '@rollup/rollup-linux-arm64-musl': 4.56.0
+      '@rollup/rollup-linux-loong64-gnu': 4.56.0
+      '@rollup/rollup-linux-loong64-musl': 4.56.0
+      '@rollup/rollup-linux-ppc64-gnu': 4.56.0
+      '@rollup/rollup-linux-ppc64-musl': 4.56.0
+      '@rollup/rollup-linux-riscv64-gnu': 4.56.0
+      '@rollup/rollup-linux-riscv64-musl': 4.56.0
+      '@rollup/rollup-linux-s390x-gnu': 4.56.0
+      '@rollup/rollup-linux-x64-gnu': 4.56.0
+      '@rollup/rollup-linux-x64-musl': 4.56.0
+      '@rollup/rollup-openbsd-x64': 4.56.0
+      '@rollup/rollup-openharmony-arm64': 4.56.0
+      '@rollup/rollup-win32-arm64-msvc': 4.56.0
+      '@rollup/rollup-win32-ia32-msvc': 4.56.0
+      '@rollup/rollup-win32-x64-gnu': 4.56.0
+      '@rollup/rollup-win32-x64-msvc': 4.56.0
       fsevents: 2.3.3
 
   scheduler@0.23.2:
@@ -5490,15 +5617,15 @@ snapshots:
     dependencies:
       eastasianwidth: 0.2.0
       emoji-regex: 9.2.2
-      strip-ansi: 7.1.0
+      strip-ansi: 7.1.2
 
   strip-ansi@6.0.1:
     dependencies:
       ansi-regex: 5.0.1
 
-  strip-ansi@7.1.0:
+  strip-ansi@7.1.2:
     dependencies:
-      ansi-regex: 6.1.0
+      ansi-regex: 6.2.2
 
   stylis@4.2.0: {}
 
@@ -5518,13 +5645,12 @@ snapshots:
       react: 18.3.1
       use-sync-external-store: 1.2.2(react@18.3.1)
 
-  tar@7.4.3:
+  tar@7.5.6:
     dependencies:
       '@isaacs/fs-minipass': 4.0.1
       chownr: 3.0.0
       minipass: 7.1.2
-      minizlib: 3.0.1
-      mkdirp: 3.0.1
+      minizlib: 3.1.0
       yallist: 5.0.0
 
   tiny-invariant@1.3.3: {}
@@ -5569,7 +5695,7 @@ snapshots:
     dependencies:
       browserslist: 4.23.3
       escalade: 3.2.0
-      picocolors: 1.1.0
+      picocolors: 1.1.1
 
   use-callback-ref@1.3.2(@types/react@18.3.5)(react@18.3.1):
     dependencies:
@@ -5592,22 +5718,22 @@ snapshots:
 
   uuid@10.0.0: {}
 
-  vite-tsconfig-paths@4.3.2(typescript@5.5.4)(vite@5.4.3(@types/node@20.16.5)):
+  vite-tsconfig-paths@4.3.2(typescript@5.5.4)(vite@5.4.21(@types/node@20.16.5)):
     dependencies:
       debug: 4.3.5
       globrex: 0.1.2
       tsconfck: 3.1.0(typescript@5.5.4)
     optionalDependencies:
-      vite: 5.4.3(@types/node@20.16.5)
+      vite: 5.4.21(@types/node@20.16.5)
     transitivePeerDependencies:
       - supports-color
       - typescript
 
-  vite@5.4.3(@types/node@20.16.5):
+  vite@5.4.21(@types/node@20.16.5):
     dependencies:
       esbuild: 0.21.5
-      postcss: 8.4.45
-      rollup: 4.21.2
+      postcss: 8.5.6
+      rollup: 4.56.0
     optionalDependencies:
       '@types/node': 20.16.5
       fsevents: 2.3.3
@@ -5629,9 +5755,9 @@ snapshots:
 
   wrap-ansi@8.1.0:
     dependencies:
-      ansi-styles: 6.2.1
+      ansi-styles: 6.2.3
       string-width: 5.1.2
-      strip-ansi: 7.1.0
+      strip-ansi: 7.1.2
 
   y18n@5.0.8: {}
 
